@@ -12,7 +12,7 @@ class shading: public DITAlgorithm{
         bool execute();
     private:
         int _avgPixel(int, int, int, int);
-        bool shading::_detectCentre(int);
-        bool shading::_detectCornerShading(std::vector<int>);
-        bool shading::_detectCornerDiff(std::vector<int>);
+        bool _detectCentre(int);
+        bool _detectCornerShading(std::vector<int>);
+        bool _detectCornerDiff(std::vector<int>);
 };

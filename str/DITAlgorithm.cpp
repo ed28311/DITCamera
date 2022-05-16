@@ -13,3 +13,4 @@ cv::Mat DITAlgorithm::loadImage(){
     }
     return image;
 };
+

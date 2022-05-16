@@ -15,7 +15,8 @@ int main(int argc, char ** argv){
         std::string mode = std::string(argv[1]);
         std::string configPath = std::string(argv[2]);
         std::string imagePath = std::string(argv[3]);
-        Config DITConfig = configLoader.getSPEConfig(configPath, mode);
+        std::vector<std::string> modeVector = parseDITMode(mode);
+        Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
         algorithmDispatch dispatcher(DITConfig, imagePath);
         dispatcher.executeAlgorithm();
     }catch(std::invalid_argument& e){
@@ -26,19 +27,19 @@ int main(int argc, char ** argv){
 }
 
 std::vector<std::string> parseDITMode(std::string DITMode){
-    std::regex reg("^-.*[\w]+\[.*[\w]+\]");
+    std::regex reg("^-.*[\\w]+\\[.*[\\w]+\\]");
     std::string mode = DITMode;
     std::vector<std::string> modevector;
     if (regex_match(mode, reg)){
         std::smatch sm;
-        std::regex matchstring("[\w]+");
+        std::regex matchstring("[\\w]+");
         while(std::regex_search(mode, sm, matchstring)){
             modevector.push_back(sm[0]);
             mode = sm.suffix().str();
         }
         return modevector;
     }else{
-        throw std::invalid_argument("Invalid arguments format (Wrong mode format.). (format: -mode[modeName] configPath imagePath)");
+        throw std::invalid_argument("Invalid arguments format ("+mode+"Wrong mode format.). (format: -mode[modeName] configPath imagePath)");
     }
 }
 void checkDITArgument(int argc, char ** argv){

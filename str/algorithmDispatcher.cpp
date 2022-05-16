@@ -2,7 +2,7 @@
 
 
 algorithmDispatch::algorithmDispatch(Config config, std::string imagePath){
-    DITConfig = getDITConfig();
+    DITConfig = config;
     createAlgorithm(imagePath);
 };
 

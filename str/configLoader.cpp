@@ -1,30 +1,32 @@
 #include "configLoader.hpp"
 
 
-Config DITConfig::ConfigLoader::getJsonConfig(std::string filePath, std::string mode){
+Config DITConfig::ConfigLoader::getJsonConfig(std::string filePath, std::vector<std::string> modeVector){
 
 }
 
-Config DITConfig::ConfigLoader::getSPEConfig(std::string filePath, std::string mode){
+Config DITConfig::ConfigLoader::getSPEConfig(std::string filePath, std::vector<std::string> modeVector){
     json globalConf;
     json algorithmConf;
-    std::tie(globalConf, algorithmConf) = _SPE_parseConfig(filePath, mode, GLOBAL_PARAMS);
+    std::tie(globalConf, algorithmConf) = _SPE_parseConfig(filePath, modeVector, GLOBAL_PARAMS);
     config = Config(globalConf, algorithmConf);
 }
 
-std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string filePath, std::string mode, std::vector<std::string> GLOBAL_PARAMS){
+std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string filePath, std::vector<std::string> modeVector, std::vector<std::string> GLOBAL_PARAMS){
     std::ifstream inFile(filePath);
     std::string readLine;
     json globalConf;
     json algorithmConf;
     std::string inspect("null");
     bool detectAlgorithm = false;
-    algorithmConf["mode"] = mode;
+    algorithmConf["mode"] = modeVector[0];
+    std::string configMode = modeVector[1];
+    algorithmConf["configMode"] = configMode;
     while(std::getline(inFile, readLine)){
         std::smatch sm;
-        if (std::regex_match(readLine, std::regex("\[.*[\w]+\]"))){
+        if (std::regex_match(readLine, std::regex("\\[.*[\\w]+\\]"))){
             std::smatch sm;
-            std::regex_search(readLine, sm, std::regex("\w+"));
+            std::regex_search(readLine, sm, std::regex("\\w+"));
             inspect = sm[0];
         }
         if (std::regex_match(readLine, std::regex("="))){
@@ -34,7 +36,7 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
                 std::tie(param, value) = _SPE_parseLine(readLine);
                 globalConf[param] = value;
             }else{
-                if(inspect==mode){
+                if(inspect==configMode){
                     detectAlgorithm = true;
                     std::string param;
                     std::string value;
@@ -45,7 +47,7 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
         }
     };
     if (!detectAlgorithm){
-        throw std::invalid_argument("Invalid mode. (mode: "+mode+").");
+        throw std::invalid_argument("Invalid mode. (mode: "+configMode+").");
     }
     return std::make_tuple(globalConf, algorithmConf);
 }

@@ -110,6 +110,46 @@ depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+#=============================================================================
+# Target rules for targets named main
+
+# Build rule for target.
+main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main
+.PHONY : main
+
+# fast build rule for target.
+main/fast:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
+.PHONY : main/fast
+
+DITCameraTestApp.o: DITCameraTestApp.cpp.o
+
+.PHONY : DITCameraTestApp.o
+
+# target to build an object file
+DITCameraTestApp.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/DITCameraTestApp.cpp.o
+.PHONY : DITCameraTestApp.cpp.o
+
+DITCameraTestApp.i: DITCameraTestApp.cpp.i
+
+.PHONY : DITCameraTestApp.i
+
+# target to preprocess a source file
+DITCameraTestApp.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/DITCameraTestApp.cpp.i
+.PHONY : DITCameraTestApp.cpp.i
+
+DITCameraTestApp.s: DITCameraTestApp.cpp.s
+
+.PHONY : DITCameraTestApp.s
+
+# target to generate assembly for a file
+DITCameraTestApp.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/DITCameraTestApp.cpp.s
+.PHONY : DITCameraTestApp.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -118,6 +158,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... main"
+	@echo "... DITCameraTestApp.o"
+	@echo "... DITCameraTestApp.i"
+	@echo "... DITCameraTestApp.s"
 .PHONY : help
 
 

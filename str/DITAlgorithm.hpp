@@ -1,3 +1,5 @@
+#ifndef DITALGOLOAD
+#define DITALGOLOAD
 #include <iostream>
 #include <memory>
 #include "DITConfig.hpp"
@@ -17,6 +19,4 @@ class DITAlgorithm{
         json algorithmConf;
         json globalConf;
 };
-
-
-
+#endif

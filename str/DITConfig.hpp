@@ -1,3 +1,6 @@
+#ifndef DITCONFIGLOAD
+#define DITCONFIGLOAD
+
 #include <iostream>
 #include "nlohmann/json.hpp"
 
@@ -14,3 +17,4 @@ class Config{
         json globalConf;
         json algorithmConf;
 };
+#endif

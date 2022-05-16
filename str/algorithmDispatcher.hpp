@@ -1,3 +1,5 @@
+#ifndef DISPATCHERLOAD
+#define DISPATCHERLOAD
 #include <iostream>
 #include "DITAlgorithms.hpp"
 
@@ -12,3 +14,4 @@ class algorithmDispatch{
         DITAlgorithm *algorithm;
         void createAlgorithm(std::string);
 };
+#endif
