@@ -6,11 +6,6 @@ Config::Config(json globalConf, json algorithmConf){
     Config::algorithmConf = algorithmConf;
 }
 
-Config::~Config(){
-    Config::globalConf.clear();
-    Config::algorithmConf.clear();
-};
-
 json Config::getAlgorithmConf(){
     return Config::algorithmConf;
 };

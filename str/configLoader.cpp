@@ -2,15 +2,16 @@
 
 
 Config DITConfig::ConfigLoader::getJsonConfig(std::string filePath, std::vector<std::string> modeVector){
-
-}
+    return Config();
+};
 
 Config DITConfig::ConfigLoader::getSPEConfig(std::string filePath, std::vector<std::string> modeVector){
     json globalConf;
     json algorithmConf;
     std::tie(globalConf, algorithmConf) = _SPE_parseConfig(filePath, modeVector, GLOBAL_PARAMS);
     config = Config(globalConf, algorithmConf);
-}
+    return config;
+};
 
 std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string filePath, std::vector<std::string> modeVector, std::vector<std::string> GLOBAL_PARAMS){
     std::ifstream inFile(filePath);
@@ -50,7 +51,7 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
         throw std::invalid_argument("Invalid mode. (mode: "+configMode+").");
     }
     return std::make_tuple(globalConf, algorithmConf);
-}
+};
 
 std::tuple<std::string, std::string> DITConfig::ConfigLoader::_SPE_parseLine(std::string readLine){
     std::string param;
@@ -63,7 +64,7 @@ std::tuple<std::string, std::string> DITConfig::ConfigLoader::_SPE_parseLine(std
     param = parseLine.substr(0, paramEndLoc);
     value = parseLine.substr(valueBeginLoc, readLineSize-1);
     return std::make_tuple(param, value);
-}
+};
 
 bool DITConfig::ConfigLoader::_SPE_isGlobal(std::string inspect, std::vector<std::string> GLOBAL_PARAMS){
     for (int i=0; i<GLOBAL_PARAMS.size(); i++){
@@ -74,4 +75,5 @@ bool DITConfig::ConfigLoader::_SPE_isGlobal(std::string inspect, std::vector<std
             return false;
         }
     }
-}
+    return false;
+};

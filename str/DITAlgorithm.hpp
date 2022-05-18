@@ -9,7 +9,6 @@
 class DITAlgorithm{
     public:
         DITAlgorithm(Config, std::string);
-        virtual ~DITAlgorithm();
         virtual bool execute();
         virtual cv::Mat loadImage();
         cv::Mat image;

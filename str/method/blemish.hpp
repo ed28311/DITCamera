@@ -7,6 +7,5 @@
 class blemish: public DITAlgorithm{
     public:
         blemish(Config, std::string);
-        ~blemish();
         bool execute() ;
 };

@@ -6,7 +6,6 @@
 class algorithmDispatch{
     public:
         algorithmDispatch(Config, std::string);
-        ~algorithmDispatch();
         bool executeAlgorithm();
         Config getDITConfig();
         Config DITConfig;

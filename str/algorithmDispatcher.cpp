@@ -15,13 +15,13 @@ bool algorithmDispatch::executeAlgorithm(){
 void algorithmDispatch::createAlgorithm(std::string imagePath){
     DITConfig = getDITConfig();
     json algorithmConf = DITConfig.getAlgorithmConf();
-    if (algorithmConf['mode'] == "Shading"){
+    if (algorithmConf["mode"] == "Shading"){
         algorithm = new shading(DITConfig, imagePath);
     }
-    if (algorithmConf['mode'] == "Blemish"){
+    if (algorithmConf["mode"] == "Blemish"){
         algorithm = new blemish(DITConfig, imagePath);
     }
-    if (algorithmConf['mode'] == "Flare"){
+    if (algorithmConf["mode"] == "Flare"){
         algorithm = new flare(DITConfig, imagePath);
     }
 };

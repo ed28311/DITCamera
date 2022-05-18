@@ -10,7 +10,6 @@ class Config{
     public:
         Config();
         Config(json, json);
-        ~Config();
         json getGlobalConf();
         json getAlgorithmConf();
     private:

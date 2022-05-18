@@ -123,32 +123,113 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
-DITCameraTestApp.o: DITCameraTestApp.cpp.o
+str/DITAlgorithm.o: str/DITAlgorithm.cpp.o
 
-.PHONY : DITCameraTestApp.o
+.PHONY : str/DITAlgorithm.o
 
 # target to build an object file
-DITCameraTestApp.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/DITCameraTestApp.cpp.o
-.PHONY : DITCameraTestApp.cpp.o
+str/DITAlgorithm.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/DITAlgorithm.cpp.o
+.PHONY : str/DITAlgorithm.cpp.o
 
-DITCameraTestApp.i: DITCameraTestApp.cpp.i
+str/DITAlgorithm.i: str/DITAlgorithm.cpp.i
 
-.PHONY : DITCameraTestApp.i
+.PHONY : str/DITAlgorithm.i
 
 # target to preprocess a source file
-DITCameraTestApp.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/DITCameraTestApp.cpp.i
-.PHONY : DITCameraTestApp.cpp.i
+str/DITAlgorithm.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/DITAlgorithm.cpp.i
+.PHONY : str/DITAlgorithm.cpp.i
 
-DITCameraTestApp.s: DITCameraTestApp.cpp.s
+str/DITAlgorithm.s: str/DITAlgorithm.cpp.s
 
-.PHONY : DITCameraTestApp.s
+.PHONY : str/DITAlgorithm.s
 
 # target to generate assembly for a file
-DITCameraTestApp.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/DITCameraTestApp.cpp.s
-.PHONY : DITCameraTestApp.cpp.s
+str/DITAlgorithm.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/DITAlgorithm.cpp.s
+.PHONY : str/DITAlgorithm.cpp.s
+
+str/DITConfig.o: str/DITConfig.cpp.o
+
+.PHONY : str/DITConfig.o
+
+# target to build an object file
+str/DITConfig.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/DITConfig.cpp.o
+.PHONY : str/DITConfig.cpp.o
+
+str/DITConfig.i: str/DITConfig.cpp.i
+
+.PHONY : str/DITConfig.i
+
+# target to preprocess a source file
+str/DITConfig.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/DITConfig.cpp.i
+.PHONY : str/DITConfig.cpp.i
+
+str/DITConfig.s: str/DITConfig.cpp.s
+
+.PHONY : str/DITConfig.s
+
+# target to generate assembly for a file
+str/DITConfig.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/DITConfig.cpp.s
+.PHONY : str/DITConfig.cpp.s
+
+str/algorithmDispatcher.o: str/algorithmDispatcher.cpp.o
+
+.PHONY : str/algorithmDispatcher.o
+
+# target to build an object file
+str/algorithmDispatcher.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/algorithmDispatcher.cpp.o
+.PHONY : str/algorithmDispatcher.cpp.o
+
+str/algorithmDispatcher.i: str/algorithmDispatcher.cpp.i
+
+.PHONY : str/algorithmDispatcher.i
+
+# target to preprocess a source file
+str/algorithmDispatcher.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/algorithmDispatcher.cpp.i
+.PHONY : str/algorithmDispatcher.cpp.i
+
+str/algorithmDispatcher.s: str/algorithmDispatcher.cpp.s
+
+.PHONY : str/algorithmDispatcher.s
+
+# target to generate assembly for a file
+str/algorithmDispatcher.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/algorithmDispatcher.cpp.s
+.PHONY : str/algorithmDispatcher.cpp.s
+
+str/configLoader.o: str/configLoader.cpp.o
+
+.PHONY : str/configLoader.o
+
+# target to build an object file
+str/configLoader.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/configLoader.cpp.o
+.PHONY : str/configLoader.cpp.o
+
+str/configLoader.i: str/configLoader.cpp.i
+
+.PHONY : str/configLoader.i
+
+# target to preprocess a source file
+str/configLoader.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/configLoader.cpp.i
+.PHONY : str/configLoader.cpp.i
+
+str/configLoader.s: str/configLoader.cpp.s
+
+.PHONY : str/configLoader.s
+
+# target to generate assembly for a file
+str/configLoader.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/str/configLoader.cpp.s
+.PHONY : str/configLoader.cpp.s
 
 # Help Target
 help:
@@ -159,9 +240,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... main"
-	@echo "... DITCameraTestApp.o"
-	@echo "... DITCameraTestApp.i"
-	@echo "... DITCameraTestApp.s"
+	@echo "... str/DITAlgorithm.o"
+	@echo "... str/DITAlgorithm.i"
+	@echo "... str/DITAlgorithm.s"
+	@echo "... str/DITConfig.o"
+	@echo "... str/DITConfig.i"
+	@echo "... str/DITConfig.s"
+	@echo "... str/algorithmDispatcher.o"
+	@echo "... str/algorithmDispatcher.i"
+	@echo "... str/algorithmDispatcher.s"
+	@echo "... str/configLoader.o"
+	@echo "... str/configLoader.i"
+	@echo "... str/configLoader.s"
 .PHONY : help
 
 

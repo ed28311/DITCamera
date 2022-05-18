@@ -7,7 +7,6 @@
 class shading: public DITAlgorithm{
     public:
         shading(Config, std::string);
-        ~shading();
         cv::Mat loadImage();
         bool execute();
     private:

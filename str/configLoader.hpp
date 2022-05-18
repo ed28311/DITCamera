@@ -12,7 +12,6 @@ namespace DITConfig{
     class ConfigLoader{
         public:
             ConfigLoader();
-            ~ConfigLoader();
             Config getSPEConfig(std::string configPath, std::vector<std::string> modeVector);
             Config getJsonConfig(std::string configPath, std::vector<std::string> modeVector);
         private:
