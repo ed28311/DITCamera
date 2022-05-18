@@ -1,3 +1,0 @@
-/home/ed/DITCamera/build/CMakeFiles/rebuild_cache.dir
-/home/ed/DITCamera/build/CMakeFiles/edit_cache.dir
-/home/ed/DITCamera/build/CMakeFiles/main.dir
