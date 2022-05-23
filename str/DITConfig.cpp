@@ -1,5 +1,9 @@
 #include "DITConfig.hpp"
 
+Config::~Config(){
+    globalConf.clear();
+    algorithmConf.clear();
+}
 
 Config::Config(){
     json globalConf;

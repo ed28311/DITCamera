@@ -6,6 +6,13 @@ DITAlgorithm::DITAlgorithm(){
     Config DITConfig;
 }
 
+DITAlgorithm::~DITAlgorithm(){
+    Config *configPtr = &DITConfig;
+    cv::Mat *imagePtr = &image;
+    delete imagePtr;
+    delete configPtr;
+}
+
 DITAlgorithm::DITAlgorithm(Config config, std::string filePath){
     DITConfig = config;
     imagePath = filePath;
@@ -13,10 +20,10 @@ DITAlgorithm::DITAlgorithm(Config config, std::string filePath){
     globalConf = DITConfig.getGlobalConf();
 }
 cv::Mat DITAlgorithm::loadImage(){
-    image = cv::imread(imagePath);
+    cv::Mat figure = cv::imread(imagePath);
     if (!image.data){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");
     }
-    return image;
+    return figure;
 };
 

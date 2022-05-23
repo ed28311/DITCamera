@@ -7,23 +7,27 @@ shading::shading(){
     Config DITConfig;
 }
 
+shading::~shading(){
+    cv::Mat* imagePtr = &image;
+    delete imagePtr;
+}
+
 shading::shading(Config config, std::string filePath){
     std::string imagePath(filePath);
     Config DITConfig = config;
     cv::Mat image = loadImage();
 }
 
-cv::Mat shading::loadImage(){
-    image = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
-    if (!image.data){
+cv::Mat shading::loadImage() {
+    cv::Mat figure = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
+    if (image.data){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");
     }
-    return image;
+    return figure;
 }
 
 bool shading::execute(){
     bool resultBool = false;
-    image = loadImage();
     json algorithmConf = DITConfig.getAlgorithmConf();
     float BLOCKRATIO = algorithmConf["BlockRatio"]; //BlockRatio = 0.1;
     int imageH = image.rows;

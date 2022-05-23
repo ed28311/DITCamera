@@ -1,5 +1,9 @@
 #include "blemish.hpp"
 
+blemish::~blemish(){
+    cv::Mat* imagePtr = &image;
+    delete imagePtr;
+}
 
 blemish::blemish(){
     cv::Mat image;

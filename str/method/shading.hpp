@@ -6,10 +6,11 @@
 
 class shading: public DITAlgorithm{
     public:
+        ~shading();
         shading();
         shading(Config, std::string);
-        cv::Mat loadImage();
-        bool execute();
+        virtual cv::Mat loadImage() override;
+        virtual bool execute() override;
     private:
         int _avgPixel(int, int, int, int);
         bool _detectCentre(int);

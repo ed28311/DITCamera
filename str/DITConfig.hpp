@@ -8,6 +8,7 @@ using json=nlohmann::json;
 
 class Config{
     public:
+        ~Config();
         Config();
         Config(json, json);
         json getGlobalConf();

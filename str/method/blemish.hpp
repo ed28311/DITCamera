@@ -7,7 +7,8 @@
 class blemish: public DITAlgorithm{
     public:
         blemish();
+        ~blemish();
         blemish(Config, std::string);
-        bool execute() ;
-        cv::Mat loadImage();
+        virtual bool execute() override;
+        virtual cv::Mat loadImage() override;
 };
