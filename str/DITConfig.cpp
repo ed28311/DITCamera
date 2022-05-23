@@ -1,6 +1,11 @@
 #include "DITConfig.hpp"
 
 
+Config::Config(){
+    json globalConf;
+    json algorithmConf;
+}
+
 Config::Config(json globalConf, json algorithmConf){
     Config::globalConf = globalConf;
     Config::algorithmConf = algorithmConf;

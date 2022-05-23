@@ -6,7 +6,9 @@
 
 class flare: public DITAlgorithm{
     public:
+        flare();
         flare(Config, std::string);
         ~flare();
         bool execute();
+        cv::Mat loadImage();
 };

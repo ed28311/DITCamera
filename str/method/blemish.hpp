@@ -6,6 +6,8 @@
 
 class blemish: public DITAlgorithm{
     public:
+        blemish();
         blemish(Config, std::string);
         bool execute() ;
+        cv::Mat loadImage();
 };

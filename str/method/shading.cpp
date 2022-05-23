@@ -1,6 +1,18 @@
 #include "shading.hpp"
 
 
+shading::shading(){
+    cv::Mat image;
+    std::string imagePath;
+    Config DITConfig;
+}
+
+shading::shading(Config config, std::string filePath){
+    std::string imagePath(filePath);
+    Config DITConfig = config;
+    cv::Mat image = loadImage();
+}
+
 cv::Mat shading::loadImage(){
     image = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
     if (!image.data){
@@ -10,6 +22,7 @@ cv::Mat shading::loadImage(){
 }
 
 bool shading::execute(){
+    bool resultBool = false;
     image = loadImage();
     json algorithmConf = DITConfig.getAlgorithmConf();
     float BLOCKRATIO = algorithmConf["BlockRatio"]; //BlockRatio = 0.1;
@@ -22,13 +35,15 @@ bool shading::execute(){
     int avgAreaRT = _avgPixel(imageW-blockW, 0, blockW, blockH);
     int avgAreaRB = _avgPixel(imageW-blockW, imageH-blockH, blockW, blockH);
     int avgAreaCentre = _avgPixel(imageW/4, imageH/4, imageW/2, imageH/2);
-    
     std::vector<int> avgAreaCorner{avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT};
     bool resultCentre = _detectCentre(avgAreaCentre);
     bool resultCornerShading = _detectCornerShading(avgAreaCorner);
     bool resultCornerDiff = _detectCornerDiff(avgAreaCorner);
-};
-
+    if(resultCentre && resultCornerDiff && resultCornerShading){
+        resultBool = true;
+    }
+    return resultBool;
+}
 
 int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight){
     cv::Rect imageRect(begin_x, begin_y, rectWidth, rectHeight);

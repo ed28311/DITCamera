@@ -31,6 +31,8 @@ PassLevel_Up = 110
 BlockRatio = 0.1
 
 [Flare]
-
+Std_Threshold = 100
 
 [Blemish]
+Stride = 3
+Diff_Tolarence = 10
