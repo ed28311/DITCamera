@@ -1,5 +1,9 @@
 #include "configLoader.hpp"
 
+DITConfig::ConfigLoader::ConfigLoader(){
+    json config;
+}
+
 
 Config DITConfig::ConfigLoader::getJsonConfig(std::string filePath, std::vector<std::string> modeVector){
     return Config();
