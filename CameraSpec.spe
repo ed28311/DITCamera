@@ -24,7 +24,7 @@ DoItemsNumMT = 0
 
 [Shading]
 PassLevel=16
-Diff=10
+Diff = 10
 Center_Up = 180
 Center_Low = 140
 PassLevel_Up = 110

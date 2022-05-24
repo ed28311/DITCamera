@@ -12,6 +12,9 @@ DITAlgorithm::~DITAlgorithm(){
     delete imagePtr;
     delete configPtr;
 }
+bool DITAlgorithm::execute(){
+    return true;
+}
 
 DITAlgorithm::DITAlgorithm(Config config, std::string filePath){
     DITConfig = config;

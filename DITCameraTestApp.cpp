@@ -6,19 +6,26 @@
 #include "./str/algorithmDispatcher.hpp"
 
 void checkDITArgument(int, char **);
-std::vector<std::string> parseDITMode(std::string);
+std::vector<std::string>  parseDITMode( std::string);
 
 int main(int argc, char ** argv){
     try{
         DITConfig::ConfigLoader configLoader;
         checkDITArgument(argc, argv);
         std::string mode = std::string(argv[1]);
+        printf("\nmode: %s\n", mode.c_str());
         std::string configPath = std::string(argv[2]);
+        printf("configPath: %s\n",configPath.c_str());
         std::string imagePath = std::string(argv[3]);
-        std::vector<std::string> modeVector = parseDITMode(mode);
+        printf("imagePath: %s\n", imagePath.c_str());
+        printf("---------------------------\n");
+        std::vector<std::string> modeVector(2);
+        modeVector = parseDITMode(mode);
         Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
-        algorithmDispatch dispatcher(DITConfig, imagePath);
-        dispatcher.executeAlgorithm();
+        json algConf = DITConfig.getAlgorithmConf();
+        std::cout << algConf.dump(4) << std::endl;
+        // algorithmDispatch dispatcher(DITConfig, imagePath);
+        // dispatcher.executeAlgorithm();
     }catch(std::invalid_argument& e){
         std::cerr << e.what() << std::endl;
         return -1;
@@ -27,20 +34,28 @@ int main(int argc, char ** argv){
 }
 
 std::vector<std::string> parseDITMode(std::string DITMode){
+    std::vector<std::string> modeVector(2);
     std::regex reg("^-.*[\\w]+\\[.*[\\w]+\\]");
     std::string mode = DITMode;
-    std::vector<std::string> modevector;
-    if (regex_match(mode, reg)){
+    if (std::regex_match(mode, reg)){
         std::smatch sm;
         std::regex matchstring("[\\w]+");
+        int i = 0;
         while(std::regex_search(mode, sm, matchstring)){
-            modevector.push_back(sm[0]);
+            for (std::string x:sm) {
+                modeVector[i] = x;
+            }
             mode = sm.suffix().str();
+            i++;
+            if(i>2){
+                throw std::invalid_argument("Invalid arguments format ("+mode+"Wrong mode format.). (format: -mode[modeName] configPath imagePath)");
+                break;
+            }
         }
-        return modevector;
     }else{
         throw std::invalid_argument("Invalid arguments format ("+mode+"Wrong mode format.). (format: -mode[modeName] configPath imagePath)");
     }
+    return modeVector;
 }
 void checkDITArgument(int argc, char ** argv){
     if (argc!=4){

@@ -41,7 +41,7 @@ bool shading::execute(){
     int avgAreaCentre = _avgPixel(imageW/4, imageH/4, imageW/2, imageH/2);
     std::vector<int> avgAreaCorner{avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT};
     bool resultCentre = _detectCentre(avgAreaCentre);
-    bool resultCornerShading = _detectCornerShading(avgAreaCorner);
+    bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner);
     bool resultCornerDiff = _detectCornerDiff(avgAreaCorner);
     if(resultCentre && resultCornerDiff && resultCornerShading){
         resultBool = true;
@@ -73,12 +73,13 @@ bool shading::_detectCentre(int avgAreaCentre){
     }
 }
 
-bool shading::_detectCornerShading(std::vector<int> avgAreaVec){
+bool shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVec){
     int PASSLEVEL = algorithmConf["PassLevel"];
     int PASSLEVEL_UP = algorithmConf["PassLevel_Up"];
     bool detectResult = true;
     for (int avgArea:avgAreaVec){
-        detectResult = ( detectResult&& (avgArea>PASSLEVEL )&& ( avgArea<PASSLEVEL_UP ) );
+        double avgAreaShading = 100*(static_cast<double>(avgArea)/static_cast<double>(avgAreaCentre));
+        detectResult = ( detectResult&& (avgAreaShading>PASSLEVEL )&& ( avgAreaShading<PASSLEVEL_UP ) );
     }
     return detectResult;
 }
