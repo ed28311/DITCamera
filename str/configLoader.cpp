@@ -24,17 +24,16 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
     json algorithmConf;
     std::string inspect("null");
     bool detectAlgorithm = false;
-    algorithmConf["mode"] = modeVector[0];
-    std::string configMode = modeVector[1];
+    algorithmConf["mode"] = modeVector.at(0);
+    std::string configMode = modeVector.at(1); 
     algorithmConf["configMode"] = configMode;
     while(std::getline(inFile, readLine)){
-        std::smatch sm;
         if (std::regex_match(readLine, std::regex("\\[.*[\\w]+\\]"))){
             std::smatch sm;
             std::regex_search(readLine, sm, std::regex("\\w+"));
             inspect = sm[0];
         }
-        if (std::regex_match(readLine, std::regex("="))){
+        if (std::regex_match(readLine, std::regex("[\\w]+[\\=\\ ]+[\\w]+"))){
             if (_SPE_isGlobal(inspect, GLOBAL_PARAMS)){
                 std::string param;
                 std::string value;
@@ -49,7 +48,7 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
                     algorithmConf[param] = value;
                 }
             };
-        }
+        }   
     };
     if (!detectAlgorithm){
         throw std::invalid_argument("Invalid mode. (mode: "+configMode+").");
@@ -58,15 +57,20 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
 };
 
 std::tuple<std::string, std::string> DITConfig::ConfigLoader::_SPE_parseLine(std::string readLine){
+    /*
+    Assumption: 
+        1. the readLine only contain a singal equal sign, and space is meanless.
+        2. Parameter in config is all integer format.
+    */
     std::string param;
     std::string value;
     std::string parseLine = readLine;
-    std::remove(parseLine.begin(), parseLine.end(), ' ');
-    int readLineSize = parseLine.size();
-    int paramEndLoc = parseLine.find_first_not_of("=");
-    int valueBeginLoc = parseLine.find_last_not_of("=");
+    parseLine.erase(std::remove(parseLine.begin(), parseLine.end(), ' '), parseLine.end());
+    int parseLineSize = parseLine.size();
+    int paramEndLoc = parseLine.find_first_of("=");
+    int valueBeginLoc = parseLine.find_last_of("=");
     param = parseLine.substr(0, paramEndLoc);
-    value = parseLine.substr(valueBeginLoc, readLineSize-1);
+    value = parseLine.substr(valueBeginLoc+1, parseLineSize);
     return std::make_tuple(param, value);
 };
 
