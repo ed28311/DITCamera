@@ -7,29 +7,29 @@ shading::shading(){
     Config DITConfig;
 }
 
-shading::~shading(){
-    cv::Mat* imagePtr = &image;
-    delete imagePtr;
-}
 
 shading::shading(Config config, std::string filePath){
     std::string imagePath(filePath);
-    Config DITConfig = config;
-    std::cout << "Loading Completed." << std::endl;
+    cv::Mat image = loadImage();
+    algorithmConf = config.getAlgorithmConf();
+    globalConf = config.getGlobalConf();
+    std::cout << "Loading Completed.\n" << std::endl;
 }
 
-cv::Mat shading::loadImage() {
+cv::Mat shading::loadImage() const {
     cv::Mat figure = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
     if (image.data){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");
     }
+    std::cout << image.rows << std::endl;
+    printf("Load Image Complete.");
     return figure;
 }
 
-bool shading::execute(){
+bool shading::execute() const {
     bool resultBool = false;
-    json algorithmConf = DITConfig.getAlgorithmConf();
-    float BLOCKRATIO = algorithmConf["BlockRatio"]; //BlockRatio = 0.1;
+    float BLOCKRATIO = std::stof((std::string)algorithmConf["BlockRatio"]); //BlockRatio = 0.1;
+    std::cout << BLOCKRATIO <<std::endl;
     int imageH = image.rows;
     int imageW = image.cols;
     int blockH = static_cast<float>(imageH)*BLOCKRATIO;
@@ -49,7 +49,7 @@ bool shading::execute(){
     return resultBool;
 }
 
-int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight){
+int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight) const{
     cv::Rect imageRect(begin_x, begin_y, rectWidth, rectHeight);
     cv::Mat imageMat = image(imageRect);
     unsigned long long int accumulatePixel=0;
@@ -63,9 +63,9 @@ int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight){
     return avgPixel;
 };
 
-bool shading::_detectCentre(int avgAreaCentre){
-    int CENTER_UP = static_cast<int>(algorithmConf["Center_Up"]);
-    int CENTER_LOW = static_cast<int>(algorithmConf["Center_Low"]);
+bool shading::_detectCentre (int avgAreaCentre) const{
+    int CENTER_UP = std::stoi((std::string)algorithmConf["Center_Up"]);
+    int CENTER_LOW = std::stoi((std::string)algorithmConf["Center_Low"]);
     if(avgAreaCentre<CENTER_UP && avgAreaCentre>CENTER_LOW){
         return true;
     } else {
@@ -73,9 +73,9 @@ bool shading::_detectCentre(int avgAreaCentre){
     }
 }
 
-bool shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVec){
-    int PASSLEVEL = algorithmConf["PassLevel"];
-    int PASSLEVEL_UP = algorithmConf["PassLevel_Up"];
+bool shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVec) const{
+    int PASSLEVEL = std::stoi((std::string)algorithmConf["PassLevel"]);
+    int PASSLEVEL_UP = std::stoi((std::string)algorithmConf["PassLevel_Up"]);
     bool detectResult = true;
     for (int avgArea:avgAreaVec){
         double avgAreaShading = 100*(static_cast<double>(avgArea)/static_cast<double>(avgAreaCentre));
@@ -84,8 +84,8 @@ bool shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVe
     return detectResult;
 }
 
-bool shading::_detectCornerDiff(std::vector<int> avgAreaVec){
-    int DIFF = algorithmConf["Diff"];
+bool shading::_detectCornerDiff(std::vector<int> avgAreaVec) const {
+    int DIFF = std::stoi((std::string)algorithmConf["Diff"]);
     int maxVal = 0;
     int maxLoc = 0;
     int minVal = 256;

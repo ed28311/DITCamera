@@ -1,25 +1,21 @@
 #include "blemish.hpp"
 
-blemish::~blemish(){
-    cv::Mat* imagePtr = &image;
-    delete imagePtr;
-}
 
 blemish::blemish(){
     cv::Mat image;
     std::string imagePath;
-    Config DITConfig;
 }
 
 blemish::blemish(Config config, std::string filePath){
     std::string imagePath(filePath);
-    Config DITConfig = config;
-    cv::Mat image = loadImage();
+    algorithmConf = config.getAlgorithmConf();
+    globalConf = config.getGlobalConf();
+    std::cout << "Loading Completed." << std::endl;
 }
 
-cv::Mat blemish::loadImage(){
+cv::Mat blemish::loadImage() const{
     return DITAlgorithm::loadImage();
 }
 
-bool blemish::execute(){return true;}
+bool blemish::execute() const{return true;}
 

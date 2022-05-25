@@ -23,7 +23,9 @@ int main(int argc, char ** argv){
         modeVector = parseDITMode(mode);
         Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
         json algConf = DITConfig.getAlgorithmConf();
+        std::cout << "algConf: "<<algConf.dump(4) << std::endl;
         json globalConf = DITConfig.getGlobalConf();
+        std::cout << "globalConf: " << globalConf.dump(4) << std::endl;
         algorithmDispatch dispatcher(DITConfig, imagePath);
         // dispatcher.executeAlgorithm();
     }catch(std::invalid_argument& e){

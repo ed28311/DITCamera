@@ -14,14 +14,16 @@ flare::~flare(){
 
 flare::flare(Config config, std::string filePath){
     std::string imagePath(filePath);
-    Config DITConfig = config;
-    cv::Mat image = loadImage();
+    algorithmConf = config.getAlgorithmConf();
+    globalConf = config.getGlobalConf();
+    std::cout << "Loading Completed." << std::endl;
+
 }
-bool flare::execute(){
+bool flare::execute() const {
     return true;
 }
 
 
-cv::Mat flare::loadImage(){
+cv::Mat flare::loadImage() const {
     return DITAlgorithm::loadImage();
 }

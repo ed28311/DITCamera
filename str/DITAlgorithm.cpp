@@ -6,23 +6,16 @@ DITAlgorithm::DITAlgorithm(){
     Config DITConfig;
 }
 
-DITAlgorithm::~DITAlgorithm(){
-    Config *configPtr = &DITConfig;
-    cv::Mat *imagePtr = &image;
-    delete imagePtr;
-    delete configPtr;
-}
-bool DITAlgorithm::execute(){
+bool DITAlgorithm::execute () const{
     return true;
 }
 
-DITAlgorithm::DITAlgorithm(Config config, std::string filePath){
-    DITConfig = config;
+DITAlgorithm::DITAlgorithm(const Config config, std::string filePath){
     imagePath = filePath;
-    algorithmConf = DITConfig.getAlgorithmConf();
-    globalConf = DITConfig.getGlobalConf();
+    algorithmConf = config.getAlgorithmConf();
+    globalConf = config.getGlobalConf();
 }
-cv::Mat DITAlgorithm::loadImage(){
+cv::Mat DITAlgorithm::loadImage() const{
     cv::Mat figure = cv::imread(imagePath);
     if (!image.data){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");

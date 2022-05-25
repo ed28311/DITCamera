@@ -11,8 +11,8 @@ class Config{
         ~Config();
         Config();
         Config(json, json);
-        json getGlobalConf();
-        json getAlgorithmConf();
+        json getGlobalConf() const;
+        json getAlgorithmConf() const;
     private:
         json globalConf;
         json algorithmConf;

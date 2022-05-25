@@ -1,12 +1,12 @@
 #include <iostream>
-#include "../str/method/shading.hpp"
-#include "../str/configLoader.hpp"
-#include "../str/DITConfig.hpp"
+#include "./str/DITAlgorithms.hpp"
+#include "./str/configLoader.hpp"
+#include "./str/DITConfig.hpp"
 
 std::vector<std::string> parseDITMode(std::string DITMode);
 
 int main(){
-    std::string imagePath("/home/ed/DITCamera/test_pic/shading.jpg");
+    std::string imagePath("/home/ed/DITCamera/test_pic/Shading.jpg");
     std::string configPath("/home/ed/DITCamera/CameraSpec.spe");
     std::string mode("-LS[Shading]");
     DITConfig::ConfigLoader configLoader;
@@ -18,10 +18,14 @@ int main(){
     modeVector = parseDITMode(mode);
     Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
     json algConf = DITConfig.getAlgorithmConf();
+    std::cout<<"algConf: "<<algConf.dump(4)<<std::endl;
     json globalConf = DITConfig.getGlobalConf();
+    std::cout<<"globalConf: "<<globalConf.dump(4)<<std::endl;
     printf("Config loaded\n");
     shading algorithm(DITConfig, imagePath);
-    // algorithm.execute();
+    printf("Algorithm loaded\n");
+    algorithm.execute();
+    return 0;
 }
 
 std::vector<std::string> parseDITMode(std::string DITMode){

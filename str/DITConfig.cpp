@@ -15,10 +15,10 @@ Config::Config(json globalConf, json algorithmConf){
     Config::algorithmConf = algorithmConf;
 }
 
-json Config::getAlgorithmConf(){
+json Config::getAlgorithmConf() const{
     return Config::algorithmConf;
 };
 
-json Config::getGlobalConf(){
+json Config::getGlobalConf() const{
     return Config::globalConf;
 };

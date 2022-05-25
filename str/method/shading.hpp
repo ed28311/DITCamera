@@ -6,14 +6,13 @@
 
 class shading: public DITAlgorithm{
     public:
-        ~shading();
         shading();
         shading(Config, std::string);
-        virtual cv::Mat loadImage() override;
-        virtual bool execute() override;
+        virtual cv::Mat loadImage() const override;
+        virtual bool execute() const override;
     private:
-        int _avgPixel(int, int, int, int);
-        bool _detectCentre(int);
-        bool _detectCornerShading(int, std::vector<int>);
-        bool _detectCornerDiff(std::vector<int>);
+        int _avgPixel(int, int, int, int) const;
+        bool _detectCentre(int) const;
+        bool _detectCornerShading(int, std::vector<int>) const;
+        bool _detectCornerDiff(std::vector<int>) const;
 };

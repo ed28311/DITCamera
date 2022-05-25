@@ -9,6 +9,6 @@ class flare: public DITAlgorithm{
         flare();
         flare(Config, std::string);
         ~flare();
-        virtual bool execute() override;
-        virtual cv::Mat loadImage() override;
+        virtual bool execute() const override;
+        virtual cv::Mat loadImage() const override;
 };

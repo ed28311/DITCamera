@@ -7,14 +7,14 @@
 
 class DITAlgorithm{
     public:
-        virtual ~DITAlgorithm();
         DITAlgorithm();
         DITAlgorithm(Config, std::string);
-        virtual bool execute();
-        virtual cv::Mat loadImage();
-        cv::Mat image = loadImage();
+
+        virtual ~DITAlgorithm() = default;
+        virtual bool execute () const;
+        virtual cv::Mat loadImage() const;
+        cv::Mat image;
         std::string imagePath;
-        Config DITConfig;
     protected:
         json algorithmConf;
         json globalConf;
