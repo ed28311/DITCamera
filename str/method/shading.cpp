@@ -15,7 +15,7 @@ shading::~shading(){
 shading::shading(Config config, std::string filePath){
     std::string imagePath(filePath);
     Config DITConfig = config;
-    cv::Mat image = loadImage();
+    std::cout << "Loading Completed." << std::endl;
 }
 
 cv::Mat shading::loadImage() {

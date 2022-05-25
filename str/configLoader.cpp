@@ -79,9 +79,6 @@ bool DITConfig::ConfigLoader::_SPE_isGlobal(std::string inspect, std::vector<std
         if (inspect == GLOBAL_PARAMS[i]){
             return true;
         }
-        else{
-            return false;
-        }
     }
     return false;
 };
