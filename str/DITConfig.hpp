@@ -6,15 +6,17 @@
 
 using json=nlohmann::json;
 
-class Config{
-    public:
-        ~Config();
-        Config();
-        Config(json, json);
-        json getGlobalConf() const;
-        json getAlgorithmConf() const;
-    private:
-        json globalConf;
-        json algorithmConf;
-};
+namespace DITCameraTool{
+    class Config{
+        public:
+            ~Config();
+            Config();
+            Config(json, json);
+            json getGlobalConf() const;
+            json getAlgorithmConf() const;
+        private:
+            json globalConf;
+            json algorithmConf;
+    };
+}
 #endif

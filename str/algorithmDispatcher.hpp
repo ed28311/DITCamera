@@ -3,14 +3,16 @@
 #include <iostream>
 #include "DITAlgorithms.hpp"
 
-class algorithmDispatch{
-    public:
-        algorithmDispatch(Config, std::string);
-        bool executeAlgorithm();
-        Config getDITConfig();
-        Config DITConfig;
-    private:
-        DITAlgorithm *algorithm;
-        void createAlgorithm(std::string);
+namespace DITCameraTool{
+    class AlgorithmDispatch{
+        public:
+            AlgorithmDispatch(Config, std::string);
+            bool executeAlgorithm();
+            DITCameraTool::Config getDITConfig();
+            DITCameraTool::Config DITConfig;
+        private:
+            DITCameraTool::Algorithm::AlgorithmBase *algorithm;
+            void createAlgorithm(std::string);
 };
+}
 #endif

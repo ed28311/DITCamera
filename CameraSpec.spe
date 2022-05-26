@@ -1,6 +1,7 @@
 ;20191116
 [Project]
 Name=DIT_NewMember_Demo_version
+SE
 
 ;20181101
 ; 1st version
@@ -21,6 +22,7 @@ OutputShortPath = 1
 DoMultiThread = 1
 DoItemsMultiThread = 0
 DoItemsNumMT = 0
+ReportDirectory = ASUS_Camera_Reports
 
 [Shading]
 PassLevel=16

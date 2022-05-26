@@ -4,10 +4,14 @@
 #endif
 
 
-class blemish: public DITAlgorithm{
-    public:
-        blemish();
-        blemish(Config, std::string);
-        virtual bool execute() const override;
-        virtual cv::Mat loadImage() const override;
-};
+namespace DITCameraTool{
+    namespace Algorithm{
+        class Blemish: public DITCameraTool::Algorithm::AlgorithmBase{
+            public:
+                Blemish();
+                Blemish(DITCameraTool::Config, std::string);
+                virtual bool execute() const override;
+                virtual cv::Mat loadImage() const override;
+        };
+    }
+}

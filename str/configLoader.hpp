@@ -8,14 +8,14 @@
 #include <tuple>
 #include "DITConfig.hpp"
 
-namespace DITConfig{
+namespace DITCameraTool{
     class ConfigLoader{
         public:
             ConfigLoader();
-            Config getSPEConfig(std::string configPath, std::vector<std::string> modeVector);
-            Config getJsonConfig(std::string configPath, std::vector<std::string> modeVector);
+            DITCameraTool::Config getSPEConfig(std::string configPath, std::vector<std::string> modeVector);
+            DITCameraTool::Config getJsonConfig(std::string configPath, std::vector<std::string> modeVector);
         private:
-            Config config;
+            DITCameraTool::Config config;
             std::vector<std::string> const GLOBAL_PARAMS{"ATD_OUTPUT_INFO", "ASUS_DebugInfo", "Project"};
             std::tuple<json, json> _SPE_parseConfig(std::string filePath, std::vector<std::string> modeVector, std::vector<std::string> GLOBAL_PARAMS);
             std::tuple<std::string, std::string> _SPE_parseLine(std::string readLine);

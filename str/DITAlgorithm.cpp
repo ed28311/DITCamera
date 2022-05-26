@@ -1,22 +1,22 @@
 #include "DITAlgorithm.hpp"
 
-DITAlgorithm::DITAlgorithm(){
+DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(){
     cv::Mat image;
     std::string imagePath;
-    Config DITConfig;
+    DITCameraTool::Config DITConfig;
 }
 
-bool DITAlgorithm::execute () const{
+bool DITCameraTool::Algorithm::AlgorithmBase::execute () const{
     return true;
 }
 
-DITAlgorithm::DITAlgorithm(const Config config, std::string filePath){
+DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config, std::string filePath){
     imagePath = filePath;
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
 }
-cv::Mat DITAlgorithm::loadImage() const{
+cv::Mat DITCameraTool::Algorithm::AlgorithmBase::loadImage() const{
     cv::Mat figure = cv::imread(imagePath);
     if (!image.data){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");

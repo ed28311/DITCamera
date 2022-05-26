@@ -1,27 +1,27 @@
 #include "configLoader.hpp"
 
-DITConfig::ConfigLoader::ConfigLoader(){
+DITCameraTool::ConfigLoader::ConfigLoader(){
     json config;
-}
-
-
-Config DITConfig::ConfigLoader::getJsonConfig(std::string filePath, std::vector<std::string> modeVector){
-    return Config();
 };
 
-Config DITConfig::ConfigLoader::getSPEConfig(std::string filePath, std::vector<std::string> modeVector){
+
+DITCameraTool::Config DITCameraTool::ConfigLoader::getJsonConfig(std::string filePath, std::vector<std::string> modeVector){
+    return DITCameraTool::Config();
+};
+
+DITCameraTool::Config DITCameraTool::ConfigLoader::getSPEConfig(std::string filePath, std::vector<std::string> modeVector){
     json globalConf;
     json algorithmConf;
     std::tie(globalConf, algorithmConf) = _SPE_parseConfig(filePath, modeVector, GLOBAL_PARAMS);
-    config = Config(globalConf, algorithmConf);
+    config = DITCameraTool::Config(globalConf, algorithmConf);
     return config;
 };
 
-std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string filePath, std::vector<std::string> modeVector, std::vector<std::string> GLOBAL_PARAMS){
+std::tuple<json, json> DITCameraTool::ConfigLoader::_SPE_parseConfig(std::string filePath, std::vector<std::string> modeVector, std::vector<std::string> GLOBAL_PARAMS){
     std::ifstream inFile(filePath);
     std::string readLine;
     json globalConf;
-    json algorithmConf;
+    json algorithmConf; 
     std::string inspect("null");
     bool detectAlgorithm = false;
     algorithmConf["mode"] = modeVector.at(0);
@@ -49,14 +49,14 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
                 }
             };
         }   
-    };
+    };  
     if (!detectAlgorithm){
         throw std::invalid_argument("Invalid mode. (mode: "+configMode+").");
     }
     return std::make_tuple(globalConf, algorithmConf);
 };
 
-std::tuple<std::string, std::string> DITConfig::ConfigLoader::_SPE_parseLine(std::string readLine){
+std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_SPE_parseLine(std::string readLine){
     /*
     Assumption: 
         1. the readLine only contain a singal equal sign, and space is meanless.
@@ -71,10 +71,11 @@ std::tuple<std::string, std::string> DITConfig::ConfigLoader::_SPE_parseLine(std
     int valueBeginLoc = parseLine.find_last_of("=");
     param = parseLine.substr(0, paramEndLoc);
     value = parseLine.substr(valueBeginLoc+1, parseLineSize);
+    // printf("param:%s, value:%s\n", param.c_str(), value.c_str());
     return std::make_tuple(param, value);
 };
 
-bool DITConfig::ConfigLoader::_SPE_isGlobal(std::string inspect, std::vector<std::string> GLOBAL_PARAMS){
+bool DITCameraTool::ConfigLoader::_SPE_isGlobal(std::string inspect, std::vector<std::string> GLOBAL_PARAMS){
     for (int i=0; i<GLOBAL_PARAMS.size(); i++){
         if (inspect == GLOBAL_PARAMS[i]){
             return true;

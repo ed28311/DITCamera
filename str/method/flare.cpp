@@ -1,29 +1,25 @@
 #include "flare.hpp"
 
 
-flare::flare(){
+DITCameraTool::Algorithm::Flare::Flare(){
     cv::Mat image;
     std::string imagePath;
     Config DITConfig;
 }
 
-flare::~flare(){
-    cv::Mat* imagePtr = &image;
-    delete imagePtr;
-}
 
-flare::flare(Config config, std::string filePath){
+DITCameraTool::Algorithm::Flare::Flare(DITCameraTool::Config config, std::string filePath){
     std::string imagePath(filePath);
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
     std::cout << "Loading Completed." << std::endl;
 
 }
-bool flare::execute() const {
+bool DITCameraTool::Algorithm::Flare::execute() const {
     return true;
 }
 
 
-cv::Mat flare::loadImage() const {
-    return DITAlgorithm::loadImage();
+cv::Mat DITCameraTool::Algorithm::Flare::loadImage() const {
+    return cv::Mat();
 }

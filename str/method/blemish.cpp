@@ -1,21 +1,21 @@
 #include "blemish.hpp"
 
 
-blemish::blemish(){
+DITCameraTool::Algorithm::Blemish::Blemish(){
     cv::Mat image;
     std::string imagePath;
 }
 
-blemish::blemish(Config config, std::string filePath){
+DITCameraTool::Algorithm::Blemish::Blemish(DITCameraTool::Config config, std::string filePath){
     std::string imagePath(filePath);
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
     std::cout << "Loading Completed." << std::endl;
 }
 
-cv::Mat blemish::loadImage() const{
-    return DITAlgorithm::loadImage();
+cv::Mat DITCameraTool::Algorithm::Blemish::loadImage() const{
+    return cv::Mat();
 }
 
-bool blemish::execute() const{return true;}
+bool DITCameraTool::Algorithm::Blemish::execute() const{return true;}
 

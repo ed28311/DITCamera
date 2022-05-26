@@ -1,24 +1,24 @@
 #include "DITConfig.hpp"
 
-Config::~Config(){
+DITCameraTool::Config::~Config(){
     globalConf.clear();
     algorithmConf.clear();
 }
 
-Config::Config(){
+DITCameraTool::Config::Config(){
     json globalConf;
     json algorithmConf;
 }
 
-Config::Config(json globalConf, json algorithmConf){
-    Config::globalConf = globalConf;
-    Config::algorithmConf = algorithmConf;
+DITCameraTool::Config::Config(json globalConfig, json algorithmConfig){
+    globalConf = globalConfig;
+    algorithmConf = algorithmConfig;
 }
 
-json Config::getAlgorithmConf() const{
-    return Config::algorithmConf;
+json DITCameraTool::Config::getAlgorithmConf() const{
+    return algorithmConf;
 };
 
-json Config::getGlobalConf() const{
-    return Config::globalConf;
+json DITCameraTool::Config::getGlobalConf() const{
+    return globalConf;
 };

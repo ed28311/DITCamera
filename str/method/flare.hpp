@@ -4,11 +4,15 @@
 #endif
 
 
-class flare: public DITAlgorithm{
-    public:
-        flare();
-        flare(Config, std::string);
-        ~flare();
-        virtual bool execute() const override;
-        virtual cv::Mat loadImage() const override;
-};
+
+namespace DITCameraTool{
+    namespace Algorithm{
+        class Flare: public DITCameraTool::Algorithm::AlgorithmBase{
+            public:
+                Flare();
+                Flare(DITCameraTool::Config, std::string);
+                virtual bool execute() const override;
+                virtual cv::Mat loadImage() const override;
+        };
+    }
+}

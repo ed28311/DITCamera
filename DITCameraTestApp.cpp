@@ -10,20 +10,21 @@ std::vector<std::string>  parseDITMode( std::string);
 
 int main(int argc, char ** argv){
     try{
-        DITConfig::ConfigLoader configLoader;
+        DITCameraTool::ConfigLoader configLoader;
         checkDITArgument(argc, argv);
         std::string mode = std::string(argv[1]);
         std::string configPath = std::string(argv[2]);
         std::string imagePath = std::string(argv[3]);
+        std::vector<std::string> modeVector(2);
+        modeVector = parseDITMode(mode);
+        DITCameraTool::Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
         printf("mode: %s\n", mode.c_str());
         printf("configPath: %s\n",configPath.c_str());
         printf("imagePath: %s\n", imagePath.c_str());
         printf("---------------------------\n");
-        std::vector<std::string> modeVector(2);
-        modeVector = parseDITMode(mode);
-        Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
-        algorithmDispatch dispatcher(DITConfig, imagePath);
+        DITCameraTool::AlgorithmDispatch dispatcher(DITConfig, imagePath);
         dispatcher.executeAlgorithm();
+        
     }catch(std::invalid_argument& e){
         std::cerr << e.what() << std::endl;
         return -1;

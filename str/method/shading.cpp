@@ -1,21 +1,21 @@
 #include "shading.hpp"
 
 
-shading::shading(){
+DITCameraTool::Algorithm::Shading::Shading(){
     cv::Mat image;
     std::string imagePath;
-    Config DITConfig;
+    DITCameraTool::Config DITConfig;
 }
 
 
-shading::shading(Config config, std::string filePath){
+DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config, std::string filePath){
     imagePath = filePath;
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
 }
 
-cv::Mat shading::loadImage() const {
+cv::Mat DITCameraTool::Algorithm::Shading::loadImage() const {
     cv::Mat figure = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
     cv::Size figureSize(figure.size());
     if (figure.empty()){
@@ -24,7 +24,7 @@ cv::Mat shading::loadImage() const {
     return figure;
 }
 
-bool shading::execute() const {
+bool DITCameraTool::Algorithm::Shading::execute() const {
     bool resultBool = false;
     float BLOCKRATIO = std::stof((std::string)algorithmConf["BlockRatio"]); //BlockRatio = 0.1;
     cv::Size imageSize(image.size());
@@ -32,11 +32,11 @@ bool shading::execute() const {
     int imageW = imageSize.width;
     int blockH = static_cast<float>(imageH)*BLOCKRATIO;
     int blockW = static_cast<float>(imageW)*BLOCKRATIO;
-    int avgAreaLT = _avgPixel(0, 0, blockW, blockH);
-    int avgAreaLB = _avgPixel(0, imageH-blockH, blockW, blockH);
-    int avgAreaRT = _avgPixel(imageW-blockW, 0, blockW, blockH);
-    int avgAreaRB = _avgPixel(imageW-blockW, imageH-blockH, blockW, blockH);
-    int avgAreaCentre = _avgPixel(imageW/4, imageH/4, imageW/2, imageH/2);
+    int avgAreaLT = _fetchAvgPixel(0, 0, blockW, blockH);
+    int avgAreaLB = _fetchAvgPixel(0, imageH-blockH, blockW, blockH);
+    int avgAreaRT = _fetchAvgPixel(imageW-blockW, 0, blockW, blockH);
+    int avgAreaRB = _fetchAvgPixel(imageW-blockW, imageH-blockH, blockW, blockH);
+    int avgAreaCentre = _fetchAvgPixel(imageW/4, imageH/4, imageW/2, imageH/2);
     std::vector<int> avgAreaCorner{avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT};
     bool resultCentre = _detectCentre(avgAreaCentre);
     bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner);
@@ -49,7 +49,7 @@ bool shading::execute() const {
     return resultBool;
 }
 
-int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight) const{
+int DITCameraTool::Algorithm::Shading::_fetchAvgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight) const{
     cv::Rect imageRect(begin_x, begin_y, rectWidth, rectHeight);
     cv::Mat imageMat = image(imageRect);
     unsigned long long int accumulatePixel=0;
@@ -63,7 +63,7 @@ int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight) 
     return avgPixel;
 };
 
-bool shading::_detectCentre (int avgAreaCentre) const{
+bool DITCameraTool::Algorithm::Shading::_detectCentre (int avgAreaCentre) const{
     int CENTER_UP = std::stoi((std::string)algorithmConf["Center_Up"]);
     int CENTER_LOW = std::stoi((std::string)algorithmConf["Center_Low"]);
     if(avgAreaCentre<CENTER_UP && avgAreaCentre>CENTER_LOW){
@@ -73,7 +73,7 @@ bool shading::_detectCentre (int avgAreaCentre) const{
     }
 }
 
-bool shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVec) const{
+bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVec) const{
     int PASSLEVEL = std::stoi((std::string)algorithmConf["PassLevel"]);
     int PASSLEVEL_UP = std::stoi((std::string)algorithmConf["PassLevel_Up"]);
     bool detectResult = true;
@@ -84,7 +84,7 @@ bool shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVe
     return detectResult;
 }
 
-bool shading::_detectCornerDiff(std::vector<int> avgAreaVec) const {
+bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(std::vector<int> avgAreaVec) const {
     int DIFF = std::stoi((std::string)algorithmConf["Diff"]);
     int maxVal = 0;
     int maxLoc = 0;
