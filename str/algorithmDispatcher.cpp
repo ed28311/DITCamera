@@ -4,12 +4,12 @@
 algorithmDispatch::algorithmDispatch(Config config, std::string imagePath){
     DITConfig = config;
     createAlgorithm(imagePath);
+    printf("Create algorithm completed.\n");
     std::cout << algorithm->imagePath << std::endl;
 };
 
 bool algorithmDispatch::executeAlgorithm(){
     bool resultBool=false;
-    std::cout << algorithm << std::endl;
     resultBool = algorithm->execute();
     return resultBool;
 }
@@ -17,14 +17,13 @@ bool algorithmDispatch::executeAlgorithm(){
 void algorithmDispatch::createAlgorithm(std::string imagePath){
     DITConfig = getDITConfig();
     json algorithmConf = DITConfig.getAlgorithmConf();
-    std::cout << algorithm << std::endl;
-    if (algorithmConf["configMode"] == "Shading"){
+    if (algorithmConf["mode"] == "LS"){
         algorithm = new shading(DITConfig, imagePath);
     }
-    if (algorithmConf["configMode"] == "Blemish"){
+    if (algorithmConf["mode"] == "BL"){
         algorithm = new blemish(DITConfig, imagePath);
     }
-    if (algorithmConf["configMode"] == "Flare"){
+    if (algorithmConf["mode"] == "FL"){
         algorithm = new flare(DITConfig, imagePath);
     }
 };

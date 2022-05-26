@@ -9,29 +9,27 @@ shading::shading(){
 
 
 shading::shading(Config config, std::string filePath){
-    std::string imagePath(filePath);
-    cv::Mat image = loadImage();
+    imagePath = filePath;
+    image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
-    std::cout << "Loading Completed.\n" << std::endl;
 }
 
 cv::Mat shading::loadImage() const {
     cv::Mat figure = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
-    if (image.data){
+    cv::Size figureSize(figure.size());
+    if (figure.empty()){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");
     }
-    std::cout << image.rows << std::endl;
-    printf("Load Image Complete.");
     return figure;
 }
 
 bool shading::execute() const {
     bool resultBool = false;
     float BLOCKRATIO = std::stof((std::string)algorithmConf["BlockRatio"]); //BlockRatio = 0.1;
-    std::cout << BLOCKRATIO <<std::endl;
-    int imageH = image.rows;
-    int imageW = image.cols;
+    cv::Size imageSize(image.size());
+    int imageH = imageSize.height;
+    int imageW = imageSize.width;
     int blockH = static_cast<float>(imageH)*BLOCKRATIO;
     int blockW = static_cast<float>(imageW)*BLOCKRATIO;
     int avgAreaLT = _avgPixel(0, 0, blockW, blockH);
@@ -43,9 +41,11 @@ bool shading::execute() const {
     bool resultCentre = _detectCentre(avgAreaCentre);
     bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner);
     bool resultCornerDiff = _detectCornerDiff(avgAreaCorner);
+    printf("resultCentre: %d, resultCornerShading: %d, resultCornerDiff: %d\n", resultCentre, resultCornerShading, resultCornerDiff);
     if(resultCentre && resultCornerDiff && resultCornerShading){
         resultBool = true;
     }
+    std::cout << (resultBool?"PASS":"NOT PASS") << std::endl;
     return resultBool;
 }
 
@@ -56,7 +56,7 @@ int shading::_avgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight) 
     int numPixel = rectWidth*rectHeight;
     for(int i=0; i<rectHeight; i++){
         for (int j=0; j<rectWidth; j++){
-            accumulatePixel += imageMat.at<int>(i, j);
+            accumulatePixel += imageMat.at<uchar>(i, j);
         }
     }
     int avgPixel =  accumulatePixel/numPixel;

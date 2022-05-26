@@ -6,7 +6,7 @@
 std::vector<std::string> parseDITMode(std::string DITMode);
 
 int main(){
-    std::string imagePath("/home/ed/DITCamera/test_pic/Shading.jpg");
+    std::string imagePath("/home/ed/DITCamera/test_pic/shadingOK.jpg");
     std::string configPath("/home/ed/DITCamera/CameraSpec.spe");
     std::string mode("-LS[Shading]");
     DITConfig::ConfigLoader configLoader;

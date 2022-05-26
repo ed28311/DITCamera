@@ -13,8 +13,8 @@ class DITAlgorithm{
         virtual ~DITAlgorithm() = default;
         virtual bool execute () const;
         virtual cv::Mat loadImage() const;
-        cv::Mat image;
         std::string imagePath;
+        cv::Mat image;
     protected:
         json algorithmConf;
         json globalConf;

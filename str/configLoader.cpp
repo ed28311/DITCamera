@@ -33,7 +33,6 @@ std::tuple<json, json> DITConfig::ConfigLoader::_SPE_parseConfig(std::string fil
             std::regex_search(readLine, sm, std::regex("\\w+"));
             inspect = sm[0];
         }
-        std::cout << readLine << std::endl;
         if (std::regex_match(readLine, std::regex("[\\w]+[\\=\\ ]+[\\w\\.]+"))){
             if (_SPE_isGlobal(inspect, GLOBAL_PARAMS)){
                 std::string param;
@@ -72,7 +71,6 @@ std::tuple<std::string, std::string> DITConfig::ConfigLoader::_SPE_parseLine(std
     int valueBeginLoc = parseLine.find_last_of("=");
     param = parseLine.substr(0, paramEndLoc);
     value = parseLine.substr(valueBeginLoc+1, parseLineSize);
-    printf("param: %s, value: %s\n", param.c_str(), value.c_str());
     return std::make_tuple(param, value);
 };
 

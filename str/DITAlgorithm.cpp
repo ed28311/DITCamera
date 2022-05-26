@@ -12,6 +12,7 @@ bool DITAlgorithm::execute () const{
 
 DITAlgorithm::DITAlgorithm(const Config config, std::string filePath){
     imagePath = filePath;
+    image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
 }

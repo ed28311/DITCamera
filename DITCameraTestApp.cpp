@@ -13,21 +13,17 @@ int main(int argc, char ** argv){
         DITConfig::ConfigLoader configLoader;
         checkDITArgument(argc, argv);
         std::string mode = std::string(argv[1]);
-        printf("\nmode: %s\n", mode.c_str());
         std::string configPath = std::string(argv[2]);
-        printf("configPath: %s\n",configPath.c_str());
         std::string imagePath = std::string(argv[3]);
+        printf("mode: %s\n", mode.c_str());
+        printf("configPath: %s\n",configPath.c_str());
         printf("imagePath: %s\n", imagePath.c_str());
         printf("---------------------------\n");
         std::vector<std::string> modeVector(2);
         modeVector = parseDITMode(mode);
         Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
-        json algConf = DITConfig.getAlgorithmConf();
-        std::cout << "algConf: "<<algConf.dump(4) << std::endl;
-        json globalConf = DITConfig.getGlobalConf();
-        std::cout << "globalConf: " << globalConf.dump(4) << std::endl;
         algorithmDispatch dispatcher(DITConfig, imagePath);
-        // dispatcher.executeAlgorithm();
+        dispatcher.executeAlgorithm();
     }catch(std::invalid_argument& e){
         std::cerr << e.what() << std::endl;
         return -1;
