@@ -3,8 +3,6 @@
 #define DITALG_LOADED
 #endif
 
-
-
 namespace DITCameraTool{
     namespace Algorithm{
         class Flare: public DITCameraTool::Algorithm::AlgorithmBase{
