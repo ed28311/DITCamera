@@ -4,8 +4,6 @@
 DITCameraTool::AlgorithmDispatch::AlgorithmDispatch(DITCameraTool::Config config, std::string imagePath){
     DITConfig = config;
     createAlgorithm(imagePath);
-    printf("Create algorithm completed.\n");
-    std::cout << algorithm->imagePath << std::endl;
 };
 
 bool DITCameraTool::AlgorithmDispatch::executeAlgorithm(){

@@ -18,6 +18,7 @@ int main(int argc, char ** argv){
         std::vector<std::string> modeVector(2);
         modeVector = parseDITMode(mode);
         DITCameraTool::Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
+        json globalConfig = DITConfig.getGlobalConf();
         printf("mode: %s\n", mode.c_str());
         printf("configPath: %s\n",configPath.c_str());
         printf("imagePath: %s\n", imagePath.c_str());

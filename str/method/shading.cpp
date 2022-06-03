@@ -1,5 +1,5 @@
 #include "shading.hpp"
-
+#define _AppendAvgAreaCorner(jsonAvgAreaCorner, variable) _appendAvgAreaCorner((jsonAvgAreaCorner), #variable, (variable))
 
 DITCameraTool::Algorithm::Shading::Shading(){
     cv::Mat image;
@@ -37,7 +37,9 @@ bool DITCameraTool::Algorithm::Shading::execute() const {
     int avgAreaRT = _fetchAvgPixel(imageW-blockW, 0, blockW, blockH);
     int avgAreaRB = _fetchAvgPixel(imageW-blockW, imageH-blockH, blockW, blockH);
     int avgAreaCentre = _fetchAvgPixel(imageW/4, imageH/4, imageW/2, imageH/2);
-    std::vector<int> avgAreaCorner{avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT};
+    json avgAreaCorner;
+    _collectAvgAreaCorner(avgAreaCorner, avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT);
+    // std::vector<int> avgAreaCorner{avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT};
     bool resultCentre = _detectCentre(avgAreaCentre);
     bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner);
     bool resultCornerDiff = _detectCornerDiff(avgAreaCorner);
@@ -47,6 +49,18 @@ bool DITCameraTool::Algorithm::Shading::execute() const {
     }
     std::cout << (resultBool?"PASS":"NOT PASS") << std::endl;
     return resultBool;
+}
+
+
+
+void DITCameraTool::Algorithm::Shading::_collectAvgAreaCorner(json &jsonAvgAreaCorner, int avgAreaLB, int avgAreaLT, int avgAreaRB, int avgAreaRT) const{
+    _AppendAvgAreaCorner(jsonAvgAreaCorner, avgAreaLB);
+    _AppendAvgAreaCorner(jsonAvgAreaCorner, avgAreaLT);
+    _AppendAvgAreaCorner(jsonAvgAreaCorner, avgAreaRB);
+    _AppendAvgAreaCorner(jsonAvgAreaCorner, avgAreaRT);
+}
+void DITCameraTool::Algorithm::Shading::_appendAvgAreaCorner(json &jsonAvgAreaCorner,std::string name, int val) const{
+    jsonAvgAreaCorner[name] = val;
 }
 
 int DITCameraTool::Algorithm::Shading::_fetchAvgPixel(int begin_x, int begin_y, int rectWidth, int rectHeight) const{
@@ -73,7 +87,7 @@ bool DITCameraTool::Algorithm::Shading::_detectCentre (int avgAreaCentre) const{
     }
 }
 
-bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, std::vector<int> avgAreaVec) const{
+bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, json avgAreaVec) const{
     int PASSLEVEL = std::stoi((std::string)algorithmConf["PassLevel"]);
     int PASSLEVEL_UP = std::stoi((std::string)algorithmConf["PassLevel_Up"]);
     bool detectResult = true;
@@ -84,23 +98,24 @@ bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, 
     return detectResult;
 }
 
-bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(std::vector<int> avgAreaVec) const {
+bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList) const {
     int DIFF = std::stoi((std::string)algorithmConf["Diff"]);
     int maxVal = 0;
-    int maxLoc = 0;
+    std::string maxKey;
     int minVal = 256;
-    int minLoc = 0;
+    std::string minKey;
     bool detectResult = false;
-    for(int i = 0; i<avgAreaVec.size(); i++){
-        if (avgAreaVec[i]>maxVal){
-            maxVal = avgAreaVec[i];
-            maxLoc = i;
+    for(const auto& item:avgAreaList.items()){
+        if (item.value()>maxVal){
+            maxKey = item.key();
+            maxVal = item.value();
         }
-        if (avgAreaVec[i]<minVal){
-            minVal = avgAreaVec[i];
-            minLoc = i;
+        if (item.value()<minVal){
+            minKey = item.key();
+            minVal = item.value();
         }
     }
+    printf("maxKey: %s, minKey: %s\n", maxKey.c_str(), minKey.c_str());
     if ((maxVal-minVal)< DIFF){
         detectResult = true;
     }

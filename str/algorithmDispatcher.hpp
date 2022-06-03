@@ -13,6 +13,6 @@ namespace DITCameraTool{
         private:
             DITCameraTool::Algorithm::AlgorithmBase *algorithm;
             void createAlgorithm(std::string);
-};
+    };
 }
 #endif

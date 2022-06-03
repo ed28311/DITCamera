@@ -13,9 +13,11 @@ namespace DITCameraTool{
                 virtual bool execute() const override;
             private:
                 int _fetchAvgPixel(int, int, int, int) const;
+                void _collectAvgAreaCorner(json &jsonAvgAreaCorner, int avgAreaLB, int avgAreaLT, int avgAreaRB, int avgAreaRT) const;
+                void _appendAvgAreaCorner(json &jsonAvgAreaCorner,std::string name, int val) const;
                 bool _detectCentre(int) const;
-                bool _detectCornerShading(int, std::vector<int>) const;
-                bool _detectCornerDiff(std::vector<int>) const;
+                bool _detectCornerShading(int, json) const;
+                bool _detectCornerDiff(json) const;
         };
     }
 }

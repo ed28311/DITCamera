@@ -33,7 +33,7 @@ PassLevel_Up = 110
 BlockRatio = 0.1
 
 [Flare]
-Std_Threshold = 100
+Std_Threshold = 80
 
 [Blemish]
 Stride = 3
