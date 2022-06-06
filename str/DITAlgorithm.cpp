@@ -24,3 +24,4 @@ cv::Mat DITCameraTool::Algorithm::AlgorithmBase::loadImage() const{
     return figure;
 };
 
+

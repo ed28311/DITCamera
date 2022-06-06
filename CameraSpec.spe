@@ -36,5 +36,9 @@ BlockRatio = 0.1
 Std_Threshold = 80
 
 [Blemish]
-Stride = 3
+Split_Partition = 3
+Std_Threshold = 5
+
+[BlemishPixel]
+Stride = 4
 Diff_Tolarence = 10
