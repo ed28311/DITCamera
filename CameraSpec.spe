@@ -1,17 +1,17 @@
 ;20191116
 [Project]
 Name=DIT_NewMember_Demo_version
-SE
+Version=1.0.0
 
 ;20181101
 ; 1st version
-
 [ATD_OUTPUT_INFO]
 OutputATDLog = 2
 ShowSN = 1
 
 [ASUS_DebugInfo]
 OutputDebugInfo = 1
+OutputTestInfo = 1
 OutputDLLReport = 1
 OutputEXEReport = 0
 OutputLSTReport = 0
@@ -22,7 +22,7 @@ OutputShortPath = 1
 DoMultiThread = 1
 DoItemsMultiThread = 0
 DoItemsNumMT = 0
-ReportDirectory = ASUS_Camera_Reports
+ReportDirectory = ASUS_Camera_Reports_DLL
 
 [Shading]
 PassLevel=16

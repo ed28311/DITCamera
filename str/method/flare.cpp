@@ -24,6 +24,7 @@ DITCameraTool::Algorithm::Flare::Flare(DITCameraTool::Config config, std::string
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
+    debugMode = _getDebugMode();
 }
 
 bool DITCameraTool::Algorithm::Flare::execute() const {

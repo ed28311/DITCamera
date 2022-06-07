@@ -13,6 +13,7 @@ DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config, std::st
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
+    debugMode = _getDebugMode();
 }
 
 cv::Mat DITCameraTool::Algorithm::Shading::loadImage() const {
@@ -43,7 +44,11 @@ bool DITCameraTool::Algorithm::Shading::execute() const {
     bool resultCentre = _detectCentre(avgAreaCentre);
     bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner);
     bool resultCornerDiff = _detectCornerDiff(avgAreaCorner);
-    printf("resultCentre: %d, resultCornerShading: %d, resultCornerDiff: %d\n", resultCentre, resultCornerShading, resultCornerDiff);
+    if(debugMode){
+        _PrintVariable(resultCentre);
+        _PrintVariable(resultCornerShading);
+        _PrintVariable(resultCornerDiff);
+    }
     if(resultCentre && resultCornerDiff && resultCornerShading){
         resultBool = true;
     }
@@ -78,13 +83,17 @@ int DITCameraTool::Algorithm::Shading::_fetchAvgPixel(int begin_x, int begin_y, 
 };
 
 bool DITCameraTool::Algorithm::Shading::_detectCentre (int avgAreaCentre) const{
+    bool resultBool = false;
     int CENTER_UP = std::stoi((std::string)algorithmConf["Center_Up"]);
     int CENTER_LOW = std::stoi((std::string)algorithmConf["Center_Low"]);
     if(avgAreaCentre<CENTER_UP && avgAreaCentre>CENTER_LOW){
-        return true;
-    } else {
-        return false;
+        resultBool = true;
     }
+    logElement.at("UCL").get_to(CENTER_UP);
+    logElement["LCL"] = CENTER_LOW;
+    logElement["ITEM"] = std::string("_detectCentre");
+
+    return resultBool;
 }
 
 bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, json avgAreaVec) const{
@@ -115,7 +124,9 @@ bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList) cons
             minVal = item.value();
         }
     }
-    printf("maxKey: %s, minKey: %s\n", maxKey.c_str(), minKey.c_str());
+    if (debugMode){
+        printf("maxKey: %s, minKey: %s\n", maxKey.c_str(), minKey.c_str());
+    }
     if ((maxVal-minVal)< DIFF){
         detectResult = true;
     }

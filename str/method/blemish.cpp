@@ -11,6 +11,7 @@ DITCameraTool::Algorithm::Blemish::Blemish(DITCameraTool::Config config, std::st
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
+    debugMode = _getDebugMode();
 }
 
 cv::Mat DITCameraTool::Algorithm::Blemish::loadImage() const{
@@ -30,12 +31,11 @@ bool DITCameraTool::Algorithm::Blemish::execute() const{
     int splitCols = image.cols/splitPartitions;
     int height;
     int width;
-    if(false){
+    if(debugMode){
         _PrintVariable(image.rows);
         _PrintVariable(image.cols);
         printf("-----\n");
     }
-    _PrintVariable(image.cols);
     for (int i=0; i<splitPartitions; i++){
         for(int j=0; j<splitPartitions; j++){
             std::vector<int> pixelStat(256, 0);
@@ -48,7 +48,7 @@ bool DITCameraTool::Algorithm::Blemish::execute() const{
             if(j==splitPartitions-1){
                 width = image.cols-j*splitCols;
             }
-            if(false){
+            if(debugMode){
                 _PrintVariable(i); 
                 _PrintVariable(j);
                 _PrintVariable(width);
@@ -81,7 +81,7 @@ bool DITCameraTool::Algorithm::Blemish::_detectStd(cv::Mat figure, std::vector<i
     bool resultBool = false;
     float pixelStd = _evalPixelStandardDeviation(figure, pixelArray);
     float stdThreshold = std::stof((std::string)algorithmConf["Std_Threshold"]);
-    if (true){
+    if (debugMode){
         _PrintVariable(pixelStd);
         printf("-----Done\n");
     }
@@ -103,7 +103,7 @@ float DITCameraTool::Algorithm::Blemish::_evalPixelStandardDeviation(cv::Mat fig
             printf("Pixel: %d, # of pxiels: %d\n", i, intArray[i]);
         }
     }
-    if(false){
+    if(debugMode){
         _PrintVariable((int)intArray.size());
         _PrintVariable(mean);
         _PrintVariable(meanSquare);

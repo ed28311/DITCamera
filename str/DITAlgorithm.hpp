@@ -3,6 +3,7 @@
 #define LOGGER(name) DITLogger(#name, (name))
 #include <iostream>
 #include "DITConfig.hpp"
+#include "logger.hpp"
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include "tool/displayer.hpp"
@@ -17,12 +18,17 @@ namespace DITCameraTool{
                 virtual ~AlgorithmBase() = default;
                 virtual bool execute () const;
                 virtual cv::Mat loadImage() const;
+                virtual json logInitialize() const;
                 std::string imagePath;
                 cv::Mat image;
-                bool test_mode;
+                bool debugMode;
+                DITCameraTool::Logger DITLogger;
+                json logElement;
             protected:
+                DITCameraTool::Logger _loadLogger();
                 json algorithmConf;
                 json globalConf;
+                bool _getDebugMode() const;
         };
     }
 }
