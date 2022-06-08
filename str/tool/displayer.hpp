@@ -1,4 +1,7 @@
+#ifndef PRINTVARIABLE_LOAD
 #include <iostream>
+#define PRINTVARIABLE_LOAD
+#define _PrintVariable(variable) DITCameraTool::Display().printVariable(#variable, (variable))
 
 namespace DITCameraTool {
     class Display{
@@ -14,3 +17,4 @@ namespace DITCameraTool {
             std::string _debugPrintFormat(std::string);            
     };
 }
+#endif

@@ -8,11 +8,12 @@ DITCameraTool::Logger::Logger(){
 }
 
 DITCameraTool::Logger::Logger(json globalConf){
-    std::cout << "LOGGER" <<std::endl;
+    config = globalConf;
+    logCols = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG"};
     maxCol = logCols.size();
     logEnable = _getLogOption();
+    std::cout << logEnable<< std::endl;
     serialNums = "ED0472-28311";
-    logCols = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG"};
     _getCurrentTime();
     fileDir = (std::string)config["ReportDirectory"]+currentDate+"/";
     fileName = "Report-"+serialNums+"-"+currentDatetime;
@@ -49,7 +50,6 @@ void DITCameraTool::Logger::write(json logElement){
 }
 
 std::string DITCameraTool::Logger::_generateCSVString(std::vector<std::string> logVec){
-    _addDITLogComponentHeader();
     std::string outputString = "";
     for (int i=0; i<logVec.size(); i++){
         outputString+=(logVec[i]+",");
@@ -61,13 +61,18 @@ std::string DITCameraTool::Logger::_generateCSVString(std::vector<std::string> l
     return outputString;
 }
 
-bool DITCameraTool::Logger::generate(){
+bool DITCameraTool::Logger::generateCSV(){
+    _addDITLogComponentHeader();
     bool resultBool = false;
-    if(~logEnable){
+    if(!logEnable){
         return resultBool;
     }
+    _PrintVariable((int)logComponent.size());
     std::ofstream logFile;
-    logFile.open(fileDir+fileName);
+    _checkDirRoot(fileDir);
+    std::string filePath = fileDir+fileName+".csv";
+    _PrintVariable(filePath);
+    logFile.open(filePath);
     for(int i=0; i<logComponent.size(); i++){
         logFile << _generateCSVString(logComponent[i]);
     }
@@ -76,7 +81,9 @@ bool DITCameraTool::Logger::generate(){
     return resultBool;
 }
 
-
+void DITCameraTool::Logger::_checkDirRoot(std::string fileDir){
+    std::filesystem::create_directories(fileDir);
+};
 bool DITCameraTool::Logger::_getLogOption(){
     return std::stoi((std::string)config["OutputDebugInfo"]);
 }

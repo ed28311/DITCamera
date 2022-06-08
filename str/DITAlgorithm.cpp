@@ -6,7 +6,7 @@ DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(){
     DITCameraTool::Config DITConfig;
 }
 
-DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config, std::string filePath, DITCameraTool::Logger& logger){
+DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config, std::string filePath){
     imagePath = filePath;
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
@@ -36,7 +36,7 @@ void DITCameraTool::Algorithm::AlgorithmBase::submitLog(json logElement, DITCame
     const_cast<AlgorithmBase*>(this)->logInitialize(DITLogger);
 }
 void DITCameraTool::Algorithm::AlgorithmBase::writeLog(std::string key, std::string val) const{
-    const_cast<AlgorithmBase*>(this)->logElement["key"]=val;
+    const_cast<AlgorithmBase*>(this)->logElement[key]=val;
 }
 
 void DITCameraTool::Algorithm::AlgorithmBase::logInitialize(DITCameraTool::Logger& DITLogger){

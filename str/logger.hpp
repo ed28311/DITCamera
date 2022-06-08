@@ -2,7 +2,9 @@
 #include <fstream>
 #include <deque>
 #include <ctime>
+#include <filesystem>
 #include "DITConfig.hpp"
+#include "tool/displayer.hpp"
 
 namespace DITCameraTool{
     class Logger{
@@ -10,8 +12,9 @@ namespace DITCameraTool{
             Logger();
             Logger(json globalConf);
             void write(json);
-            bool generate();
+            bool generateCSV();
             int maxCol;
+            json config;
             std::string serialNums;
             std::string fileDir;
             std::string fileName;
@@ -19,12 +22,12 @@ namespace DITCameraTool{
             std::vector<std::string> logCols;
             std::string currentDatetime;
             std::string currentDate;
-            json config;
             bool logEnable;
         private:
             bool _getLogOption();
             int _addDITLogComponentHeader();
             std::string _generateCSVString(std::vector<std::string>);
             void _getCurrentTime();
+            void _checkDirRoot(std::string);
     };
 }

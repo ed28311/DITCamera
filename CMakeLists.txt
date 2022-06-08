@@ -11,7 +11,7 @@ SET(JSON_DIR 			${THIRDPARTY}/nlohmann)
 
 SET(LIBRARY_OUTPUT_DIRECTORY 	${PROJECT_BINARY_DIR}/lib)
 SET(EXECUTABLE_OUTPUT_PATH 	    ${PROJECT_BINARY_DIR}/bin)
-
+SET(CMAKE_CXX_FLAGS "-lstdc++fs -std=c++17")
 add_subdirectory(${JSON_DIR})
 find_package(nlohmann_json 3.2.0 REQUIRED CONFIG PATHS ${JSON_DIR})
 find_package(OpenCV REQUIRED PATHS "/usr/include/opencv2")

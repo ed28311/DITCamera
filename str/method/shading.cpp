@@ -8,6 +8,7 @@ DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config, std::st
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
     debugMode = _getDebugMode();
+    _PrintVariable(debugMode);
     if(debugMode){
         _PrintVariable(globalConf.dump(4));
         _PrintVariable(algorithmConf.dump(4));
@@ -25,6 +26,7 @@ cv::Mat DITCameraTool::Algorithm::Shading::loadImage() const {
 
 bool DITCameraTool::Algorithm::Shading::execute(DITCameraTool::Logger& logger) const {
     DITCameraTool::Logger& DITLogger = logger;
+    const_cast<Shading*>(this)->logInitialize(DITLogger);
     bool resultBool = false;
     float BLOCKRATIO = std::stof((std::string)algorithmConf["BlockRatio"]); //BlockRatio = 0.1;
     cv::Size imageSize(image.size());
@@ -153,9 +155,9 @@ bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList, DITC
     }
     if(DITLogger.logEnable){
         _attachBaseLogInfo(DITLogger);
-        writeLog("LCL",std::to_string(DIFF));
+        writeLog("UCL",std::to_string(DIFF));
         writeLog("ITEM","detectCornerDiff");
-        writeLog("VALUE", std::to_string(maxVal));
+        writeLog("VALUE", std::to_string(maxVal-minVal));
         writeLog("RESULT", ((detectResult))?"PASS":"FAIL");
         submitLog(logElement, DITLogger);
     }

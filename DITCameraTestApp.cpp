@@ -26,7 +26,8 @@ int main(int argc, char ** argv){
         printf("---------------------------\n");
         DITCameraTool::AlgorithmDispatch dispatcher(DITConfig, imagePath, logger);
         dispatcher.executeAlgorithm();
-        logger.generate();
+        bool logResult = logger.generateCSV();
+        _PrintVariable(logResult);
     }catch(std::invalid_argument& e){
         std::cerr << e.what() << std::endl;
         return -1;
