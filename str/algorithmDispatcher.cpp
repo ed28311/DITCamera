@@ -1,14 +1,14 @@
 #include <algorithmDispatcher.hpp>
 
 
-DITCameraTool::AlgorithmDispatch::AlgorithmDispatch(DITCameraTool::Config config, std::string imagePath){
+DITCameraTool::AlgorithmDispatch::AlgorithmDispatch(DITCameraTool::Config config, std::string imagePath, DITCameraTool::Logger &logger):DITLogger(logger){
     DITConfig = config;
     createAlgorithm(imagePath);
 };
 
 bool DITCameraTool::AlgorithmDispatch::executeAlgorithm(){
     bool resultBool=false;
-    resultBool = algorithm->execute();
+    resultBool = algorithm->execute(DITLogger);
     return resultBool;
 }
 

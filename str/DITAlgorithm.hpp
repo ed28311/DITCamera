@@ -14,16 +14,18 @@ namespace DITCameraTool{
         class AlgorithmBase{
             public:
                 AlgorithmBase();
-                AlgorithmBase(DITCameraTool::Config, std::string);
+                AlgorithmBase(DITCameraTool::Config, std::string, DITCameraTool::Logger&);
                 virtual ~AlgorithmBase() = default;
-                virtual bool execute () const;
                 virtual cv::Mat loadImage() const;
-                virtual json logInitialize() const;
                 std::string imagePath;
                 cv::Mat image;
                 bool debugMode;
-                DITCameraTool::Logger DITLogger;
                 json logElement;
+                
+                virtual bool execute (DITCameraTool::Logger&) const;
+                virtual void submitLog(json, DITCameraTool::Logger&) const;
+                virtual void writeLog(std::string, std::string) const;
+                void logInitialize(DITCameraTool::Logger&);
             protected:
                 DITCameraTool::Logger _loadLogger();
                 json algorithmConf;

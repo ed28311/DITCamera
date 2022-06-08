@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <deque>
 #include <ctime>
 #include "DITConfig.hpp"
 
@@ -14,16 +15,16 @@ namespace DITCameraTool{
             std::string serialNums;
             std::string fileDir;
             std::string fileName;
-            std::vector<std::vector<std::string>> logComponent;
+            std::deque<std::vector<std::string>> logComponent;
             std::vector<std::string> logCols;
             std::string currentDatetime;
+            std::string currentDate;
             json config;
-            
-        private:
             bool logEnable;
+        private:
             bool _getLogOption();
             int _addDITLogComponentHeader();
             std::string _generateCSVString(std::vector<std::string>);
-            std::string _getCurrentDate();
+            void _getCurrentTime();
     };
 }

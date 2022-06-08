@@ -23,7 +23,8 @@ cv::Mat DITCameraTool::Algorithm::BlemishPixel::loadImage() const{
     return figure;
 }
 
-bool DITCameraTool::Algorithm::BlemishPixel::execute() const{
+bool DITCameraTool::Algorithm::BlemishPixel::execute(DITCameraTool::Logger& logger) const{
+    DITCameraTool::Logger& DITLogger = logger;
     std::vector<std::vector<int>> logObject;
     bool resultBool = _loopPixels(true, logObject);
     std::cout << resultBool << std::endl;

@@ -1,12 +1,6 @@
 #include "shading.hpp"
 #define _AppendAvgAreaCorner(jsonAvgAreaCorner, variable) _appendAvgAreaCorner((jsonAvgAreaCorner), #variable, (variable))
 
-DITCameraTool::Algorithm::Shading::Shading(){
-    cv::Mat image;
-    std::string imagePath;
-    DITCameraTool::Config DITConfig;
-}
-
 
 DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config, std::string filePath){
     imagePath = filePath;
@@ -14,6 +8,10 @@ DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config, std::st
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
     debugMode = _getDebugMode();
+    if(debugMode){
+        _PrintVariable(globalConf.dump(4));
+        _PrintVariable(algorithmConf.dump(4));
+    }
 }
 
 cv::Mat DITCameraTool::Algorithm::Shading::loadImage() const {
@@ -25,7 +23,8 @@ cv::Mat DITCameraTool::Algorithm::Shading::loadImage() const {
     return figure;
 }
 
-bool DITCameraTool::Algorithm::Shading::execute() const {
+bool DITCameraTool::Algorithm::Shading::execute(DITCameraTool::Logger& logger) const {
+    DITCameraTool::Logger& DITLogger = logger;
     bool resultBool = false;
     float BLOCKRATIO = std::stof((std::string)algorithmConf["BlockRatio"]); //BlockRatio = 0.1;
     cv::Size imageSize(image.size());
@@ -40,10 +39,9 @@ bool DITCameraTool::Algorithm::Shading::execute() const {
     int avgAreaCentre = _fetchAvgPixel(imageW/4, imageH/4, imageW/2, imageH/2);
     json avgAreaCorner;
     _collectAvgAreaCorner(avgAreaCorner, avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT);
-    // std::vector<int> avgAreaCorner{avgAreaLB, avgAreaLT, avgAreaRB, avgAreaRT};
-    bool resultCentre = _detectCentre(avgAreaCentre);
-    bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner);
-    bool resultCornerDiff = _detectCornerDiff(avgAreaCorner);
+    bool resultCentre = _detectCentre(avgAreaCentre, DITLogger);
+    bool resultCornerShading = _detectCornerShading(avgAreaCentre, avgAreaCorner, DITLogger);
+    bool resultCornerDiff = _detectCornerDiff(avgAreaCorner, DITLogger);
     if(debugMode){
         _PrintVariable(resultCentre);
         _PrintVariable(resultCornerShading);
@@ -52,6 +50,7 @@ bool DITCameraTool::Algorithm::Shading::execute() const {
     if(resultCentre && resultCornerDiff && resultCornerShading){
         resultBool = true;
     }
+
     std::cout << (resultBool?"PASS":"NOT PASS") << std::endl;
     return resultBool;
 }
@@ -82,32 +81,57 @@ int DITCameraTool::Algorithm::Shading::_fetchAvgPixel(int begin_x, int begin_y, 
     return avgPixel;
 };
 
-bool DITCameraTool::Algorithm::Shading::_detectCentre (int avgAreaCentre) const{
+bool DITCameraTool::Algorithm::Shading::_detectCentre (int avgAreaCentre, DITCameraTool::Logger& DITLogger) const{
     bool resultBool = false;
     int CENTER_UP = std::stoi((std::string)algorithmConf["Center_Up"]);
     int CENTER_LOW = std::stoi((std::string)algorithmConf["Center_Low"]);
     if(avgAreaCentre<CENTER_UP && avgAreaCentre>CENTER_LOW){
         resultBool = true;
     }
-    logElement.at("UCL").get_to(CENTER_UP);
-    logElement["LCL"] = CENTER_LOW;
-    logElement["ITEM"] = std::string("_detectCentre");
-
+    if(DITLogger.logEnable){
+        _attachBaseLogInfo(DITLogger);
+        writeLog("UCL",std::to_string(CENTER_UP));
+        writeLog("LCL",std::to_string(CENTER_LOW));
+        writeLog("ITEM","detectCentre");
+        writeLog("VALUE", std::to_string(avgAreaCentre));
+        writeLog("RESULT",(resultBool)?"PASS":"FAIL");
+        submitLog(logElement, DITLogger);
+    }
     return resultBool;
 }
 
-bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, json avgAreaVec) const{
+
+bool DITCameraTool::Algorithm::Shading::_detectCornerShading(int avgAreaCentre, json avgAreaList, DITCameraTool::Logger& DITLogger) const{
     int PASSLEVEL = std::stoi((std::string)algorithmConf["PassLevel"]);
     int PASSLEVEL_UP = std::stoi((std::string)algorithmConf["PassLevel_Up"]);
-    bool detectResult = true;
-    for (int avgArea:avgAreaVec){
+    bool resultBool = true;
+    for (const auto& item:avgAreaList.items()){
+        int avgArea = item.value();
+        std::string avgAreaKey = item.key();
         double avgAreaShading = 100*(static_cast<double>(avgArea)/static_cast<double>(avgAreaCentre));
-        detectResult = ( detectResult&& (avgAreaShading>PASSLEVEL )&& ( avgAreaShading<PASSLEVEL_UP ) );
+        resultBool = ( resultBool&& (avgAreaShading>PASSLEVEL )&& ( avgAreaShading<PASSLEVEL_UP ) );
+        if(DITLogger.logEnable){
+            _attachBaseLogInfo(DITLogger);
+            writeLog("UCL",std::to_string(PASSLEVEL));
+            writeLog("LCL",std::to_string(PASSLEVEL_UP));
+            writeLog("ITEM",avgAreaKey);
+            writeLog("VALUE", std::to_string(avgAreaShading));
+            writeLog("RESULT", ((avgAreaShading>PASSLEVEL )&& ( avgAreaShading<PASSLEVEL_UP ))?"PASS":"FAIL");
+            submitLog(logElement, DITLogger);
+        }
     }
-    return detectResult;
+    if(DITLogger.logEnable){
+        _attachBaseLogInfo(DITLogger);
+        writeLog("UCL",std::to_string(PASSLEVEL));
+        writeLog("LCL",std::to_string(PASSLEVEL_UP));
+        writeLog("ITEM","detectCornerShading");
+        writeLog("RESULT",(resultBool)?"PASS":"FAIL");
+        submitLog(logElement, DITLogger);
+    }
+    return resultBool;
 }
 
-bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList) const {
+bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList, DITCameraTool::Logger& DITLogger) const {
     int DIFF = std::stoi((std::string)algorithmConf["Diff"]);
     int maxVal = 0;
     std::string maxKey;
@@ -124,11 +148,24 @@ bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList) cons
             minVal = item.value();
         }
     }
-    if (debugMode){
-        printf("maxKey: %s, minKey: %s\n", maxKey.c_str(), minKey.c_str());
-    }
     if ((maxVal-minVal)< DIFF){
         detectResult = true;
     }
+    if(DITLogger.logEnable){
+        _attachBaseLogInfo(DITLogger);
+        writeLog("LCL",std::to_string(DIFF));
+        writeLog("ITEM","detectCornerDiff");
+        writeLog("VALUE", std::to_string(maxVal));
+        writeLog("RESULT", ((detectResult))?"PASS":"FAIL");
+        submitLog(logElement, DITLogger);
+    }
     return detectResult;
 }
+
+void DITCameraTool::Algorithm::Shading::_attachBaseLogInfo(DITCameraTool::Logger& DITLogger) const{
+    writeLog("SPEC_NAME",globalConf["SpecName"]);
+    writeLog("DATE_TIME",DITLogger.currentDate);
+    writeLog("OBJ_NAME",algorithmConf["mode"]);
+    writeLog("STATUS",std::to_string(0));
+}
+

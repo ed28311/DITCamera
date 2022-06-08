@@ -27,7 +27,8 @@ DITCameraTool::Algorithm::Flare::Flare(DITCameraTool::Config config, std::string
     debugMode = _getDebugMode();
 }
 
-bool DITCameraTool::Algorithm::Flare::execute() const {
+bool DITCameraTool::Algorithm::Flare::execute(DITCameraTool::Logger& logger) const {
+    DITCameraTool::Logger& DITLogger = logger;
     cv::Mat hist;
     std::vector<int> pixelStat(256, 0);
     _statisticPixel(pixelStat, image);

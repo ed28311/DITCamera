@@ -23,8 +23,9 @@ cv::Mat DITCameraTool::Algorithm::Blemish::loadImage() const{
     return figure;
 }
 
-bool DITCameraTool::Algorithm::Blemish::execute() const{
+bool DITCameraTool::Algorithm::Blemish::execute(DITCameraTool::Logger& logger) const{
     cv::Mat hist;
+    DITCameraTool::Logger& DITLogger = logger;
     bool resultBool = false;
     int splitPartitions = std::stoi((std::string)algorithmConf["Split_Partition"]);
     int splitRows = image.rows/splitPartitions;

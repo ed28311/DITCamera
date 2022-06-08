@@ -6,34 +6,15 @@ DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(){
     DITCameraTool::Config DITConfig;
 }
 
-bool DITCameraTool::Algorithm::AlgorithmBase::execute () const{
-    return true;
-}
-
-DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config, std::string filePath){
+DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config, std::string filePath, DITCameraTool::Logger& logger){
     imagePath = filePath;
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
     debugMode = _getDebugMode();
-    DITLogger = _loadLogger();
-    logElement = logInitialize();
 }
-
-json DITCameraTool::Algorithm::AlgorithmBase::logInitialize() const{
-    json logVec;
-    for (int i=0; i<DITLogger.logCols.size(); i++){
-        logVec[DITLogger.logCols[i]] = " ";
-    }
-    return logVec;
-}
-
-DITCameraTool::Logger DITCameraTool::Algorithm::AlgorithmBase::_loadLogger(){
-    return DITCameraTool::Logger(globalConf);
-}
-
-bool DITCameraTool::Algorithm::AlgorithmBase::_getDebugMode() const{
-    return (std::stoi((std::string)globalConf["OutputTestInfo"]));
+bool DITCameraTool::Algorithm::AlgorithmBase::execute(DITCameraTool::Logger& ) const{
+    return true;
 }
 
 cv::Mat DITCameraTool::Algorithm::AlgorithmBase::loadImage() const{
@@ -43,5 +24,27 @@ cv::Mat DITCameraTool::Algorithm::AlgorithmBase::loadImage() const{
     }
     return figure;
 };
+
+
+bool DITCameraTool::Algorithm::AlgorithmBase::_getDebugMode() const{
+    return (std::stoi((std::string)globalConf["OutputTestInfo"]));
+}
+
+void DITCameraTool::Algorithm::AlgorithmBase::submitLog(json logElement, DITCameraTool::Logger& DITLogger)const{
+    DITCameraTool::Logger *loggerPtr = &DITLogger;
+    const_cast<DITCameraTool::Logger*>(loggerPtr)->write(logElement);
+    const_cast<AlgorithmBase*>(this)->logInitialize(DITLogger);
+}
+void DITCameraTool::Algorithm::AlgorithmBase::writeLog(std::string key, std::string val) const{
+    const_cast<AlgorithmBase*>(this)->logElement["key"]=val;
+}
+
+void DITCameraTool::Algorithm::AlgorithmBase::logInitialize(DITCameraTool::Logger& DITLogger){
+    json logVec;
+    for (int i=0; i<DITLogger.logCols.size(); i++){
+        logVec[DITLogger.logCols[i]] = " ";
+    }
+    logElement = logVec;
+}
 
 

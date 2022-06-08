@@ -2,6 +2,7 @@
 [Project]
 Name=DIT_NewMember_Demo_version
 Version=1.0.0
+SpecName=CameraSpec.spe
 
 ;20181101
 ; 1st version

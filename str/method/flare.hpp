@@ -9,7 +9,7 @@ namespace DITCameraTool{
             public:
                 Flare();
                 Flare(DITCameraTool::Config, std::string);
-                virtual bool execute() const override;
+                virtual bool execute(DITCameraTool::Logger& ) const override;
                 virtual cv::Mat loadImage() const override;
             private:
                 void _statisticPixel(std::vector<int>&, cv::Mat) const;

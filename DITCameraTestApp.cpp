@@ -19,13 +19,14 @@ int main(int argc, char ** argv){
         modeVector = parseDITMode(mode);
         DITCameraTool::Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
         json globalConfig = DITConfig.getGlobalConf();
+        DITCameraTool::Logger logger(globalConfig);
         printf("mode: %s\n", mode.c_str());
         printf("configPath: %s\n",configPath.c_str());
         printf("imagePath: %s\n", imagePath.c_str());
         printf("---------------------------\n");
-        DITCameraTool::AlgorithmDispatch dispatcher(DITConfig, imagePath);
+        DITCameraTool::AlgorithmDispatch dispatcher(DITConfig, imagePath, logger);
         dispatcher.executeAlgorithm();
-        
+        logger.generate();
     }catch(std::invalid_argument& e){
         std::cerr << e.what() << std::endl;
         return -1;
