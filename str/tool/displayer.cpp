@@ -32,6 +32,15 @@ void DITCameraTool::Display::printVariable(std::string variableName, float varia
     std::cout <<  debugMode <<variableName<< "\033[0m" << " = " << variable << std::endl;
 }
 
-void cprintf(std::string printString){
+void DITCameraTool::Display::printVairable(std::string variableName, std::vector<std::string> variable){
+    std::cout <<  debugMode <<variableName<< "\033[0m" << " = [";
+    for (std::string element:variable){
+        std::cout << element <<", ";
+    }
+    std::cout << "\b\b]" << std::endl;
+}
+
+
+void DITCameraTool::Display::cprintf(std::string printString){
 
 };

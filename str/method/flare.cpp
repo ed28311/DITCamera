@@ -8,11 +8,12 @@ DITCameraTool::Algorithm::Flare::Flare(){
 }
 
 cv::Mat DITCameraTool::Algorithm::Flare::loadImage() const {
-    if(false){
-        std::cout << imagePath << std::endl;
-    }
     cv::Mat figure = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
     cv::Size figureSize(figure.size());
+    if(debugMode){
+        _PrintVariable(figureSize.width);
+        _PrintVariable(figureSize.height);
+    }
     if (figure.empty()){
         throw std::invalid_argument("Invalid image path. ("+imagePath+")");
     }
@@ -21,20 +22,38 @@ cv::Mat DITCameraTool::Algorithm::Flare::loadImage() const {
 
 DITCameraTool::Algorithm::Flare::Flare(DITCameraTool::Config config, std::string filePath){
     imagePath = filePath;
+    if(debugMode){
+        _PrintVariable(imagePath);
+    }
     image = loadImage();
     algorithmConf = config.getAlgorithmConf();
     globalConf = config.getGlobalConf();
     debugMode = _getDebugMode();
+    if(debugMode){
+        _PrintVariable(globalConf.dump(4));
+        _PrintVariable(algorithmConf.dump(4));
+    }
 }
 
 bool DITCameraTool::Algorithm::Flare::execute(DITCameraTool::Logger& logger) const {
     DITCameraTool::Logger& DITLogger = logger;
+    const_cast<Flare*>(this)->logInitialize(DITLogger);
     cv::Mat hist;
     std::vector<int> pixelStat(256, 0);
     _statisticPixel(pixelStat, image);
-    bool resultBool = _detectStd(pixelStat);
-    printf("%s\n", resultBool?"Pass":"Not Pass");
-    return resultBool;
+    bool resultStd = _detectStd(pixelStat, logger);
+    if(DITLogger.logEnable){
+        _attachBaseLogInfo(DITLogger);
+        writeLog("ITEM","FlareDetectResult");
+        writeLog("RESULT",(resultStd)?"PASS":"FAIL");
+        writeLog("IMG", imagePath);
+        finishLog(logElement, DITLogger);
+    }
+    if(debugMode){
+        _PrintVariable((int)logger.logComponent.size());
+    }
+    printf("%s\n", resultStd?"Pass":"Not Pass");
+    return resultStd;
 }
 
 void DITCameraTool::Algorithm::Flare::_statisticPixel(std::vector<int> &pixelStat, cv::Mat image) const {
@@ -45,18 +64,26 @@ void DITCameraTool::Algorithm::Flare::_statisticPixel(std::vector<int> &pixelSta
     }
 }
 
-bool DITCameraTool::Algorithm::Flare::_detectStd(std::vector<int> pixelArray) const {
+bool DITCameraTool::Algorithm::Flare::_detectStd(std::vector<int> pixelArray, DITCameraTool::Logger& DITLogger) const {
     bool resultBool = false;
     int imagePixelNums = image.rows*image.cols;
     float pixelStd = _evalPixelStandardDeviation(pixelArray, imagePixelNums);
     float stdThreshold = std::stof((std::string)algorithmConf["Std_Threshold"]);
-    if (false){
-        std::cout << stdThreshold << std::endl;
-        printf("imagePath: %s \npixelStd:%.2e\n", imagePath.c_str(), pixelStd);
-        printf("%.2f > %.2f: %s\n", pixelStd, stdThreshold, (pixelStd > stdThreshold)?"true":"false");
+    if (debugMode){
+        _PrintVariable(stdThreshold);
+        _PrintVariable(pixelStd);   
     }
     if (pixelStd > stdThreshold){
         resultBool = true;
+    }
+
+    if(DITLogger.logEnable){
+        _attachBaseLogInfo(DITLogger);
+        writeLog("ITEM", "detectStd");
+        writeLog("VALUE", std::to_string(pixelStd));
+        writeLog("LCL", std::to_string(stdThreshold));
+        writeLog("RESULT", (resultBool)?"PASS":"FAIL");
+        submitLog(logElement, DITLogger);
     }
     return resultBool;
 }
@@ -69,13 +96,20 @@ float DITCameraTool::Algorithm::Flare::_evalPixelStandardDeviation(std::vector<i
         mean += (intArray[i]/imagePixelNumsF)*i;
         meanSquare += ((intArray[i]/imagePixelNumsF)*(i*i));
     }
-    if(false){
-        std::cout << intArray.size() << std::endl;
-        std::cout << mean << std::endl;
-        std::cout << meanSquare << std::endl;
-        std::cout << meanSquare - (mean*mean) << std::endl;
+    if(debugMode){
+        _PrintVariable((int)intArray.size());
+        _PrintVariable(mean);
+        _PrintVariable(meanSquare);
+        _PrintVariable(meanSquare - (mean*mean));
     }
     float standardDeviation = sqrt(meanSquare - (mean*mean));
     return standardDeviation;
+}
+
+void DITCameraTool::Algorithm::Flare::_attachBaseLogInfo(DITCameraTool::Logger& DITLogger) const{
+    writeLog("SPEC_NAME",globalConf["SpecName"]);
+    writeLog("DATE_TIME",DITLogger.currentDate);
+    writeLog("OBJ_NAME",algorithmConf["configMode"]);
+    writeLog("STATUS",std::to_string(0));
 }
 

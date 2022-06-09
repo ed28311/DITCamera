@@ -11,7 +11,8 @@ namespace DITCameraTool{
         public:
             Logger();
             Logger(json globalConf);
-            void write(json);
+            void writeBack(json);
+            void writeFront(json);
             bool generateCSV();
             int maxCol;
             json config;
@@ -23,6 +24,7 @@ namespace DITCameraTool{
             std::string currentDatetime;
             std::string currentDate;
             bool logEnable;
+            void mergeLogger(DITCameraTool::Logger);
         private:
             bool _getLogOption();
             int _addDITLogComponentHeader();

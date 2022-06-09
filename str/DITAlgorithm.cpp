@@ -32,7 +32,7 @@ bool DITCameraTool::Algorithm::AlgorithmBase::_getDebugMode() const{
 
 void DITCameraTool::Algorithm::AlgorithmBase::submitLog(json logElement, DITCameraTool::Logger& DITLogger)const{
     DITCameraTool::Logger *loggerPtr = &DITLogger;
-    const_cast<DITCameraTool::Logger*>(loggerPtr)->write(logElement);
+    const_cast<DITCameraTool::Logger*>(loggerPtr)->writeBack(logElement);
     const_cast<AlgorithmBase*>(this)->logInitialize(DITLogger);
 }
 void DITCameraTool::Algorithm::AlgorithmBase::writeLog(std::string key, std::string val) const{
@@ -48,3 +48,9 @@ void DITCameraTool::Algorithm::AlgorithmBase::logInitialize(DITCameraTool::Logge
 }
 
 
+void DITCameraTool::Algorithm::AlgorithmBase::finishLog(json logElement, DITCameraTool::Logger& DITLogger) const{
+    DITCameraTool::Logger* loggerPtr = &DITLogger;
+    const_cast<DITCameraTool::Logger*>(loggerPtr)->writeFront(logElement);
+    const_cast<AlgorithmBase*>(this)->logInitialize(DITLogger); 
+    const_cast<DITCameraTool::Logger*>(loggerPtr)->writeBack(this->logElement);
+}

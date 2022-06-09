@@ -52,7 +52,13 @@ bool DITCameraTool::Algorithm::Shading::execute(DITCameraTool::Logger& logger) c
     if(resultCentre && resultCornerDiff && resultCornerShading){
         resultBool = true;
     }
-
+    if(DITLogger.logEnable){
+        _attachBaseLogInfo(DITLogger);
+        writeLog("ITEM","ShadingDetectResult");
+        writeLog("RESULT",(resultBool)?"PASS":"FAIL");
+        writeLog("IMG", imagePath);
+        finishLog(logElement, DITLogger);
+    }
     std::cout << (resultBool?"PASS":"NOT PASS") << std::endl;
     return resultBool;
 }
@@ -167,7 +173,7 @@ bool DITCameraTool::Algorithm::Shading::_detectCornerDiff(json avgAreaList, DITC
 void DITCameraTool::Algorithm::Shading::_attachBaseLogInfo(DITCameraTool::Logger& DITLogger) const{
     writeLog("SPEC_NAME",globalConf["SpecName"]);
     writeLog("DATE_TIME",DITLogger.currentDate);
-    writeLog("OBJ_NAME",algorithmConf["mode"]);
+    writeLog("OBJ_NAME",algorithmConf["configMode"]);
     writeLog("STATUS",std::to_string(0));
 }
 

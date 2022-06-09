@@ -14,7 +14,8 @@ namespace DITCameraTool{
             private:
                 void _statisticPixel(std::vector<int>&, cv::Mat) const;
                 float _evalPixelStandardDeviation(std::vector<int>, int) const;
-                bool _detectStd(std::vector<int>) const;
-        };
+                bool _detectStd(std::vector<int>, DITCameraTool::Logger&) const;
+                void _attachBaseLogInfo(DITCameraTool::Logger& ) const;
+        };  
     }
 }
