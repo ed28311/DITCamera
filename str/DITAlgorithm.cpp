@@ -1,5 +1,6 @@
 #include "DITAlgorithm.hpp"
 
+
 DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(){
     cv::Mat image;
     std::string imagePath;
@@ -47,6 +48,12 @@ void DITCameraTool::Algorithm::AlgorithmBase::logInitialize(DITCameraTool::Logge
     logElement = logVec;
 }
 
+std::string DITCameraTool::Algorithm::AlgorithmBase::getImageFileName(){
+    std::smatch sm;
+    std::regex_search(imagePath, sm, std::regex("(?=([^\\/]+$))[\\w]+"));
+    std::string imageName = sm[0];
+    return imageName;
+}
 
 void DITCameraTool::Algorithm::AlgorithmBase::finishLog(json logElement, DITCameraTool::Logger& DITLogger) const{
     DITCameraTool::Logger* loggerPtr = &DITLogger;

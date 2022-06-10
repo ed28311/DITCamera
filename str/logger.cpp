@@ -17,6 +17,7 @@ DITCameraTool::Logger::Logger(json globalConf){
     serialNums = "ED0472-28311";
     _getCurrentTime();
     fileDir = (std::string)config["ReportDirectory"]+"/"+currentDate+"/";
+    _checkDirRoot(fileDir);
     fileName = "Report-"+serialNums+"-"+currentDatetime;
 }
 
@@ -81,7 +82,6 @@ bool DITCameraTool::Logger::generateCSV(){
     }
     _PrintVariable((int)logComponent.size());
     std::ofstream logFile;
-    _checkDirRoot(fileDir);
     std::string filePath = fileDir+fileName+".csv";
     _PrintVariable(filePath);
     logFile.open(filePath);

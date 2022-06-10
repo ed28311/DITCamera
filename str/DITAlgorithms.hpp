@@ -3,3 +3,4 @@
 #include "method/flare.hpp"
 #include "method/blemish.hpp"
 #include "method/blemishPixel.hpp"
+#include "method/blemishStat.hpp"

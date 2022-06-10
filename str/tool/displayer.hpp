@@ -1,8 +1,10 @@
 #ifndef PRINTVARIABLE_LOAD
 #include <iostream>
 #include <vector>
+#include "../DITConfig.hpp"
 #define PRINTVARIABLE_LOAD
 #define _PrintVariable(variable) DITCameraTool::Display().printVariable((std::string)#variable, (variable))
+
 
 namespace DITCameraTool {
     class Display{
@@ -15,6 +17,7 @@ namespace DITCameraTool {
             void printVariable(std::string, int);
             void printVariable(std::string, float);
             void printVairable(std::string, std::vector<std::string>);
+            void printVariable(std::string, DITCameraTool::Config);
         private:
             std::string _debugPrintFormat(std::string);            
     };

@@ -27,6 +27,9 @@ void DITCameraTool::AlgorithmDispatch::createAlgorithm(std::string imagePath){
     if (algorithmConf["mode"] == "BLPX"){
         algorithm = new DITCameraTool::Algorithm::BlemishPixel(DITConfig, imagePath);
     }
+    if (algorithmConf["mode"] == "BLST"){
+        algorithm = new DITCameraTool::Algorithm::BlemishStat(DITConfig, imagePath);
+    }
 };
 
 DITCameraTool::Config DITCameraTool::AlgorithmDispatch::getDITConfig(){
