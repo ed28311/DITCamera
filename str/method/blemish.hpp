@@ -19,6 +19,7 @@ namespace DITCameraTool{
                 bool _detectBlemish(cv::Mat, DITCameraTool::Logger&) const;
                 int _findMedian(std::vector<int>) const;
                 void _attachBaseLogInfo(DITCameraTool::Logger& ) const;
+                cv::Mat _2DFilter(cv::Mat, int) const;
         };
     }
 }

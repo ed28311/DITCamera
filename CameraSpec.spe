@@ -38,8 +38,9 @@ Std_Threshold = 80
 
 [Blemish]
 Stride = 2
-PixelTolerance = 40
-SelectInterval = 16
+PixelTolerance = 200
+SelectIntervalRatio = 0.2
+FilterSize = 9
 
 
 [BlemishStat]

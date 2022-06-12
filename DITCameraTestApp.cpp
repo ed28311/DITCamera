@@ -10,11 +10,11 @@ std::vector<std::string>  parseDITMode( std::string);
 
 int main(int argc, char * argv[]){
     try{
+        checkDITArgument(argc, argv);
         DITCameraTool::ConfigLoader configLoader;
         DITCameraTool::Logger totalLogger;
         std::vector<std::string> argvDebug(argv, argv+argc);
         for (int i=0; i<(argc/3); i++){
-            checkDITArgument(argc, argv);
             std::string mode = std::string(argv[3*i+1]);
             std::string configPath = std::string(argv[3*i+2]);
             std::string imagePath = std::string(argv[3*i+3]);
@@ -23,12 +23,10 @@ int main(int argc, char * argv[]){
             DITCameraTool::Config DITConfig = configLoader.getSPEConfig(configPath, modeVector);
             json globalConfig = DITConfig.getGlobalConf();
             DITCameraTool::Logger logger(globalConfig);
-            if(std::stoi((std::string)globalConfig["OutputTestInfo"])){
-                printf("mode: %s\n", mode.c_str());
-                printf("configPath: %s\n",configPath.c_str());
-                printf("imagePath: %s\n", imagePath.c_str());
-                printf("---------------------------\n");
-            }
+            printf("mode: %s\n", mode.c_str());
+            printf("configPath: %s\n",configPath.c_str());
+            printf("imagePath: %s\n", imagePath.c_str());
+            printf("---------------------------\n");
             DITCameraTool::AlgorithmDispatch* dispatcher = new DITCameraTool::AlgorithmDispatch(DITConfig, imagePath, logger);
             dispatcher->executeAlgorithm();
             totalLogger.mergeLogger(logger);
@@ -67,7 +65,8 @@ std::vector<std::string> parseDITMode(std::string DITMode){
     return modeVector;
 }
 void checkDITArgument(int argc, char ** argv){
-    if ((argc%3)!=1){
+    _PrintVariable(argc);
+    if ((argc%3)!=1 || (argc<4)){
         throw std::invalid_argument("Invalid arguments format (Too little arguments.). (format: -mode[modeName] configPath imagePath)");
     }
 }

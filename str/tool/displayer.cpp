@@ -43,7 +43,7 @@ void DITCameraTool::Display::printVairable(std::string variableName, std::vector
 void DITCameraTool::Display::printVariable(std::string variableName, DITCameraTool::Config config){
     json algorithmConf = config.getAlgorithmConf();
     json globalConf = config.getGlobalConf();
-    std::cout <<  debugMode << variableName<< "\033[0m" << std::endl;
+    std::cout <<  debugMode << variableName<< ":\033[0m" << std::endl;
     std::cout <<  debugMode << "algorithmConfig" << "\033[0m" << algorithmConf.dump(4)<<std::endl;
     std::cout <<  debugMode << "globalConfig" << "\033[0m" << globalConf.dump(4)<<std::endl;
 };

@@ -3,7 +3,6 @@
 #include <vector>
 #include "../DITConfig.hpp"
 #define PRINTVARIABLE_LOAD
-#define _PrintVariable(variable) DITCameraTool::Display().printVariable((std::string)#variable, (variable))
 
 
 namespace DITCameraTool {
@@ -19,7 +18,10 @@ namespace DITCameraTool {
             void printVairable(std::string, std::vector<std::string>);
             void printVariable(std::string, DITCameraTool::Config);
         private:
-            std::string _debugPrintFormat(std::string);            
+            std::string _debugPrintFormat(std::string);          
+              
     };
 }
+
+#define _PrintVariable(variable) DITCameraTool::Display().printVariable((std::string)#variable, (variable))
 #endif

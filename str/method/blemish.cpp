@@ -72,8 +72,32 @@ bool DITCameraTool::Algorithm::Blemish::execute(DITCameraTool::Logger& logger) c
 bool DITCameraTool::Algorithm::Blemish::_detectBlemish(cv::Mat image, DITCameraTool::Logger& DITLogger) const{
     cv::Mat filterValueImg = fastDifferenceFiltering(image);
     cv::Mat filterImg = cv::Mat(filterValueImg.rows, filterValueImg.cols, CV_8U);
-    int pixelTolerance = std::stoi((std::string)algorithmConf["PixelTolerance"]);
+    if (debugMode){
+        std::string exportDir = DITLogger.fileDir;
+        std::string fileName = DITLogger.currentDatetime+"-"+(std::string)algorithmConf["configMode"]+"-"+imageName+"-"+"fastDifferenceFilteringRawMap.jpg";
+        std::string filePath = exportDir+fileName;
+        if(debugMode){
+            _PrintVariable(exportDir);
+            _PrintVariable(fileName);
+        }
+        cv::imwrite(exportDir+fileName, filterValueImg);
+    }
+    int filterSize = std::stoi((std::string)algorithmConf["FilterSize"]);
+    filterValueImg = _2DFilter(filterValueImg, filterSize);
+    filterValueImg = _2DFilter(filterValueImg, 2);
+    if (debugMode){
+        std::string exportDir = DITLogger.fileDir;
+        std::string fileName = DITLogger.currentDatetime+"-"+(std::string)algorithmConf["configMode"]+"-"+imageName+"-"+"fastDifferenceFilteringProcessed.jpg";
+        std::string filePath = exportDir+fileName;
+        if(debugMode){
+            _PrintVariable(exportDir);
+            _PrintVariable(fileName);
+        }
+        cv::imwrite(exportDir+fileName, filterValueImg);
+    }
+
     bool resultBool = true;
+    int pixelTolerance = std::stoi((std::string)algorithmConf["PixelTolerance"]);
     int maxPixel = 0;
     for (int i=0; i<filterImg.rows; i++){
         for (int j=0; j<filterImg.cols; j++){
@@ -93,6 +117,8 @@ bool DITCameraTool::Algorithm::Blemish::_detectBlemish(cv::Mat image, DITCameraT
         _PrintVariable(pixelTolerance);
         _PrintVariable(maxPixel);
     }
+
+
     _attachBaseLogInfo(DITLogger);
     writeLog("ITEM", "detectBlemish");
     writeLog("UCL", std::to_string(pixelTolerance));
@@ -100,7 +126,7 @@ bool DITCameraTool::Algorithm::Blemish::_detectBlemish(cv::Mat image, DITCameraT
     writeLog("RESULT", ((resultBool))?"PASS":"FAIL");
     if(isImageGenerate){
         std::string exportDir = DITLogger.fileDir;
-        std::string fileName = DITLogger.currentDatetime+"-"+(std::string)algorithmConf["configMode"]+"-"+imageName+"-"+"-"+"fastDifferenceFiltering.jpg";
+        std::string fileName = DITLogger.currentDatetime+"-"+(std::string)algorithmConf["configMode"]+"-"+imageName+"-"+"fastDifferenceFiltering.jpg";
         std::string filePath = exportDir+fileName;
         if(debugMode){
             _PrintVariable(exportDir);
@@ -117,33 +143,55 @@ bool DITCameraTool::Algorithm::Blemish::_detectBlemish(cv::Mat image, DITCameraT
 Reference: Blemish detection in camera production testing using fast difference filtering.
 */
 cv::Mat DITCameraTool::Algorithm::Blemish::fastDifferenceFiltering(cv::Mat image) const{
-    int interval = std::stoi((std::string)algorithmConf["SelectInterval"]);
+    float intervalRatio = std::stof((std::string)algorithmConf["SelectIntervalRatio"]);
     if(debugMode){
-        _PrintVariable(interval);
+        _PrintVariable(intervalRatio);
     }
+    int interval = static_cast<int>(image.cols*intervalRatio);
     int rangeVal = interval/2;
     cv::Mat filterImg = cv::Mat(image.rows, image.cols, CV_8U);
     for(int i=0; i<image.rows; i++){
         for (int j=0; j<image.cols; j++){
             int xLRange = (i<rangeVal)?i:rangeVal;
-            int xRRange = (i>(image.rows-rangeVal))?image.rows-i:rangeVal;
+            int xRRange = (i>(image.rows-rangeVal-1))?image.rows-i-1:rangeVal;
             int yBRange = (j<1)?j:1;
-            int yTRange = (j>(image.cols-1))?image.cols-j:1;
+            int yTRange = (j>=(image.cols-1))?image.cols-j-1:1;
             std::vector<int> medianLVec = {image.at<uchar>(i-xLRange, j-yBRange), image.at<uchar>(i-xLRange, j), image.at<uchar>(i-xLRange, j+yTRange)};
             std::vector<int> medianRVec = {image.at<uchar>(i+xRRange, j-yBRange), image.at<uchar>(i+xRRange, j), image.at<uchar>(i+xRRange, j+yTRange)};
             int medianL = _findMedian(medianLVec);
             int medianR = _findMedian(medianRVec);
             int IMedian = (medianL+medianR)/2;
             int I = image.at<uchar>(i,j);
-            // if(debugMode){
-            //     printf("medianL:%d, medianR:%d, I:%d, IMedien:%d, filterImg.at<uchar>(i,j):%d\n", medianL, medianR, I, IMedian, (IMedian<I)?0:(IMedian-I));
-            // }
             filterImg.at<uchar>(i,j) = (IMedian<I)?0:(IMedian-I);
         }
     }
     return filterImg;
 }
 
+
+cv::Mat DITCameraTool::Algorithm::Blemish::_2DFilter(cv::Mat image, int filterSize) const{
+    cv::Mat filteredImg(image.rows, image.cols, CV_8U);
+    for (int i=0; i<image.rows; i++){
+        for (int j=0; j<image.cols; j++){
+            int xLRange = (j<filterSize)?j:filterSize;
+            int yTRange = (i<filterSize)?i:filterSize;
+            int xRRange = (j>(image.cols-filterSize-1))?image.cols-j-1:filterSize;
+            int yBRange = (i>(image.rows-filterSize-1))?image.rows-i-1:filterSize;
+            cv::Mat kernel = cv::Mat::ones( yBRange+yTRange+1, xLRange+xRRange+1, CV_32F)/(float)((xLRange+xRRange+1)*(yBRange+yTRange+1));
+            cv::Rect imageRect = cv::Rect( j-xLRange, i-yTRange,   xLRange + xRRange+1, yTRange + yBRange+1);
+            cv::Mat selectImage = image(imageRect);
+            selectImage.convertTo(selectImage, CV_32F);
+
+            float filterNum = selectImage.dot(kernel);
+            filteredImg.at<uchar>(i,j) = (filterNum>255)?255:filterNum;
+            // if(debugMode){
+            //     _PrintVariable(image.at<uchar>(i,j));
+            //     _PrintVariable((int)filterNum);
+            // }
+        }
+    }
+    return filteredImg;
+}
 
 int DITCameraTool::Algorithm::Blemish::_findMedian(std::vector<int> medianVec) const{
     int numbers = (int)medianVec.size();
