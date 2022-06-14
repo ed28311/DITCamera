@@ -37,8 +37,8 @@ BlockRatio = 0.1
 Std_Threshold = 80
 
 [Blemish]
-Stride = 2
-PixelTolerance = 200
+Stride = 4
+PixelTolerance = 16
 SelectIntervalRatio = 0.2
 FilterSize = 9
 

@@ -8,9 +8,15 @@ SET(STR_DIR             ${BASEDIR}/str)
 SET(ALG_DIR             ${STR_DIR}/method)
 SET(JSON_GIT_DIR 		${THIRDPARTY}/nlohmann)
 SET(OPENCV_GIT_DIR      ${THIRDPARTY}/opencv)
+SET(OPENCV_SOURCE_DIR      ${THIRDPARTY}/opencv2/sources)
+SET(OPENCV_BUILD_DIR      ${THIRDPARTY}/opencv2/build)
 SET(TOOL_DIR            ${STR_DIR}/tool)
-SET(CMAKE_CXX_FLAGS     "-lstdc++fs -std=c++17")
 
+# if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+#     SET(CMAKE_CXX_FLAGS     "-lstdc++fs -std=c++17")
+# elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+#     SET(CMAKE_CXX_FLAGS     "/std=c++17")
+# endif()
 # ===== Build Execute Distination =====
 include_directories(${OPENCV_GIT_DIR})
 if(TEST_MODE)
@@ -30,19 +36,17 @@ add_subdirectory(${JSON_GIT_DIR})
 target_link_libraries(main nlohmann_json::nlohmann_json)
 target_include_directories(main PUBLIC ${JSON_GIT_DIR}/include)
 
-# ===== Set OpenCV environment variable =====
-add_subdirectory(${OPENCV_GIT_DIR})
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
-target_link_libraries(main ${OpenCV_LIBS})
-# LIST(APPEND CMAKE_PREFIX_PATH "${OPENCV_GIT_DIR}/cmake")
-# set(OpenCV_STATIC ON)
-# SET(CMAKE_INSTALL_PREFIX "/usr/local")
-# set(OpenCV_DIR ${OPENCV_GIT_DIR})
-# target_include_directories(main PUBLIC ${OPENCV_GIT_DIR}/include)
+# # ===== Set OpenCV environment variable =====
+
+# add_subdirectory(${OPENCV_GIT_DIR})
+# find_package(OpenCV REQUIRED)
+# INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
+# target_link_libraries(main ${OpenCV_LIBS})
 
 
 # target_link_libraries(main opencv_core opencv_highgui opencv_imgproc)
-target_link_libraries(main opencv_core opencv_highgui)
+add_subdirectory(${OPENCV_GIT_DIR})
+target_link_libraries(main opencv_core opencv_highgui opencv_imgproc)
 target_include_directories(main PUBLIC 
     ${CMAKE_CURRENT_BINARY_DIR}
     ${OPENCV_GIT_DIR}/include
@@ -81,6 +85,7 @@ target_include_directories(main PUBLIC
 )
 target_link_libraries(main ${OpenCV_LIBS})
 
+#=========
 
 target_include_directories(main PUBLIC ${STR_DIR})
 

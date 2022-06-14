@@ -1,6 +1,5 @@
 #ifndef DITALGOLOAD
 #define DITALGOLOAD
-#define LOGGER(name) DITLogger(#name, (name))
 #include <iostream>
 #include "DITConfig.hpp"
 #include "logger.hpp"
