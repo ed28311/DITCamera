@@ -1,17 +1,18 @@
 ;20191116
 [Project]
 Name=DIT_NewMember_Demo_version
-SE
+Version=1.0.0
+SpecName=CameraSpec.spe
 
 ;20181101
 ; 1st version
-
 [ATD_OUTPUT_INFO]
 OutputATDLog = 2
 ShowSN = 1
 
 [ASUS_DebugInfo]
 OutputDebugInfo = 1
+OutputTestInfo = 1
 OutputDLLReport = 1
 OutputEXEReport = 0
 OutputLSTReport = 0
@@ -22,7 +23,7 @@ OutputShortPath = 1
 DoMultiThread = 1
 DoItemsMultiThread = 0
 DoItemsNumMT = 0
-ReportDirectory = ASUS_Camera_Reports
+ReportDirectory = ASUS_Camera_Reports_DLL
 
 [Shading]
 PassLevel=16
@@ -33,8 +34,19 @@ PassLevel_Up = 110
 BlockRatio = 0.1
 
 [Flare]
-Std_Threshold = 100
+Std_Threshold = 80
 
 [Blemish]
-Stride = 3
+Stride = 4
+PixelTolerance = 16
+SelectIntervalRatio = 0.2
+FilterSize = 9
+
+
+[BlemishStat]
+Split_Partition = 3
+Std_Threshold = 5
+
+[BlemishPixel]
+Stride = 4
 Diff_Tolarence = 10

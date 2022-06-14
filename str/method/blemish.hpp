@@ -10,8 +10,16 @@ namespace DITCameraTool{
             public:
                 Blemish();
                 Blemish(DITCameraTool::Config, std::string);
-                virtual bool execute() const override;
+                bool isImageGenerate;
+                virtual bool execute(DITCameraTool::Logger& ) const override;
                 virtual cv::Mat loadImage() const override;
+                cv::Mat fastDifferenceFiltering(cv::Mat) const;
+                std::string imageName;
+            private:
+                bool _detectBlemish(cv::Mat, DITCameraTool::Logger&) const;
+                int _findMedian(std::vector<int>) const;
+                void _attachBaseLogInfo(DITCameraTool::Logger& ) const;
+                cv::Mat _2DFilter(cv::Mat, int) const;
         };
     }
 }
