@@ -2,12 +2,15 @@
 #include <iostream>
 #include <vector>
 #include "../DITConfig.hpp"
+#ifndef WindowsDetermined
+#define WindowsDetermined
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #define isWindowsBlock
 #include "windows.h"
 static const bool isWindows = true;
 #else
 static const bool isWindows = false;
+#endif
 #endif
 #define PRINTVARIABLE_LOAD
 

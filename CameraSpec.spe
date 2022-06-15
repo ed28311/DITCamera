@@ -26,11 +26,11 @@ DoItemsNumMT = 0
 ReportDirectory = ASUS_Camera_Reports_DLL
 
 [Shading]
-PassLevel=16
+PassLevel_Up = 110
+PassLevel = 16
 Diff = 10
 Center_Up = 220
 Center_Low = 100
-PassLevel_Up = 110
 BlockRatio = 0.1
 
 [Flare]

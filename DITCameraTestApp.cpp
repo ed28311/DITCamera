@@ -5,6 +5,17 @@
 #include "./str/algorithmDispatcher.hpp"
 #include "./str/tool/displayer.hpp"
 
+#ifndef WindowsDetermined
+#define WindowsDetermined
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#define isWindowsBlock
+#include "windows.h"
+static const bool isWindows = true;
+#else
+static const bool isWindows = false;
+#endif
+#endif
+
 void checkDITArgument(int, char **);
 std::vector<std::string>  parseDITMode(std::string);
 
@@ -37,10 +48,14 @@ int main(int argc, char * argv[]) {
 	}
 	catch (std::invalid_argument& e) {
 		std::cerr << e.what() << std::endl;
+		#ifdef isWindowsBlock
 		system("pause");
+		#endif
 		return -1;
 	}
+	#ifdef isWindowsBlock
 	system("pause");
+	#endif
 	return 0;
 }
 
