@@ -41,7 +41,7 @@ To detect a lens external condition, like dust, stain, illumination, ... ,etc, w
 - Detect method
 	- Pass image to [fast difference filtering](https://www.spiedigitallibrary.org/journals/journal-of-electronic-imaging/volume-18/issue-02/020501/Blemish-detection-in-camera-production-testing-using-fast-difference-filtering/10.1117/1.3132004.full)
 	- Pass image to filter to de-noise.
-	- Binarize image by $\text{Pixel\_Tolerance}$.
+	- Binarize image by $ \text{Pixel_Tolerance}$.
 - Qualified condition
 	- All pixel in image equal to 0.
 ## Example
