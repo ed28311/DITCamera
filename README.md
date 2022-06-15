@@ -10,7 +10,7 @@ To detect a lens external condition, like dust, stain, illumination, ... ,etc, w
 	-  ... etc.
 - Detect environment: White card.
 - Detect method
-	1. Evaluate highest pixel block ($\frac{1}{10}W\times\frac{1}{10}H$) average $Y_C$ from center($\frac{1}{2}\text{W}\times\frac{1}{2}\text{H}$).
+	1. Evaluate highest pixel block ($\frac{1}{10}W\times\frac{1}{10}H$) average $Y_C$ from center.
 	2. Evaluate corner pixel block average $\text{Y}_1,\text{Y}_2,\text{Y}_3,\text{Y}_4$  ($\frac{1}{10}\text{W}\times\frac{1}{10}\text{H}$) .
 	3. Evaluate shading (%) $\text{A}_i=\frac{\text{Y}_i}{\text{Y}_C}\times 100$, where $1\leq i\leq4$.
 - Qualified condition
