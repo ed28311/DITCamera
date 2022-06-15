@@ -14,7 +14,7 @@ To detect a lens external condition, like dust, stain, illumination, ... ,etc, w
 	2. Evaluate corner pixel block average $\text{Y}_1,\text{Y}_2,\text{Y}_3,\text{Y}_4$  ($\frac{1}{10}\text{W}\times\frac{1}{10}\text{H}$) .
 	3. Evaluate shading (%) $\text{A}_i=\frac{\text{Y}_i}{\text{Y}_C}\times 100$, where $1\leq i\leq4$.
 - Qualified condition
-	- $\text{Center\_Low}\leq \text{Y}_C \leq \text{Center\_Up}$ .
+	- $\text{Center\_Low}$$\leq \text{Y}_C \leq \text{Center\_Up}$ .
 	- $\text{PassLevel}\leq \text{A}_i \leq \text{PassLevel\_Up}$, where $1\leq i\leq4$ .
 	- $\max_{1\leq i\leq4}{A_i}-\min_{1\leq i\leq4}{\text{A}_i}\leq \text{Diff}$.
 
