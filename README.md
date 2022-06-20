@@ -77,7 +77,9 @@ make
 ├── CameraSpec.spe               -> Basic config file.
 ├── CMakeLists.txt
 ├── launch.bat
+├── launch.sh
 ├── README.md
+├── LICENSE
 ├── str
 │   ├── algorithmDispatcher.hpp  -> Assign task to correspond algorithm.
 │   ├── configLoader.hpp         -> Load Config and constructure config class.
@@ -104,3 +106,5 @@ make
 
 ```
 
+#### Class diagram
+![ClassDiagram](DITCamera.png)
