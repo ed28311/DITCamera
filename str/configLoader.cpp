@@ -28,27 +28,29 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_SPE_parseConfig(std::string
     std::string configMode = modeVector.at(1); 
     algorithmConf["configMode"] = configMode;
     while(std::getline(inFile, readLine)){
-        if (std::regex_match(readLine, std::regex("\\[.*[\\w]+\\]"))){
-            std::smatch sm;
-            std::regex_search(readLine, sm, std::regex("\\w+"));
-            inspect = sm[0];
-        }
-        if (std::regex_match(readLine, std::regex("[\\w]+[\\=\\ ]+[\\w\\.]+"))){
-            if (_SPE_isGlobal(inspect, GLOBAL_PARAMS)){
-                std::string param;
-                std::string value;
-                std::tie(param, value) = _SPE_parseLine(readLine);
-                globalConf[param] = value;
-            }else{
-                if(inspect==configMode){
-                    detectAlgorithm = true;
+        if (!std::regex_search(readLine, std::regex(";"))){
+            if (std::regex_search(readLine, std::regex("\\[.*[\\w]+\\]"))){
+                std::smatch sm;
+                std::regex_search(readLine, sm, std::regex("\\w+"));
+                inspect = sm[0];
+            }
+            if (std::regex_search(readLine, std::regex("[\\w]+[\\ \\=^;]+[\\w\\.]+"))){
+                if (_SPE_isGlobal(inspect, GLOBAL_PARAMS)){
                     std::string param;
                     std::string value;
                     std::tie(param, value) = _SPE_parseLine(readLine);
-                    algorithmConf[param] = value;
-                }
-            };
-        }   
+                    globalConf[param] = value;
+                }else{
+                    if(inspect==configMode){
+                        detectAlgorithm = true;
+                        std::string param;
+                        std::string value;
+                        std::tie(param, value) = _SPE_parseLine(readLine);
+                        algorithmConf[param] = value;
+                    }
+                };
+            }   
+        }
     };  
     if (!detectAlgorithm){
         throw std::invalid_argument("Invalid mode. (mode: "+configMode+").");
@@ -66,6 +68,7 @@ std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_SPE_parseLine
     std::string value;
     std::string parseLine = readLine;
     parseLine.erase(std::remove(parseLine.begin(), parseLine.end(), ' '), parseLine.end());
+    parseLine.erase(std::remove(parseLine.begin(), parseLine.end(), '\r'), parseLine.end());
     int parseLineSize = parseLine.size();
     int paramEndLoc = parseLine.find_first_of("=");
     int valueBeginLoc = parseLine.find_last_of("=");

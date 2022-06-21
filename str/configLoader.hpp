@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <tuple>
 #include "DITConfig.hpp"
+#include "./tool/displayer.hpp"
 
 namespace DITCameraTool{
     class ConfigLoader{

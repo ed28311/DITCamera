@@ -12,8 +12,9 @@ SET(OPENCV_SOURCE_DIR      ${THIRDPARTY}/opencv2/sources)
 SET(OPENCV_BUILD_DIR      ${THIRDPARTY}/opencv2/build)
 SET(TOOL_DIR            ${STR_DIR}/tool)
 
-# if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-#     SET(CMAKE_CXX_FLAGS     "-lstdc++fs -std=c++17")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    SET(CMAKE_CXX_FLAGS     "-lstdc++fs -std=c++17")
+endif()
 # elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 #     SET(CMAKE_CXX_FLAGS     "/std=c++17")
 # endif()
@@ -46,7 +47,7 @@ target_include_directories(main PUBLIC ${JSON_GIT_DIR}/include)
 
 # target_link_libraries(main opencv_core opencv_highgui opencv_imgproc)
 add_subdirectory(${OPENCV_GIT_DIR})
-target_link_libraries(main opencv_core opencv_highgui opencv_imgproc)
+target_link_libraries(main opencv_core opencv_highgui)
 target_include_directories(main PUBLIC 
     ${CMAKE_CURRENT_BINARY_DIR}
     ${OPENCV_GIT_DIR}/include

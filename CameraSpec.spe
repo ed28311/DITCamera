@@ -12,7 +12,7 @@ ShowSN = 1
 
 [ASUS_DebugInfo]
 OutputDebugInfo = 1
-OutputTestInfo = 1
+OutputTestInfo = 0
 OutputDLLReport = 1
 OutputEXEReport = 0
 OutputLSTReport = 0
