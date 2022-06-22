@@ -90,7 +90,11 @@ bool DITCameraTool::Logger::generateCSV() {
 }
 
 void DITCameraTool::Logger::_checkDirRoot(std::string fileDir) {
-	std::filesystem::create_directories(fileDir);
+	#if _HAS_CXX17
+		std::filesystem::create_directories(fileDir);
+	#else
+		std::experimental::filesystem::create_directories(fileDir);
+	#endif
 };
 bool DITCameraTool::Logger::_getLogOption() {
 	return std::stoi((std::string)config["OutputDebugInfo"]);
