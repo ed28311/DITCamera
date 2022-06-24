@@ -1,17 +1,13 @@
-#ifndef DITALG_LOADED
-#include "../DITAlgorithm.hpp"
-#define DITALG_LOADED
-#endif
-
+#include "algorithm_base.hpp"
 
 namespace DITCameraTool{
     namespace Algorithm{
         class BlemishStat: public DITCameraTool::Algorithm::AlgorithmBase{
             public:
                 BlemishStat();
-                BlemishStat(DITCameraTool::Config, std::string);
-                virtual bool execute(DITCameraTool::Logger& ) const override;
-                virtual cv::Mat loadImage() const override;
+                BlemishStat(DITCameraTool::Config);
+                virtual bool Execute(DITCameraTool::Reporter&) const override;
+                virtual void LoadImage(std::string) override;
             private:
                 void _statisticPixel(cv::Mat, std::vector<int>&) const;
                 float _evalPixelStandardDeviation(cv::Mat, std::vector<int>) const;
