@@ -3,6 +3,7 @@
 Name=DIT_NewMember_Demo_version
 Version=1.0.0
 SpecName=CameraSpec.spe
+SerialNum=ED0472-28311
 
 ;20181101
 ; 1st version
@@ -11,8 +12,12 @@ OutputATDLog = 2
 ShowSN = 1
 
 [ASUS_DebugInfo]
+ReportDirectory = ASUS_Camera_Reports_DLL
+LogDirectory = ASUS_Camera_Log
+LogLevel = INFO
 OutputDebugInfo = 1
-OutputTestInfo = 0
+OutputPrintDebugInfo = 0
+OutputLog = 1
 OutputDLLReport = 1
 OutputEXEReport = 0
 OutputLSTReport = 0
@@ -23,7 +28,6 @@ OutputShortPath = 1
 DoMultiThread = 1
 DoItemsMultiThread = 0
 DoItemsNumMT = 0
-ReportDirectory = ASUS_Camera_Reports_DLL
 
 [Shading]
 PassLevel_Up = 110
@@ -34,16 +38,18 @@ Center_Low = 100
 BlockRatio = 0.1
 
 [Flare]
+Stride = 1
 Std_Threshold = 80
 
 [Blemish]
 Stride = 4
-PixelTolerance = 16
-SelectIntervalRatio = 0.2
+IntensityTolerance = 16
+InspectRatio = 0.2
 FilterSize = 9
 
 
 [BlemishStat]
+Stride = 1
 Split_Partition = 3
 Std_Threshold = 5
 

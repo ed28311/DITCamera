@@ -18,7 +18,8 @@ DITCameraTool::Config DITCameraTool::ConfigLoader::getSPEConfig(std::string file
 };
 
 std::tuple<json, json> DITCameraTool::ConfigLoader::_SPE_parseConfig(std::string filePath, std::vector<std::string> modeVector, std::vector<std::string> GLOBAL_PARAMS){
-    std::ifstream inFile(filePath);
+	_PrintVariable(filePath);
+	std::ifstream inFile(filePath);
     std::string readLine;
     json globalConf;
     json algorithmConf; 
@@ -28,13 +29,16 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_SPE_parseConfig(std::string
     std::string configMode = modeVector.at(1); 
     algorithmConf["configMode"] = configMode;
     while(std::getline(inFile, readLine)){
+		_PrintVariable(readLine);
         if (!std::regex_search(readLine, std::regex(";"))){
             if (std::regex_search(readLine, std::regex("\\[.*[\\w]+\\]"))){
+				_PrintVariable(readLine);
                 std::smatch sm;
                 std::regex_search(readLine, sm, std::regex("\\w+"));
                 inspect = sm[0];
             }
             if (std::regex_search(readLine, std::regex("[\\w]+[\\ \\=^;]+[\\w\\.]+"))){
+				_PrintVariable(readLine);
                 if (_SPE_isGlobal(inspect, GLOBAL_PARAMS)){
                     std::string param;
                     std::string value;

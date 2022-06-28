@@ -1,35 +1,33 @@
 #include <iostream>
-#include <fstream>
-#include <deque>
-#include <ctime>
-#include <filesystem>
-#include "DITConfig.hpp"
-#include "tool/displayer.hpp"
+#include "config_object.hpp"
 
-namespace DITCameraTool{
-    class Logger{
+namespace DITCameraTool
+{
+    enum LOG_LEVELS
+    {
+        INFO = '1',
+        DEBUG = '2',
+        WARN = '3',
+        ERROR = '4',
+        FATAL = '5'
+    };
+    class Logger
+    {
         public:
-            Logger();
-            Logger(json globalConf);
-            void writeBack(json);
-            void writeFront(json);
-            bool generateCSV();
-            int maxCol;
-            json config;
-            std::string serialNums;
-            std::string fileDir;
-            std::string fileName;
-            std::deque<std::vector<std::string>> logComponent;
-            std::vector<std::string> logCols;
-            std::string currentDatetime;
-            std::string currentDate;
-            bool logEnable;
-            void mergeLogger(DITCameraTool::Logger);
+            Logger(json, std::string, DITCameraTool::LOG_LEVELS);
+            const LOG_LEVELS m_LEVEL;
+            const std::string m_message;
+            bool m_is_print_message;
+            bool m_is_write_log;
+            bool WriteLog();
         private:
-            bool _getLogOption();
-            int _addDITLogComponentHeader();
-            std::string _generateCSVString(std::vector<std::string>);
-            void _getCurrentTime();
-            void _checkDirRoot(std::string);
+            json m_level_transformer;
+            json m_global_config;
+            std::string m_lowest_level;
+            std::string m_log_directory;
+            std::string m_current_datetime;
+            std::string m_current_date;
+            void _LoadLevelTransformer();
+            void _GetLogInfo();
     };
 }
