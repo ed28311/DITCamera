@@ -9,9 +9,15 @@ DITCameraTool::Algorithm::Blemish::Blemish(DITCameraTool::Config config)
 {
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
+<<<<<<< HEAD
 	m_is_print_debug_info = _GetDebugMode();
 	m_is_generate_image = (std::stoi(const_cast<Blemish*>(this)->m_global_config.LoadJsonKey("OutputAllImages")));
 	if (m_is_print_debug_info)
+=======
+	m_is_debug = _GetDebugMode();
+	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
+	if (m_is_debug)
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	{
 		_PrintVariable(m_is_generate_image);
 		_PrintVariable(config);
@@ -27,13 +33,20 @@ void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
 	{
 		throw std::invalid_argument("Invalid m_image path. ("+ m_image_path+ ")");
 	}
+<<<<<<< HEAD
 	int STRIDE = std::stoi(m_algorithm_config.LoadJsonKey("Stride"));
 
 	cv::Mat stride_figure(figure.rows/STRIDE, figure.cols/STRIDE, CV_8U);
+=======
+	int STRIDE = std::stoi((std::string)m_algorithm_config["Stride"]);
+
+	cv::Mat strideFig(figure.rows/STRIDE, figure.cols/STRIDE, CV_8U);
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	for(int i = 0; i<(figure.rows/STRIDE); i++)
 	{
 		for (int j = 0; j<(figure.cols/STRIDE); j++)	
 		{
+<<<<<<< HEAD
 			stride_figure.at<uchar>(i, j) = figure.at<uchar>(i*STRIDE, j*STRIDE);
 		}
 	}
@@ -45,6 +58,19 @@ void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
 	}
 	FreeImage();
 	m_image = new cv::Mat(stride_figure);
+=======
+			strideFig.at<uchar>(i, j) = figure.at<uchar>(i*STRIDE, j*STRIDE);
+		}
+	}
+	if (m_is_debug)
+	{
+		_PrintVariable(STRIDE);
+		_PrintVariable(strideFig.rows);
+		_PrintVariable(strideFig.cols);
+	}
+	FreeImage();
+	m_image = new cv::Mat(strideFig);
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 }
 
 bool DITCameraTool::Algorithm::Blemish::Execute(DITCameraTool::Reporter& reporter) const
@@ -72,8 +98,13 @@ bool DITCameraTool::Algorithm::Blemish::_detectBlemish(cv::Mat* image, DITCamera
 	cv::Mat image_copy = cv::Mat(*image);
 	bool resultBool = true;
 	int maxPixel = 0;
+<<<<<<< HEAD
 	const int INTENSITY_TOLERANCE = std::stoi(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("IntensityTolerance"));
 	const int FILTER_SIZE = std::stoi(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("FilterSize"));
+=======
+	const int INTENSITY_TOLERANCE = std::stoi((std::string)m_algorithm_config["IntensityTolerance"]);
+	const int FILTER_SIZE = std::stoi((std::string)m_algorithm_config["FilterSize"]);
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	
 	image_copy = ExecuteFastDifferenceFilter(&image_copy);
 	GenerateImage(&image_copy, "fastDiffFilterRaw", reporter);
@@ -99,7 +130,11 @@ bool DITCameraTool::Algorithm::Blemish::_detectBlemish(cv::Mat* image, DITCamera
 			}
 		}
 	}
+<<<<<<< HEAD
 	if (m_is_print_debug_info)
+=======
+	if (m_is_debug)
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	{
 		_PrintVariable(INTENSITY_TOLERANCE);
 		_PrintVariable(maxPixel);
@@ -121,8 +156,13 @@ cv::Mat DITCameraTool::Algorithm::Blemish::ExecuteFastDifferenceFilter(cv::Mat* 
 	/*
 	Reference: Blemish detection in camera production testing using fast difference filtering.
 	*/
+<<<<<<< HEAD
 	float INSPECT_RATIO = std::stof(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("InspectRatio"));
 	if (m_is_print_debug_info)
+=======
+	float INSPECT_RATIO = std::stof((std::string)m_algorithm_config["InspectRatio"]);
+	if (m_is_debug)
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	{
 		_PrintVariable(INSPECT_RATIO);
 	}
@@ -169,7 +209,11 @@ cv::Mat DITCameraTool::Algorithm::Blemish::_2DFilter(cv::Mat* image, int FILTER_
 
 			float filterNum = selectImage.dot(kernel);
 			filteredImg.at<uchar>(i, j) = (filterNum>255)? 255: filterNum;
+<<<<<<< HEAD
 			// if(m_is_print_debug_info){
+=======
+			// if(m_is_debug){
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 			//     _PrintVariable(image.at<uchar>(i,j));
 			//     _PrintVariable((int)filterNum);
 			// }

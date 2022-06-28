@@ -34,7 +34,10 @@ int main(int argc, char * argv[]) {
 	try {
 		checkDITArgument(argc, argv);
 		DITCameraTool::ConfigLoader config_loader;
+<<<<<<< HEAD
 		/* main_report is to integrate all single report to report file. */
+=======
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 		DITCameraTool::Reporter main_report;
 		std::vector<std::string> global_config_members = {"ATD_OUTPUT_INFO", "ASUS_DebugInfo", "Project"};
 		std::vector<std::string> report_basic_property = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG" };
@@ -44,13 +47,20 @@ int main(int argc, char * argv[]) {
 			std::string image_path = std::string(argv[3 * i + 3]);
 			DITCameraTool::Config config = config_loader.GetSPEConfig(config_path, mode, global_config_members);
 			DITCameraTool::Reporter reporter(config, report_basic_property);
+<<<<<<< HEAD
+=======
+			DITCameraTool::AlgorithmDispatch* dispatcher = new DITCameraTool::AlgorithmDispatch(config, image_path, reporter);
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 			printf("---------------------------\n");
 			_PrintVariable(mode);
 			_PrintVariable(config_path);
 			_PrintVariable(image_path);
 			printf("---------------------------\n");
+<<<<<<< HEAD
 			DITCameraTool::AlgorithmDispatch* dispatcher = new DITCameraTool::AlgorithmDispatch(config, image_path, reporter);
 			dispatcher->DispatchAlgorithm();
+=======
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 			dispatcher->ExecuteAlgorithm();
 			delete dispatcher;
 			main_report.MergeReporter(reporter);
@@ -70,12 +80,18 @@ int main(int argc, char * argv[]) {
 	return 0;
 }
 
+<<<<<<< HEAD
 /*
 Description:
 	Check argument numbers is valid.	
 */
 void checkDITArgument(int argc, char ** argv) {
 	if ((argc % 3) != 1) {
+=======
+
+void checkDITArgument(int argc, char ** argv) {
+	if ((argc % 3) != 1 || (argc < 4)) {
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 		throw std::invalid_argument("Invalid arguments number. (format: -mode[modeName] config_path image_path)");
 	}
 }

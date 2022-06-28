@@ -21,7 +21,11 @@ namespace DITCameraTool
                 std::string m_image_path;
                 std::string m_image_name;
                 bool m_is_generate_image;
+<<<<<<< HEAD
                 bool m_is_print_debug_info;
+=======
+                bool m_is_debug;
+>>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
                 json m_report_row;
                 virtual void FreeImage() const;
                 virtual void LoadImage(std::string);
