@@ -4,11 +4,11 @@
 DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase() 
 {
 	m_is_print_debug_info = false;
-	m_image = NULL;
+	mp_image = NULL;
 }
 DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config) 
 {
-	m_image = NULL;
+	mp_image = NULL;
 	m_is_print_debug_info = _GetDebugMode();
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
@@ -29,14 +29,14 @@ void DITCameraTool::Algorithm::AlgorithmBase::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid m_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
 	}
-	m_image = new cv::Mat(figure);
+	mp_image = new cv::Mat(figure);
 }
 
 void DITCameraTool::Algorithm::AlgorithmBase::FreeImage() const{
-	delete m_image;
-	const_cast<AlgorithmBase*>(this)->m_image = NULL;
+	delete mp_image;
+	const_cast<AlgorithmBase*>(this)->mp_image = NULL;
 }
 std::string DITCameraTool::Algorithm::AlgorithmBase::GenerateImage(cv::Mat* image, std::string item_name, DITCameraTool::Reporter& reporter) const{
 	std::string file_generate_path;

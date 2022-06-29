@@ -19,7 +19,7 @@ void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid m_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
 	}
 	int STRIDE = std::stoi((std::string)m_algorithm_config["Stride"]);
 
@@ -38,20 +38,20 @@ void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string  image_path)
 		_PrintVariable(stride_figure.cols);
 	}
 	FreeImage();
-	m_image = new cv::Mat(stride_figure);
+	mp_image = new cv::Mat(stride_figure);
 }
 
 bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& reporter) const{
     cv::Mat hist;
     bool resultBool = false;
     int splitPartitions = std::stoi((std::string)m_algorithm_config["Split_Partition"]);
-    int splitRows = m_image->rows/splitPartitions;
-    int splitCols = m_image->cols/splitPartitions;
+    int splitRows = mp_image->rows/splitPartitions;
+    int splitCols = mp_image->cols/splitPartitions;
     int height;
     int width;
     if(m_is_print_debug_info){
-        _PrintVariable(m_image->rows);
-        _PrintVariable(m_image->cols);
+        _PrintVariable(mp_image->rows);
+        _PrintVariable(mp_image->cols);
         printf("-----\n");
     }
     for (int i=0; i<splitPartitions; i++){
@@ -61,10 +61,10 @@ bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& rep
             width = splitCols;
             
             if(i==splitPartitions-1){
-                height = m_image->rows-i*splitRows;
+                height = mp_image->rows-i*splitRows;
             }
             if(j==splitPartitions-1){
-                width = m_image->cols-j*splitCols;
+                width = mp_image->cols-j*splitCols;
             }
             if(m_is_print_debug_info){
                 _PrintVariable(i); 
@@ -74,7 +74,7 @@ bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& rep
                 printf("-----\n");
             }   
             cv::Rect splitRectangle(j*splitCols, i*splitRows, width, height);
-            cv::Mat splitImage= (*m_image)(splitRectangle);
+            cv::Mat splitImage= (*mp_image)(splitRectangle);
             _statisticPixel(splitImage, pixelStat);
             bool detectResult = _detectStd(splitImage, pixelStat);
             resultBool = (resultBool||detectResult);

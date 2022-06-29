@@ -44,15 +44,15 @@ void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
 		_PrintVariable(stride_figure.rows);
 		_PrintVariable(stride_figure.cols);
 	}
-	m_image = new cv::Mat(stride_figure);
+	mp_image = new cv::Mat(stride_figure);
 }
 
 bool DITCameraTool::Algorithm::Blemish::Execute(DITCameraTool::Reporter& reporter) const
 {
 	InitializeReportRow(reporter);
-	GenerateImage(m_image, "stride", reporter);
+	GenerateImage(mp_image, "stride", reporter);
 	bool result_bool = true;
-	bool resultBlemish = _DetectBlemish(m_image, reporter);
+	bool resultBlemish = _DetectBlemish(mp_image, reporter);
 	result_bool = (result_bool&&resultBlemish);
 	printf("%s\n", result_bool? "Pass": "Not Pass");
 
@@ -130,7 +130,7 @@ cv::Mat DITCameraTool::Algorithm::Blemish::ExecuteFastDifferenceFilter(cv::Mat* 
 	{
 		_PrintVariable(INSPECT_RATIO);
 	}
-	int interval = static_cast<int>(m_image->cols*INSPECT_RATIO);
+	int interval = static_cast<int>(mp_image->cols*INSPECT_RATIO);
 	int expand_distance = interval/2;
 	cv::Mat filted_image = cv::Mat(image->rows, image->cols, CV_8U);
 	for (int i = 0; i<image->rows; i++)

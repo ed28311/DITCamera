@@ -23,7 +23,7 @@ void DITCameraTool::Algorithm::Flare::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid m_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
 	}
 	int STRIDE = std::stoi((std::string)m_algorithm_config["Stride"]);
 
@@ -42,13 +42,13 @@ void DITCameraTool::Algorithm::Flare::LoadImage(std::string  image_path)
 		_PrintVariable(stride_figure.cols);
 	}
 	FreeImage();
-	m_image = new cv::Mat(stride_figure);
+	mp_image = new cv::Mat(stride_figure);
 }
 
 bool DITCameraTool::Algorithm::Flare::Execute(DITCameraTool::Reporter& reporter) const
 {
 	InitializeReportRow(reporter);
-	bool result_bool = _DetectIntensityStd(m_image, reporter);
+	bool result_bool = _DetectIntensityStd(mp_image, reporter);
 	if (reporter.m_is_create_report)
 	{
 		_AttachReportRowBasicInfo(reporter);

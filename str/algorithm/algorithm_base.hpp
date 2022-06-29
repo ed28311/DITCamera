@@ -33,7 +33,7 @@ namespace DITCameraTool
                 void SubmitReport(json, DITCameraTool::Reporter&) const;
                 void FinishReport(json, DITCameraTool::Reporter&) const;
             protected:
-                cv::Mat *m_image;
+                cv::Mat *mp_image;
                 json m_algorithm_config;
                 json m_global_config;
                 std::string _GetImageFileName() const;

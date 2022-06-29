@@ -22,10 +22,10 @@ void DITCameraTool::Algorithm::Shading::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid m_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
 	}
 	FreeImage();
-	m_image = new cv::Mat(figure);
+	mp_image = new cv::Mat(figure);
 }
 
 bool DITCameraTool::Algorithm::Shading::Execute(DITCameraTool::Reporter& reporter) const {
@@ -33,8 +33,8 @@ bool DITCameraTool::Algorithm::Shading::Execute(DITCameraTool::Reporter& reporte
 	InitializeReportRow(reporter);
 	const float BLOCK_RATIO = std::stof(const_cast<Shading*>(this)->m_algorithm_config.LoadJsonKey("BlockRatio")); 
 
-	int image_height = m_image->rows;
-	int image_width = m_image->cols;
+	int image_height = mp_image->rows;
+	int image_width = mp_image->cols;
 	int block_height = image_height*BLOCK_RATIO;
 	int block_width = image_width*BLOCK_RATIO;
 
@@ -86,7 +86,7 @@ void DITCameraTool::Algorithm::Shading::_AppendCornerAvgIntensity(json &jsonAvgA
 }
 
 int DITCameraTool::Algorithm::Shading::_FetchAvgPixel(int begin_x, int begin_y, int rect_w, int rect_h) const {
-	cv::Mat image = (*m_image);
+	cv::Mat image = (*mp_image);
 	cv::Rect image_rect(begin_x, begin_y, rect_w, rect_h);
 	cv::Mat image_crop = image(image_rect);
 	unsigned long long int accumulatePixel = 0;
