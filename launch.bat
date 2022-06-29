@@ -1,7 +1,12 @@
-
-SET BASEDIR=%HOMEPATH%\DITCamera
-cd %BASEDIR%
-start /D "%BASEDIR%\build\bin\Release\" main ^
+SET BASEDIR=%1
+SET FILEPATH=%2
+shift
+shift
+For %%A in ("%FILEPATH%") DO (
+    SET FILEFOLDER=%%~dpA
+    SET FILENAME=%%~nxA
+)
+start /D "%FILEFOLDER%" %FILENAME% ^
 -BL[Blemish] %BASEDIR%\CameraSpec.spe %BASEDIR%\test_pic\blemishNG.jpg ^
 -BL[Blemish] %BASEDIR%\CameraSpec.spe %BASEDIR%\test_pic\blemishOK.jpg ^
 -BL[Blemish] %BASEDIR%\CameraSpec.spe %BASEDIR%\test_pic\blemish.jpg ^

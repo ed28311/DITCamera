@@ -3,33 +3,22 @@
 DITCameraTool::Algorithm::BlemishStat::BlemishStat(DITCameraTool::Config config) {
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
-<<<<<<< HEAD
 	m_is_print_debug_info = _GetDebugMode();
 	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
 	if (m_is_print_debug_info)
-=======
-	m_is_debug = _GetDebugMode();
-	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
-	if (m_is_debug)
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	{
 		_PrintVariable(m_is_generate_image);
 		_PrintVariable(config);
 	}
 }
 
-<<<<<<< HEAD
 void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string  image_path)
 {
-=======
-void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string image_path) {
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	m_image_path = image_path;
 	m_image_name = _GetImageFileName();
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-<<<<<<< HEAD
 		throw std::invalid_argument("Invalid m_image path. ("+ m_image_path+ ")");
 	}
 	int STRIDE = std::stoi((std::string)m_algorithm_config["Stride"]);
@@ -52,31 +41,6 @@ void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string image_path) {
 	m_image = new cv::Mat(stride_figure);
 }
 
-=======
-		throw std::invalid_argument("Invalid m_image path. (" + m_image_path + ")");
-	}
-	int stride = std::stoi((std::string)m_algorithm_config["Stride"]);
-
-	cv::Mat stride_figure(figure.rows / stride, figure.cols / stride, CV_8U);
-	for(int i = 0; i < (figure.rows / stride); i++)
-	{
-		for (int j = 0; j < (figure.cols / stride); j++)	
-		{
-			stride_figure.at<uchar>(i, j) = figure.at<uchar>(i*stride, j*stride);
-		}
-	}
-
-	if (m_is_debug)
-	{
-		_PrintVariable(stride);
-		_PrintVariable(stride_figure.rows);
-		_PrintVariable(stride_figure.cols);
-	}
-	*m_image = stride_figure;
-}
-
-
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& reporter) const{
     cv::Mat hist;
     bool resultBool = false;
@@ -85,11 +49,7 @@ bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& rep
     int splitCols = m_image->cols/splitPartitions;
     int height;
     int width;
-<<<<<<< HEAD
     if(m_is_print_debug_info){
-=======
-    if(m_is_debug){
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
         _PrintVariable(m_image->rows);
         _PrintVariable(m_image->cols);
         printf("-----\n");
@@ -106,11 +66,7 @@ bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& rep
             if(j==splitPartitions-1){
                 width = m_image->cols-j*splitCols;
             }
-<<<<<<< HEAD
             if(m_is_print_debug_info){
-=======
-            if(m_is_debug){
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
                 _PrintVariable(i); 
                 _PrintVariable(j);
                 _PrintVariable(width);
@@ -143,11 +99,7 @@ bool DITCameraTool::Algorithm::BlemishStat::_detectStd(cv::Mat figure, std::vect
     bool resultBool = false;
     float pixelStd = _evalPixelStandardDeviation(figure, pixelArray);
     float stdThreshold = std::stof((std::string)m_algorithm_config["Std_Threshold"]);
-<<<<<<< HEAD
     if (m_is_print_debug_info){
-=======
-    if (m_is_debug){
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
         _PrintVariable(pixelStd);
         printf("-----Done\n");
     }
@@ -169,11 +121,7 @@ float DITCameraTool::Algorithm::BlemishStat::_evalPixelStandardDeviation(cv::Mat
             printf("Pixel: %d, # of pxiels: %d\n", i, intArray[i]);
         }
     }
-<<<<<<< HEAD
     if(m_is_print_debug_info){
-=======
-    if(m_is_debug){
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
         _PrintVariable((int)intArray.size());
         _PrintVariable(mean);
         _PrintVariable(meanSquare);

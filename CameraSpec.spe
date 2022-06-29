@@ -16,12 +16,8 @@ ReportDirectory = ASUS_Camera_Reports_DLL
 LogDirectory = ASUS_Camera_Log
 LogLevel = INFO
 OutputDebugInfo = 1
-<<<<<<< HEAD
 OutputPrintDebugInfo = 0
 OutputLog = 1
-=======
-OutputTestInfo = 1
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 OutputDLLReport = 1
 OutputEXEReport = 0
 OutputLSTReport = 0
@@ -34,7 +30,6 @@ DoItemsMultiThread = 0
 DoItemsNumMT = 0
 
 [Shading]
-Stride = 1
 PassLevel_Up = 110
 PassLevel = 16
 Diff = 10
@@ -49,8 +44,10 @@ Std_Threshold = 80
 [Blemish]
 Stride = 4
 IntensityTolerance = 16
-InspectRatio = 0.2
+InspectRatio = 0.3
 FilterSize = 9
+
+
 
 
 [BlemishStat]

@@ -15,13 +15,10 @@ static const bool isWindows = false;
 #define PRINTVARIABLE_LOAD
 
 
-<<<<<<< HEAD
 /*
 Description:
 	Tool controls output color by warning level.
 */
-=======
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 namespace DITCameraTool 
 {
 	namespace Tool

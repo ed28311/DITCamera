@@ -7,10 +7,6 @@
 #include <filesystem>
 #include "config_object.hpp"
 #include "tool/displayer.hpp"
-<<<<<<< HEAD
-=======
-
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 namespace DITCameraTool
 {
     class Reporter
@@ -32,24 +28,15 @@ namespace DITCameraTool
             std::string m_current_datetime;
             std::string m_current_date;
             void MergeReporter(DITCameraTool::Reporter);
-<<<<<<< HEAD
 
         private:
-=======
-        private:
-            bool _GetReportEnable();
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
             int _AddReportHeader();
             std::string _CreateCSVLine(std::vector<std::string>);
             std::vector<std::string> _UpdateReportCols(std::vector<std::string>);
             json _UpdateReportConfig(json);
-<<<<<<< HEAD
             void _SetupReportEnable();
             void _SetupCurrentTime();
             void _SetupFileInfo();
-=======
-            void _GetCurrentTime();
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
             void _checkDirRoot(std::string);
     };
 }

@@ -26,9 +26,5 @@ json DITCameraTool::Config::GetAlgorithmConf() const
 json DITCameraTool::Config::GetGlobalConf() const
 {
     return m_global_config;
-<<<<<<< HEAD
 };
 
-=======
-};
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0

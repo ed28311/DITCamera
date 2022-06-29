@@ -4,15 +4,9 @@
 DITCameraTool::Algorithm::BlemishPixel::BlemishPixel(DITCameraTool::Config config) {
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
-<<<<<<< HEAD
 	m_is_print_debug_info = _GetDebugMode();
 	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
 	if (m_is_print_debug_info)
-=======
-	m_is_debug = _GetDebugMode();
-	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
-	if (m_is_debug)
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	{
 		_PrintVariable(m_is_generate_image);
 		_PrintVariable(config);
@@ -38,22 +32,14 @@ void DITCameraTool::Algorithm::BlemishPixel::LoadImage(std::string image_path) {
 		}
 	}
 
-<<<<<<< HEAD
 	if (m_is_print_debug_info)
-=======
-	if (m_is_debug)
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 	{
 		_PrintVariable(stride);
 		_PrintVariable(stride_figure.rows);
 		_PrintVariable(stride_figure.cols);
 	}
-<<<<<<< HEAD
 	FreeImage();
 	m_image = new cv::Mat(stride_figure);
-=======
-	*m_image = stride_figure;
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 }
 
 bool DITCameraTool::Algorithm::BlemishPixel::Execute(DITCameraTool::Reporter& logger) const{

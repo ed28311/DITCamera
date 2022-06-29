@@ -5,32 +5,19 @@ DITCameraTool::ConfigLoader::ConfigLoader()
     json config;
 };
 
-<<<<<<< HEAD
 DITCameraTool::Config DITCameraTool::ConfigLoader::GetJsonConfig(std::string file_path, std::string config_argument, std::vector<std::string> global_config_member)
-=======
-DITCameraTool::Config DITCameraTool::ConfigLoader::GetJsonConfig(std::string file_path, std::string algorithm_name, std::vector<std::string> global_config_member)
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 {
     return DITCameraTool::Config();
 };
 
-<<<<<<< HEAD
 DITCameraTool::Config DITCameraTool::ConfigLoader::GetSPEConfig(std::string file_path, std::string config_argument, std::vector<std::string> global_config_member)
-=======
-DITCameraTool::Config DITCameraTool::ConfigLoader::GetSPEConfig(std::string file_path, std::string algorithm_name, std::vector<std::string> global_config_member)
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 {
     m_global_config_member = global_config_member;
-    json global_config, algorithm_config;
     std::string algorithm, config_mode;
-<<<<<<< HEAD
     std::tuple<std::string, std::string>  mode_pair = _ParseModeArgument(config_argument);
-=======
-    
-    std::tuple<std::string, std::string>  mode_pair = _ParseModeArgument(algorithm_name);
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
     std::tie(algorithm, config_mode) = mode_pair;
 
+    json global_config, algorithm_config;
     std::tuple<json, json> config_pair = _ParseSPEConfig(file_path, algorithm, config_mode);
     std::tie(global_config, algorithm_config) = config_pair;
     algorithm_config["Algorithm"] = algorithm;
@@ -39,7 +26,6 @@ DITCameraTool::Config DITCameraTool::ConfigLoader::GetSPEConfig(std::string file
     return config;
 };
 
-<<<<<<< HEAD
 
 std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string file_path, std::string algorithm, std::string config_mode)
 /*
@@ -54,9 +40,6 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string 
 :Output:
     - std::tuple<json, json> config_pair -> Parse spe file and split into global config and algorithm config (algorithm selected by config_mode).
 */
-=======
-std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string file_path, std::string algorithm, std::string config_mode)
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 {
     std::ifstream in_file(file_path);
     std::string read_line;
@@ -83,13 +66,9 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string 
                     std::tuple<std::string, std::string> key_value_pair = _ParseSPEConfigLine(read_line);
                     std::tie(key, value) = key_value_pair;
                     global_config[key] = value;
-<<<<<<< HEAD
                 }
                 else
                 {
-=======
-                }else{
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
                     if(inspect==config_mode)
                     {
                         detect_algorithm = true;
@@ -122,19 +101,11 @@ std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_ParseSPEConfi
     std::string parse_line = read_line;
     parse_line.erase(std::remove(parse_line.begin(), parse_line.end(), ' '), parse_line.end());
     parse_line.erase(std::remove(parse_line.begin(), parse_line.end(), '\r'), parse_line.end());
-<<<<<<< HEAD
     int parse_line_size = parse_line.size();
     int key_end_loc = parse_line.find_first_of("=");
     int value_begin_loc = parse_line.find_last_of("=");
     param = parse_line.substr(0, key_end_loc);
     value = parse_line.substr(value_begin_loc+1, parse_line_size);
-=======
-    int parseLineSize = parse_line.size();
-    int paramEndLoc = parse_line.find_first_of("=");
-    int valueBeginLoc = parse_line.find_last_of("=");
-    param = parse_line.substr(0, paramEndLoc);
-    value = parse_line.substr(valueBeginLoc+1, parseLineSize);
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
     return std::make_tuple(param, value);
 };
 
@@ -150,7 +121,6 @@ bool DITCameraTool::ConfigLoader::IsGlobalParam(std::string inspect)
     }
 };
 
-<<<<<<< HEAD
 
 std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_ParseModeArgument(std::string mode) 
 /*
@@ -161,9 +131,6 @@ std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_ParseModeArgu
 :Output:
     - std::tuple<std::string, std::string> algorithm_config_name_pair
 */
-=======
-std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_ParseModeArgument(std::string mode) 
->>>>>>> 5300e8e04935a22b9a1375aee249e1db6b96a1b0
 {
 	std::vector<std::string> mode_pair(2);
 	std::regex reg("^-.*[\\w]+\\[.*[\\w]+\\]");

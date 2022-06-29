@@ -2,7 +2,7 @@
 
 DITCameraTool::Tool::Display::Display()
 {
-	#ifdef isWindowsBlock
+	#ifdef isWindowsToken
 	debugHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	#endif
 }
@@ -10,7 +10,7 @@ DITCameraTool::Tool::Display::Display()
 DITCameraTool::Tool::Display::Display(std::string debugString)
 {
 	debugMode = debugString;
-	#ifdef isWindowsBlock
+	#ifdef isWindowsToken
 	debugHandle = GetStdHandle(STD_OUTPUT_HANDLE);;
 	#endif
 }
@@ -26,7 +26,7 @@ std::string DITCameraTool::Tool::Display::_debugPrintFormat(std::string debugStr
 		}
 		else
 		{
-			#ifdef isWindowsBlock
+			#ifdef isWindowsToken
 			SetConsoleTextAttribute(debugHandle, 14);
 			#endif
 			return "";
@@ -40,7 +40,7 @@ std::string DITCameraTool::Tool::Display::_debugPrintFormat(std::string debugStr
 		}
 		else
 		{
-			#ifdef isWindowsBlock
+			#ifdef isWindowsToken
 			SetConsoleTextAttribute(debugHandle, 12);
 			#endif
 			return "";
@@ -56,7 +56,7 @@ std::string DITCameraTool::Tool::Display::_debugEndFormat()
 {
 	if (isWindows)
 	{
-		#ifdef isWindowsBlock
+		#ifdef isWindowsToken
 		SetConsoleTextAttribute(debugHandle, 15);
 		#endif
 		return "";

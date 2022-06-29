@@ -11,9 +11,9 @@ namespace DITCameraTool{
                 virtual void LoadImage(std::string) override;
                 cv::Mat ExecuteFastDifferenceFilter(cv::Mat *) const;
             private:
-                bool _detectBlemish(cv::Mat*, DITCameraTool::Reporter&) const;
-                int _findMedian(std::vector<int>) const;
-                cv::Mat _2DFilter(cv::Mat*, int) const;
+                bool _DetectBlemish(cv::Mat*, DITCameraTool::Reporter&) const;
+                int _FindMedian(std::vector<int>) const;
+                cv::Mat _Pass2DFilter(cv::Mat*, int) const;
         };
     }
 }
