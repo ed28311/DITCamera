@@ -31,7 +31,7 @@ To detect a lens external condition, like dust, stain, illumination, ... ,etc, w
 	1. Statistics all pixel value distribution.
 	2. Evaluate standard deviation $\sigma$ from pixel distribution.
 - Qualified condition
-	- $\text{SplitThreshold}\leq\sigma$ .
+	- $\text{StdThreshold}\leq\sigma$ .
 
 #### 3. Blemish
 - Definition: Visible spots or marks in the image.
