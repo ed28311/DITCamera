@@ -4,7 +4,7 @@
 DITCameraTool::Algorithm::BlemishPixel::BlemishPixel(DITCameraTool::Config config) {
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
-	m_is_print_debug_info = _GetDebugMode();
+	m_is_print_debug_info = GetDebugMode();
 	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
 	if (m_is_print_debug_info)
 	{
@@ -19,7 +19,7 @@ void DITCameraTool::Algorithm::BlemishPixel::LoadImage(std::string image_path) {
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid mp_image path. (" + m_image_path + ")");
+		throw std::invalid_argument("Invalid m_p_image path. (" + m_image_path + ")");
 	}
 	int stride = std::stoi((std::string)m_algorithm_config["Stride"]);
 
@@ -39,11 +39,10 @@ void DITCameraTool::Algorithm::BlemishPixel::LoadImage(std::string image_path) {
 		_PrintVariable(stride_figure.cols);
 	}
 	FreeImage();
-	mp_image = new cv::Mat(stride_figure);
+	m_p_image = new cv::Mat(stride_figure);
 }
 
-bool DITCameraTool::Algorithm::BlemishPixel::Execute(DITCameraTool::Reporter& logger) const{
-    DITCameraTool::Reporter& DITLogger = logger;
+bool DITCameraTool::Algorithm::BlemishPixel::Execute() const{
     std::vector<std::vector<int>> logObject;
     bool resultBool = _loopPixels(true, logObject);
     std::cout << resultBool << std::endl;
@@ -60,14 +59,14 @@ bool DITCameraTool::Algorithm::BlemishPixel::_loopPixels(bool displaySelectPixel
     int minPixelDiff = 255;
     int diffPixel;
     bool resultBool = true;
-    for(int i=0; i<mp_image->rows; i+=stride){
-        for(int j=0; j<mp_image->cols-1; j+=stride){
-            int selectPixel = mp_image->at<uchar>(i,j);
-            if((j+stride)>mp_image->cols){
-                targetPixel = mp_image->at<uchar>(i,j+stride);
+    for(int i=0; i<m_p_image->rows; i+=stride){
+        for(int j=0; j<m_p_image->cols-1; j+=stride){
+            int selectPixel = m_p_image->at<uchar>(i,j);
+            if((j+stride)>m_p_image->cols){
+                targetPixel = m_p_image->at<uchar>(i,j+stride);
             }
             else{
-                targetPixel = mp_image->at<uchar>(i,mp_image->cols);
+                targetPixel = m_p_image->at<uchar>(i,m_p_image->cols);
             }
             diffPixel = _calcAbsVal(targetPixel-selectPixel);
             if (diffPixel>maxPixelDiff){

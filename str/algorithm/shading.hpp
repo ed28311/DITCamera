@@ -6,15 +6,15 @@ namespace DITCameraTool{
             public:
                 Shading();
                 Shading(DITCameraTool::Config);
-                virtual bool Execute(DITCameraTool::Reporter&) const override;
+                virtual bool Execute() const override;
                 virtual void LoadImage(std::string) override;
             private:
-                int _FetchAvgPixel(int, int, int, int) const;
-                json _CollectCornerAvgIntensity(int avgAreaLB, int avgAreaLT, int avgAreaRB, int avgAreaRT) const;
-                void _AppendCornerAvgIntensity(json &jsonAvgAreaCorner,std::string name, int val) const;
-                bool _DetectCenterIntensity(int, DITCameraTool::Reporter&) const;
-                bool _DetectCornerShading(int, json, DITCameraTool::Reporter&) const;
-                bool _DetectCornerDiff(json, DITCameraTool::Reporter&) const;
+                int FetchAvgPixel(int, int, int, int) const;
+                json CollectCornerAvgIntensity(int avgAreaLB, int avgAreaLT, int avgAreaRB, int avgAreaRT) const;
+                void AppendCornerAvgIntensity(json &jsonAvgAreaCorner,std::string name, int val) const;
+                bool DetectCenterIntensity(int) const;
+                bool DetectCornerShading(int, json) const;
+                bool DetectCornerDiff(json) const;
         };
     }
 }

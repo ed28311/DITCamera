@@ -5,9 +5,9 @@ DITCameraTool::Algorithm::Flare::Flare(){}
 
 DITCameraTool::Algorithm::Flare::Flare(DITCameraTool::Config config)
 {
-	m_algorithm_config = config.GetAlgorithmConf();
-	m_global_config = config.GetGlobalConf();
-	m_is_print_debug_info = _GetDebugMode();
+	// m_algorithm_config = config.GetAlgorithmConf();
+	// m_global_config = config.GetGlobalConf();
+	// m_is_print_debug_info = _GetDebugMode();
 	m_is_generate_image = (std::stoi(const_cast<Flare*>(this)->m_global_config.LoadJsonKey("OutputAllImages")));
 	if (m_is_print_debug_info)
 	{
@@ -23,7 +23,7 @@ void DITCameraTool::Algorithm::Flare::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid m_p_image path. ("+ m_image_path+ ")");
 	}
 	int STRIDE = std::stoi((std::string)m_algorithm_config["Stride"]);
 
@@ -42,29 +42,29 @@ void DITCameraTool::Algorithm::Flare::LoadImage(std::string  image_path)
 		_PrintVariable(stride_figure.cols);
 	}
 	FreeImage();
-	mp_image = new cv::Mat(stride_figure);
+	m_p_image = new cv::Mat(stride_figure);
 }
 
-bool DITCameraTool::Algorithm::Flare::Execute(DITCameraTool::Reporter& reporter) const
+bool DITCameraTool::Algorithm::Flare::Execute() const
 {
-	InitializeReportRow(reporter);
-	bool result_bool = _DetectIntensityStd(mp_image, reporter);
-	if (reporter.m_is_create_report)
+	InitializeReportRow();
+	bool result_bool = DetectIntensityStd(m_p_image);
+	if (m_p_reporter->m_is_create_report)
 	{
-		_AttachReportRowBasicInfo(reporter);
+		AttachReportRowBasicInfo();
 		WriteReportRow("ITEM", "FlareDetectResult");
 		WriteReportRow("RESULT", (result_bool) ? "PASS" : "FAIL");
 		WriteReportRow("IMG", m_image_path);
 		std::string spec_info = m_algorithm_config.dump(-1);
 		std::replace(spec_info.begin(), spec_info.end(), ',', ' ');
 		WriteReportRow("OTHERS", spec_info);
-		FinishReport(m_report_row, reporter);
+		FinishReport(m_report_row);
 	}
 	printf("%s\n", result_bool ? "Pass" : "Not Pass");
 	return result_bool;
 }
 
-std::vector<int> DITCameraTool::Algorithm::Flare::_StatisticIntensity(cv::Mat* image, std::vector<int> intensity_stat) const {
+std::vector<int> DITCameraTool::Algorithm::Flare::StatisticIntensity(cv::Mat* image, std::vector<int> intensity_stat) const {
 	std::vector<int> intensity_stat_copy = std::vector<int>(intensity_stat);
 	for (int i = 0; i < image->rows; i++)
 	{
@@ -76,14 +76,14 @@ std::vector<int> DITCameraTool::Algorithm::Flare::_StatisticIntensity(cv::Mat* i
 	return intensity_stat_copy;
 }
 
-bool DITCameraTool::Algorithm::Flare::_DetectIntensityStd(cv::Mat* image, DITCameraTool::Reporter& reporter) const {
+bool DITCameraTool::Algorithm::Flare::DetectIntensityStd(cv::Mat* image) const {
 	std::vector<int> intensity_stat(256, 0);
 	std::string function_name = "DetectIntensityStd";
 	bool result_bool = false;
 
-	intensity_stat = _StatisticIntensity(image, intensity_stat);
+	intensity_stat = StatisticIntensity(image, intensity_stat);
 	int num_of_pixel = image->rows*image->cols;
-	float intensity_std = _EvalIntensityStandardDeviation(intensity_stat, num_of_pixel);
+	float intensity_std = EvalIntensityStandardDeviation(intensity_stat, num_of_pixel);
 	float std_threshold = std::stof(const_cast<Flare*>(this)->m_algorithm_config.LoadJsonKey("Std_Threshold"));
 	if (m_is_print_debug_info)
 	{
@@ -95,19 +95,19 @@ bool DITCameraTool::Algorithm::Flare::_DetectIntensityStd(cv::Mat* image, DITCam
 		result_bool = true;
 	}
 
-	if (reporter.m_is_create_report)
+	if (m_p_reporter->m_is_create_report)
 	{
-		_AttachReportRowBasicInfo(reporter);
+		AttachReportRowBasicInfo();
 		WriteReportRow("ITEM", function_name);
 		WriteReportRow("VALUE", std::to_string(intensity_std));
 		WriteReportRow("LCL", std::to_string(std_threshold));
 		WriteReportRow("RESULT", (result_bool) ? "PASS" : "FAIL");
-		SubmitReport(m_report_row, reporter);
+		SubmitReport(m_report_row);
 	}
 	return result_bool;
 }
 
-float DITCameraTool::Algorithm::Flare::_EvalIntensityStandardDeviation(std::vector<int> intensityDist, int num_of_pixel) const {
+float DITCameraTool::Algorithm::Flare::EvalIntensityStandardDeviation(std::vector<int> intensityDist, int num_of_pixel) const {
 	float mean = 0;
 	float mean_square = 0;
 	for (int i = 0; i < intensityDist.size(); i++)

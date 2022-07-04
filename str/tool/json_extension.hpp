@@ -8,6 +8,6 @@
 class json: public nlohmann::json
 {
     public:
-        const std::string LoadJsonKey(const typename object_t::key_type& key);
+        const std::string LoadJsonKey(const std::string key);
 };
 #endif

@@ -3,18 +3,18 @@
 DITCameraTool::Logger::Logger(json global_config, std::string message, DITCameraTool::LOG_LEVELS level):m_LEVEL(level), m_message(message)
 {
     m_global_config = global_config;
-    _GetLogInfo();
-    _LoadLevelTransformer();
+    GetLogInfo();
+    LoadLevelTransformer();
 }
 
-void DITCameraTool::Logger::_GetLogInfo(){
+void DITCameraTool::Logger::GetLogInfo(){
     m_is_print_message = std::stoi(m_global_config.LoadJsonKey("OutputPrintDebugInfo"));
     m_is_write_log = std::stoi(m_global_config.LoadJsonKey("OutputLog"));
     m_log_directory = m_global_config.LoadJsonKey("LogDirectory");
     m_lowest_level = m_global_config.LoadJsonKey("LogLevel");
 }
 
-void DITCameraTool::Logger::_LoadLevelTransformer()
+void DITCameraTool::Logger::LoadLevelTransformer()
 {
     m_level_transformer['1'] = " INFO";
     m_level_transformer['2'] = "DEBUG";

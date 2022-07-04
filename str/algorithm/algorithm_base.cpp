@@ -3,24 +3,33 @@
 
 DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase() 
 {
+	m_p_reporter = NULL;
 	m_is_print_debug_info = false;
-	mp_image = NULL;
+	m_p_image = NULL;
 }
 DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Config config) 
 {
-	mp_image = NULL;
-	m_is_print_debug_info = _GetDebugMode();
+	m_p_image = NULL;
+	m_is_print_debug_info = GetDebugMode();
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
+	delete m_p_reporter;
+	m_p_reporter = NULL;
+	m_p_reporter = new DITCameraTool::Reporter(config, report_basic_property);
 }
 DITCameraTool::Algorithm::AlgorithmBase::~AlgorithmBase(){
 	FreeImage();
+	delete m_p_reporter;
+	m_p_reporter = NULL;
 }
-bool DITCameraTool::Algorithm::AlgorithmBase::Execute(DITCameraTool::Reporter&) const
+bool DITCameraTool::Algorithm::AlgorithmBase::Execute() const
 {
 	return true;
 }
-
+DITCameraTool::Reporter DITCameraTool::Algorithm::AlgorithmBase::GetReporter()
+{
+	return *m_p_reporter;
+}
 void DITCameraTool::Algorithm::AlgorithmBase::LoadImage(std::string  image_path)
 {
 	FreeImage();
@@ -29,21 +38,21 @@ void DITCameraTool::Algorithm::AlgorithmBase::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid m_p_image path. ("+ m_image_path+ ")");
 	}
-	mp_image = new cv::Mat(figure);
+	m_p_image = new cv::Mat(figure);
 }
 
 void DITCameraTool::Algorithm::AlgorithmBase::FreeImage() const{
-	delete mp_image;
-	const_cast<AlgorithmBase*>(this)->mp_image = NULL;
+	delete m_p_image;
+	const_cast<AlgorithmBase*>(this)->m_p_image = NULL;
 }
-std::string DITCameraTool::Algorithm::AlgorithmBase::GenerateImage(cv::Mat* image, std::string item_name, DITCameraTool::Reporter& reporter) const{
+std::string DITCameraTool::Algorithm::AlgorithmBase::GenerateImage(cv::Mat* image, std::string item_name) const{
 	std::string file_generate_path;
 	if (m_is_generate_image)
 	{
-		std::string export_dir = reporter.m_file_dir;
-		std::string file_name = reporter.m_serial_num + "-" + reporter.m_current_datetime + "-" + const_cast<AlgorithmBase*>(this)->m_algorithm_config.LoadJsonKey("ConfigMode") + "-" + m_image_name + "-" + item_name + ".jpg";
+		std::string export_dir = m_p_reporter->m_file_dir;
+		std::string file_name = m_p_reporter->m_serial_num + "-" + m_p_reporter->m_current_datetime + "-" + const_cast<AlgorithmBase*>(this)->m_algorithm_config.LoadJsonKey("ConfigMode") + "-" + m_image_name + "-" + item_name + ".jpg";
 		if (m_is_print_debug_info)
 		{
 			_PrintVariable(export_dir);
@@ -55,12 +64,12 @@ std::string DITCameraTool::Algorithm::AlgorithmBase::GenerateImage(cv::Mat* imag
 	return file_generate_path;
 }
 
-json DITCameraTool::Algorithm::AlgorithmBase::InitializeReportRow(DITCameraTool::Reporter& reporter) const
+json DITCameraTool::Algorithm::AlgorithmBase::InitializeReportRow() const
 {
 	json new_report_row;
-	for (int i = 0; i < reporter.m_report_cols.size(); i++) 
+	for (int i = 0; i < m_p_reporter->m_report_cols.size(); i++) 
 	{
-		new_report_row[reporter.m_report_cols[i]] = " ";
+		new_report_row[m_p_reporter->m_report_cols[i]] = " ";
 	}
 	const_cast<AlgorithmBase*>(this)->m_report_row = new_report_row;
 	return new_report_row;
@@ -69,18 +78,17 @@ void DITCameraTool::Algorithm::AlgorithmBase::WriteReportRow(std::string key, st
 {
 	const_cast<AlgorithmBase*>(this)->m_report_row[key] = val;
 }
-void DITCameraTool::Algorithm::AlgorithmBase::SubmitReport(json m_report_row, DITCameraTool::Reporter& reporter) const
+void DITCameraTool::Algorithm::AlgorithmBase::SubmitReport(json m_report_row) const
 {
-	DITCameraTool::Reporter *reporter_p = &reporter;
-	reporter.WriteBack(m_report_row);
-	m_report_row = InitializeReportRow(reporter);
+	m_p_reporter->WriteBack(m_report_row);
+	m_report_row = InitializeReportRow();
 }
-void DITCameraTool::Algorithm::AlgorithmBase::FinishReport(json m_report_row, DITCameraTool::Reporter& reporter) const
+void DITCameraTool::Algorithm::AlgorithmBase::FinishReport(json m_report_row) const
 {
-	reporter.WriteFront(m_report_row);
-	m_report_row = InitializeReportRow(reporter);
+	m_p_reporter->WriteFront(m_report_row);
+	m_report_row = InitializeReportRow();
 	// add new line.
-	reporter.WriteBack(this->m_report_row);
+	m_p_reporter->WriteBack(this->m_report_row);
 }
 
 
@@ -91,15 +99,15 @@ std::string DITCameraTool::Algorithm::AlgorithmBase::_GetImageFileName() const
 	std::string imageName = sm[0];
 	return imageName;
 }
-bool DITCameraTool::Algorithm::AlgorithmBase::_GetDebugMode() const 
+bool DITCameraTool::Algorithm::AlgorithmBase::GetDebugMode() const 
 {
 	return std::stoi(const_cast<AlgorithmBase*>(this)->m_global_config.LoadJsonKey("OutputPrintDebugInfo"));
 }
 
-void DITCameraTool::Algorithm::AlgorithmBase::_AttachReportRowBasicInfo(DITCameraTool::Reporter& reporter) const
+void DITCameraTool::Algorithm::AlgorithmBase::AttachReportRowBasicInfo() const
 {
 	WriteReportRow("SPEC_NAME", const_cast<AlgorithmBase*>(this)->m_global_config.LoadJsonKey("SpecName"));
-	WriteReportRow("DATE_TIME", reporter.m_current_date);
+	WriteReportRow("DATE_TIME", m_p_reporter->m_current_date);
 	WriteReportRow("OBJ_NAME", const_cast<AlgorithmBase*>(this)->m_algorithm_config.LoadJsonKey("ConfigMode"));
 	WriteReportRow("STATUS", std::to_string(0));
 }

@@ -1,6 +1,6 @@
 #include "json_extension.hpp"
 
-const std::string json::LoadJsonKey(const typename object_t::key_type& key)
+const std::string json::LoadJsonKey(const std::string key)
 {
     std::string func_name = "LoadJsonKey";
     if (const_cast<json*>(this)->contains(key))
@@ -9,6 +9,9 @@ const std::string json::LoadJsonKey(const typename object_t::key_type& key)
     }
     else
     {
-        throw DITCameraTool::Exception::KeyIsNotIncluded(func_name, "key("+key+") is not included.");
+      std::cout << key << std::endl;
+      std::cout << (this->contains(key)) << std::endl;
+      std::string error_msg = "key is not included.("+key+").";
+      throw std::invalid_argument(func_name+" "+ error_msg);
     }
 }

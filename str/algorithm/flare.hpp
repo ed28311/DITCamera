@@ -6,12 +6,12 @@ namespace DITCameraTool{
             public:
                 Flare();
                 Flare(DITCameraTool::Config);
-                virtual bool Execute(DITCameraTool::Reporter&) const override;
+                virtual bool Execute() const override;
                 virtual void LoadImage(std::string) override;
             private:
-                std::vector<int> _StatisticIntensity(cv::Mat*, std::vector<int>) const;
-                float _EvalIntensityStandardDeviation(std::vector<int>, int) const;
-                bool _DetectIntensityStd(cv::Mat*, DITCameraTool::Reporter&) const;
+                std::vector<int> StatisticIntensity(cv::Mat*, std::vector<int>) const;
+                float EvalIntensityStandardDeviation(std::vector<int>, int) const;
+                bool DetectIntensityStd(cv::Mat*) const;
         };  
     }
 }

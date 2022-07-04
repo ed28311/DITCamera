@@ -1,9 +1,6 @@
 #include "blemishStat.hpp"
 
 DITCameraTool::Algorithm::BlemishStat::BlemishStat(DITCameraTool::Config config) {
-	m_algorithm_config = config.GetAlgorithmConf();
-	m_global_config = config.GetGlobalConf();
-	m_is_print_debug_info = _GetDebugMode();
 	m_is_generate_image = (std::stoi((std::string)m_global_config["OutputAllImages"]));
 	if (m_is_print_debug_info)
 	{
@@ -19,7 +16,7 @@ void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string  image_path)
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
-		throw std::invalid_argument("Invalid mp_image path. ("+ m_image_path+ ")");
+		throw std::invalid_argument("Invalid m_p_image path. ("+ m_image_path+ ")");
 	}
 	int STRIDE = std::stoi((std::string)m_algorithm_config["Stride"]);
 
@@ -38,20 +35,20 @@ void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string  image_path)
 		_PrintVariable(stride_figure.cols);
 	}
 	FreeImage();
-	mp_image = new cv::Mat(stride_figure);
+	m_p_image = new cv::Mat(stride_figure);
 }
 
-bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& reporter) const{
+bool DITCameraTool::Algorithm::BlemishStat::Execute() const{
     cv::Mat hist;
     bool resultBool = false;
     int splitPartitions = std::stoi((std::string)m_algorithm_config["Split_Partition"]);
-    int splitRows = mp_image->rows/splitPartitions;
-    int splitCols = mp_image->cols/splitPartitions;
+    int splitRows = m_p_image->rows/splitPartitions;
+    int splitCols = m_p_image->cols/splitPartitions;
     int height;
     int width;
     if(m_is_print_debug_info){
-        _PrintVariable(mp_image->rows);
-        _PrintVariable(mp_image->cols);
+        _PrintVariable(m_p_image->rows);
+        _PrintVariable(m_p_image->cols);
         printf("-----\n");
     }
     for (int i=0; i<splitPartitions; i++){
@@ -61,10 +58,10 @@ bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& rep
             width = splitCols;
             
             if(i==splitPartitions-1){
-                height = mp_image->rows-i*splitRows;
+                height = m_p_image->rows-i*splitRows;
             }
             if(j==splitPartitions-1){
-                width = mp_image->cols-j*splitCols;
+                width = m_p_image->cols-j*splitCols;
             }
             if(m_is_print_debug_info){
                 _PrintVariable(i); 
@@ -74,7 +71,7 @@ bool DITCameraTool::Algorithm::BlemishStat::Execute(DITCameraTool::Reporter& rep
                 printf("-----\n");
             }   
             cv::Rect splitRectangle(j*splitCols, i*splitRows, width, height);
-            cv::Mat splitImage= (*mp_image)(splitRectangle);
+            cv::Mat splitImage= (*m_p_image)(splitRectangle);
             _statisticPixel(splitImage, pixelStat);
             bool detectResult = _detectStd(splitImage, pixelStat);
             resultBool = (resultBool||detectResult);

@@ -19,9 +19,9 @@ namespace DITCameraTool{
             DITCameraTool::Config GetJsonConfig(std::string configPath, std::string algorithm_name,std::vector<std::string> global_config_member);
         private:
             bool IsGlobalParam(std::string);
-            std::tuple<json, json> _ParseSPEConfig(std::string file_path, std::string algorithm, std::string config_mode);
-            std::tuple<std::string, std::string> _ParseSPEConfigLine(std::string);
-            std::tuple<std::string, std::string>  _ParseModeArgument(std::string);
+            std::tuple<json, json> ParseSPEConfig(std::string file_path, std::string algorithm, std::string config_mode);
+            std::tuple<std::string, std::string> ParseSPEConfigLine(std::string);
+            std::tuple<std::string, std::string> ParseModeArgument(std::string);
     };
 }
 #endif

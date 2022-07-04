@@ -17,28 +17,32 @@ namespace DITCameraTool
             public:
                 AlgorithmBase();
                 AlgorithmBase(DITCameraTool::Config);
-                virtual ~AlgorithmBase();
+                virtual ~AlgorithmBase(); // why virtual.
+                virtual void FreeImage() const;
+                virtual void LoadImage(std::string);
+                virtual bool Execute() const=0;
+                std::string GenerateImage(cv::Mat* image, std::string item_name) const;
+
+                json InitializeReportRow() const;
+                void WriteReportRow(std::string key, std::string val) const;
+                void SubmitReport(json) const;
+                void FinishReport(json) const;
+                DITCameraTool::Reporter GetReporter();
+            protected:            
+                std::vector<std::string> report_basic_property = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG" };
                 std::string m_image_path;
                 std::string m_image_name;
                 bool m_is_generate_image;
                 bool m_is_print_debug_info;
-                json m_report_row;
-                virtual void FreeImage() const;
-                virtual void LoadImage(std::string);
-                virtual bool Execute(DITCameraTool::Reporter&) const;
-                std::string GenerateImage(cv::Mat* image, std::string item_name, DITCameraTool::Reporter& reporter) const;
-
-                json InitializeReportRow(DITCameraTool::Reporter&) const;
-                void WriteReportRow(std::string, std::string) const;
-                void SubmitReport(json, DITCameraTool::Reporter&) const;
-                void FinishReport(json, DITCameraTool::Reporter&) const;
-            protected:
-                cv::Mat *mp_image;
+                cv::Mat *m_p_image;
                 json m_algorithm_config;
                 json m_global_config;
                 std::string _GetImageFileName() const;
-                void _AttachReportRowBasicInfo(DITCameraTool::Reporter&) const;
-                bool _GetDebugMode() const;
+                bool GetDebugMode() const;
+
+                DITCameraTool::Reporter* m_p_reporter;
+                json m_report_row;
+                void AttachReportRowBasicInfo() const;
         };
     }
 }

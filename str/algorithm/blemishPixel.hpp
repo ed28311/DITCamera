@@ -6,7 +6,7 @@ namespace DITCameraTool{
             public:
                 BlemishPixel();
                 BlemishPixel(DITCameraTool::Config);
-                virtual bool Execute(DITCameraTool::Reporter& ) const override;
+                virtual bool Execute() const override;
                 virtual void LoadImage(std::string) override;
             private:
                 bool _loopPixels(bool, std::vector<std::vector<int>>&) const;

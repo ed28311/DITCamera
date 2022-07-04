@@ -27,7 +27,7 @@ namespace DITCameraTool
             std::string m_log_directory;
             std::string m_current_datetime;
             std::string m_current_date;
-            void _LoadLevelTransformer();
-            void _GetLogInfo();
+            void LoadLevelTransformer();
+            void GetLogInfo();
     };
 }

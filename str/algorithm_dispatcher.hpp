@@ -7,16 +7,16 @@
 namespace DITCameraTool{
     class AlgorithmDispatch{
         public:
-            AlgorithmDispatch(Config, std::string, DITCameraTool::Reporter&);
+            AlgorithmDispatch(Config, std::string);
             ~AlgorithmDispatch();
-            DITCameraTool::Reporter& mr_reporter;
-            std::string m_name = "AlgorithmDispatch";
             void DispatchAlgorithm();
             bool ExecuteAlgorithm();
+            DITCameraTool::Reporter GetReporter();
         private:
+            std::string m_name = "AlgorithmDispatch";
             std::string m_image_path;
             DITCameraTool::Config m_config;
-            DITCameraTool::Algorithm::AlgorithmBase* mp_algorithm;
+            DITCameraTool::Algorithm::AlgorithmBase* m_p_algorithm;
     };
 }
 #endif

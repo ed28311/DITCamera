@@ -30,14 +30,14 @@ namespace DITCameraTool
             void MergeReporter(DITCameraTool::Reporter);
 
         private:
-            int _AddReportHeader();
-            std::string _CreateCSVLine(std::vector<std::string>);
-            std::vector<std::string> _UpdateReportCols(std::vector<std::string>);
-            json _UpdateReportConfig(json);
-            void _SetupReportEnable();
-            void _SetupCurrentTime();
-            void _SetupFileInfo();
-            void _checkDirRoot(std::string);
+            int AddReportHeader();
+            std::string CreateCSVLine(std::vector<std::string>);
+            std::vector<std::string> UpdateReportCols(std::vector<std::string>);
+            json UpdateReportConfig(json);
+            void SetupReportEnable();
+            void SetupCurrentTime();
+            void SetupFileInfo();
+            void CheckDirRoot(std::string);
     };
 }
 #endif

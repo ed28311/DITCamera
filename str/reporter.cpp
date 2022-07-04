@@ -4,45 +4,50 @@ DITCameraTool::Reporter::Reporter()
 {
 	m_is_create_report = false;
 	m_max_column = m_report_cols.size();
-	_SetupCurrentTime();
+	SetupCurrentTime();
 }
 
 DITCameraTool::Reporter::Reporter(DITCameraTool::Config config, std::vector<std::string> basic_column) 
 {
 	m_global_config = config.GetGlobalConf();
+	for(std::string item:basic_column)
+	{
+		std::cout << item << " ";
+	}
+	std::cout <<std::endl;
 	m_report_cols = basic_column;
 	m_max_column = m_report_cols.size();
-	_SetupReportEnable();
-	_SetupCurrentTime();
-	_SetupFileInfo();
+	SetupReportEnable();
+	SetupCurrentTime();
+	SetupFileInfo();
 
 }
 
 void DITCameraTool::Reporter::WriteBack(json logElement) 
 {
-	std::vector<std::string> logVec;
+	std::vector<std::string> log_vec;
 	for (std::string key : m_report_cols) 
 	{
-		logVec.push_back((std::string)logElement[key]);
+		log_vec.push_back((std::string)logElement[key]);
 	}
-	this->m_report_component.push_back(logVec);
+	this->m_report_component.push_back(log_vec);
 }
 void DITCameraTool::Reporter::WriteFront(json logElement) 
 {
-	std::vector<std::string> logVec;
+	std::vector<std::string> log_vec;
 	for (std::string key : m_report_cols) 
 	{
-		logVec.push_back((std::string)logElement[key]);
+		log_vec.push_back((std::string)logElement[key]);
 	}
-	this->m_report_component.push_front(logVec);
+	this->m_report_component.push_front(log_vec);
 }
 
-std::string DITCameraTool::Reporter::_CreateCSVLine(std::vector<std::string> logVec) 
+std::string DITCameraTool::Reporter::CreateCSVLine(std::vector<std::string> log_vec) 
 {
 	std::string outputString = "";
-	for (int i = 0; i < logVec.size(); i++) 
+	for (int i = 0; i < log_vec.size(); i++) 
 	{
-		outputString += (logVec[i] + ",");
+		outputString += (log_vec[i] + ",");
 	}
 	if (outputString.size() > 0) 
 	{
@@ -53,7 +58,7 @@ std::string DITCameraTool::Reporter::_CreateCSVLine(std::vector<std::string> log
 }
 bool DITCameraTool::Reporter::GenerateCSV()
 {
-	_AddReportHeader();
+	AddReportHeader();
 	bool resultBool = false;
 	if (!m_is_create_report) 
 	{
@@ -65,7 +70,7 @@ bool DITCameraTool::Reporter::GenerateCSV()
 	logFile.open(csvPath);
 	for (int i = 0; i < m_report_component.size(); i++) 
 	{
-		logFile << _CreateCSVLine(m_report_component[i]);
+		logFile << CreateCSVLine(m_report_component[i]);
 	}
 	logFile.close();
 	resultBool = true;
@@ -74,8 +79,8 @@ bool DITCameraTool::Reporter::GenerateCSV()
 void DITCameraTool::Reporter::MergeReporter(DITCameraTool::Reporter reporter) 
 {
 	m_is_create_report = (m_is_create_report || reporter.m_is_create_report);
-	m_global_config = _UpdateReportConfig(reporter.m_global_config);
-	m_report_cols = _UpdateReportCols(reporter.m_report_cols);
+	m_global_config = UpdateReportConfig(reporter.m_global_config);
+	m_report_cols = UpdateReportCols(reporter.m_report_cols);
 	m_max_column = m_report_cols.size();
 	m_file_dir = (m_file_dir.size() == 0) ? (reporter.m_file_dir) : (m_file_dir);
 	m_file_name = (m_file_name.size() == 0) ? (reporter.m_file_name) : (m_file_name);
@@ -84,7 +89,7 @@ void DITCameraTool::Reporter::MergeReporter(DITCameraTool::Reporter reporter)
 
 
 
-int DITCameraTool::Reporter::_AddReportHeader() 
+int DITCameraTool::Reporter::AddReportHeader() 
 {
 	std::vector<std::string> reportDeclare(m_max_column);
 	if (m_max_column > 2)
@@ -96,7 +101,7 @@ int DITCameraTool::Reporter::_AddReportHeader()
 	this->m_report_component.push_front(reportDeclare);
 	return m_max_column;
 }
-void DITCameraTool::Reporter::_checkDirRoot(std::string m_file_dir) 
+void DITCameraTool::Reporter::CheckDirRoot(std::string m_file_dir) 
 {
 	#if (__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L) && (_MSC_VER >= 1913))
 		std::filesystem::create_directories(m_file_dir);
@@ -104,14 +109,14 @@ void DITCameraTool::Reporter::_checkDirRoot(std::string m_file_dir)
 		std::experimental::filesystem::create_directories(m_file_dir);
 	#endif
 };
-void DITCameraTool::Reporter::_SetupFileInfo()
+void DITCameraTool::Reporter::SetupFileInfo()
 {
 	m_file_dir = m_global_config.LoadJsonKey("ReportDirectory") + "/" + m_current_date + "/";
-	_checkDirRoot(m_file_dir);
+	CheckDirRoot(m_file_dir);
 	m_serial_num = m_global_config.LoadJsonKey("SerialNum");
 	m_file_name = "Report-" + m_serial_num + "-" + m_current_datetime;
 }
-void DITCameraTool::Reporter::_SetupCurrentTime() 
+void DITCameraTool::Reporter::SetupCurrentTime() 
 {
 	std::time_t t = std::time(0);
 	std::tm *now = std::localtime(&t);
@@ -126,12 +131,12 @@ void DITCameraTool::Reporter::_SetupCurrentTime()
 	m_current_date = currentYear + currentMonth + currentDay;
 	m_current_datetime = currentYear + currentMonth + currentDay + currentHour + currentMin + currentSec;
 }
-void DITCameraTool::Reporter::_SetupReportEnable() 
+void DITCameraTool::Reporter::SetupReportEnable() 
 {
 	m_is_create_report = std::stoi(m_global_config.LoadJsonKey("OutputDebugInfo"));
 }
 
-std::vector<std::string> DITCameraTool::Reporter::_UpdateReportCols(std::vector<std::string> report_cols)
+std::vector<std::string> DITCameraTool::Reporter::UpdateReportCols(std::vector<std::string> report_cols)
 {	
 	std::vector<std::string> m_report_cols_copy = std::vector<std::string>(m_report_cols);
 	for (std::string item :report_cols) 
@@ -143,7 +148,7 @@ std::vector<std::string> DITCameraTool::Reporter::_UpdateReportCols(std::vector<
 	}
 	return m_report_cols_copy;
 }
-json DITCameraTool::Reporter::_UpdateReportConfig(json report_config)
+json DITCameraTool::Reporter::UpdateReportConfig(json report_config)
 {
 	json m_config_copy = json(m_global_config);
 	for (auto& item : report_config.items()) 

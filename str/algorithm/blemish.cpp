@@ -9,13 +9,14 @@ DITCameraTool::Algorithm::Blemish::Blemish(DITCameraTool::Config config)
 {
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
-	m_is_print_debug_info = _GetDebugMode();
+	m_is_print_debug_info = GetDebugMode();
 	m_is_generate_image = (std::stoi(const_cast<Blemish*>(this)->m_global_config.LoadJsonKey("OutputAllImages")));
 	if (m_is_print_debug_info)
 	{
 		_PrintVariable(m_is_generate_image);
 		_PrintVariable(config);
 	}
+
 }
 
 void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
@@ -31,9 +32,11 @@ void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
 	const int STRIDE = std::stoi(m_algorithm_config.LoadJsonKey("Stride"));
 
 	cv::Mat stride_figure(figure.rows/STRIDE, figure.cols/STRIDE, CV_8U);
-	for(int i = 0; i<(figure.rows/STRIDE); i++)
+	int stride_rows = figure.rows/STRIDE; //
+	int stride_cols = figure.cols/STRIDE; //
+	for(int i = 0; i<stride_rows; i++) //
 	{
-		for (int j = 0; j<(figure.cols/STRIDE); j++)	
+		for (int j = 0; j<stride_cols; j++) //	
 		{
 			stride_figure.at<uchar>(i, j) = figure.at<uchar>(i*STRIDE, j*STRIDE);
 		}
@@ -44,21 +47,27 @@ void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
 		_PrintVariable(stride_figure.rows);
 		_PrintVariable(stride_figure.cols);
 	}
-	mp_image = new cv::Mat(stride_figure);
+	if (m_p_image != NULL)
+	{
+		delete m_p_image;
+		m_p_image = NULL;
+	}
+	m_p_image = new cv::Mat(stride_figure);
 }
 
-bool DITCameraTool::Algorithm::Blemish::Execute(DITCameraTool::Reporter& reporter) const
+bool DITCameraTool::Algorithm::Blemish::Execute() const
 {
-	InitializeReportRow(reporter);
-	GenerateImage(mp_image, "stride", reporter);
+	InitializeReportRow();
+	GenerateImage(m_p_image, "stride");
+
 	bool result_bool = true;
-	bool resultBlemish = _DetectBlemish(mp_image, reporter);
+	bool resultBlemish = DetectBlemish(m_p_image);
 	result_bool = (result_bool&&resultBlemish);
 	printf("%s\n", result_bool? "Pass": "Not Pass");
 
-	if (reporter.m_is_create_report)
+	if (m_p_reporter->m_is_create_report)
 	{
-		_AttachReportRowBasicInfo(reporter);
+		AttachReportRowBasicInfo();
 		WriteReportRow("ITEM", "BlemishDetectResult");
 		WriteReportRow("RESULT", (result_bool)? "PASS": "FAIL");
 		WriteReportRow("IMG", m_image_path);
@@ -66,12 +75,12 @@ bool DITCameraTool::Algorithm::Blemish::Execute(DITCameraTool::Reporter& reporte
 		std::replace(spec_info.begin(), spec_info.end(), ',', ' ');
 		WriteReportRow("OTHERS", spec_info);
 		WriteReportRow("OTHERS", spec_info);
-		FinishReport(m_report_row, reporter);
+		FinishReport(m_report_row);
 	}
 	return result_bool;
 }
 
-bool DITCameraTool::Algorithm::Blemish::_DetectBlemish(cv::Mat* image, DITCameraTool::Reporter& reporter) const
+bool DITCameraTool::Algorithm::Blemish::DetectBlemish(cv::Mat* image) const
 {
 	cv::Mat image_copy = cv::Mat(*image);
 	bool resultBool = true;
@@ -80,10 +89,10 @@ bool DITCameraTool::Algorithm::Blemish::_DetectBlemish(cv::Mat* image, DITCamera
 	const int FILTER_SIZE = std::stoi(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("FilterSize"));
 	
 	image_copy = ExecuteFastDifferenceFilter(&image_copy);
-	GenerateImage(&image_copy, "fastDiffFilterRaw", reporter);
-	image_copy = _Pass2DFilter(&image_copy, FILTER_SIZE);
-	image_copy = _Pass2DFilter(&image_copy, 2);
-	GenerateImage(&image_copy, "fastDiffFilterProcessed", reporter);
+	GenerateImage(&image_copy, "fastDiffFilterRaw");
+	image_copy = Pass2DFilter(&image_copy, FILTER_SIZE);
+	image_copy = Pass2DFilter(&image_copy, 2);
+	GenerateImage(&image_copy, "fastDiffFilterProcessed");
 	for (int i = 0; i<image_copy.rows; i++)
 	{
 		for (int j = 0; j<image_copy.cols; j++)
@@ -109,14 +118,14 @@ bool DITCameraTool::Algorithm::Blemish::_DetectBlemish(cv::Mat* image, DITCamera
 		_PrintVariable(maxPixel);
 	}
 
-	std::string file_path = GenerateImage(&image_copy, "final", reporter);
-	_AttachReportRowBasicInfo(reporter);
+	std::string file_path = GenerateImage(&image_copy, "final");
+	AttachReportRowBasicInfo();
 	WriteReportRow("IMG", file_path);
 	WriteReportRow("ITEM", "detectBlemish");
 	WriteReportRow("UCL", std::to_string(INTENSITY_TOLERANCE));
 	WriteReportRow("VALUE", std::to_string(maxPixel));
 	WriteReportRow("RESULT", ((resultBool))? "PASS": "FAIL");
-	SubmitReport(m_report_row, reporter);
+	SubmitReport(m_report_row);
 	return resultBool;
 }
 
@@ -125,12 +134,12 @@ cv::Mat DITCameraTool::Algorithm::Blemish::ExecuteFastDifferenceFilter(cv::Mat* 
 	/*
 	Reference: Blemish detection in camera production testing using fast difference filtering.
 	*/
-	float INSPECT_RATIO = std::stof(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("InspectRatio"));
+	const float INSPECT_RATIO = std::stof(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("InspectRatio"));
 	if (m_is_print_debug_info)
 	{
 		_PrintVariable(INSPECT_RATIO);
 	}
-	int interval = static_cast<int>(mp_image->cols*INSPECT_RATIO);
+	int interval = static_cast<int>(m_p_image->cols*INSPECT_RATIO);
 	int expand_distance = interval/2;
 	cv::Mat filted_image = cv::Mat(image->rows, image->cols, CV_8U);
 	for (int i = 0; i<image->rows; i++)
@@ -143,8 +152,8 @@ cv::Mat DITCameraTool::Algorithm::Blemish::ExecuteFastDifferenceFilter(cv::Mat* 
 			int x_t = (j >= (image->cols-1))? image->cols-j-1: 1;
 			std::vector<int> median_left_vec = { image->at<uchar>(i-x_l, j-y_b), image->at<uchar>(i-x_l, j), image->at<uchar>(i-x_l, j+ x_t) };
 			std::vector<int> median_right_vec = { image->at<uchar>(i+ x_r, j-y_b), image->at<uchar>(i+ x_r, j), image->at<uchar>(i+ x_r, j+ x_t) };
-			int median_l = _FindMedian(median_left_vec);
-			int median_r = _FindMedian(median_right_vec);
+			int median_l = FindMedian(median_left_vec);
+			int median_r = FindMedian(median_right_vec);
 			int I_median = (median_l+ median_r)/2;
 			int I = image->at<uchar>(i, j);
 			filted_image.at<uchar>(i, j) = (I_median<I)? 0: (I_median-I);
@@ -154,7 +163,7 @@ cv::Mat DITCameraTool::Algorithm::Blemish::ExecuteFastDifferenceFilter(cv::Mat* 
 }
 
 
-cv::Mat DITCameraTool::Algorithm::Blemish::_Pass2DFilter(cv::Mat* image, int FILTER_SIZE) const
+cv::Mat DITCameraTool::Algorithm::Blemish::Pass2DFilter(cv::Mat* image, int FILTER_SIZE) const
 {
 	cv::Mat filtered_image(image->rows, image->cols, CV_8U);
 	for (int i = 0; i<image->rows; i++)
@@ -182,7 +191,7 @@ cv::Mat DITCameraTool::Algorithm::Blemish::_Pass2DFilter(cv::Mat* image, int FIL
 	return filtered_image;
 }
 
-int DITCameraTool::Algorithm::Blemish::_FindMedian(std::vector<int> intesity_vec) const
+int DITCameraTool::Algorithm::Blemish::FindMedian(std::vector<int> intesity_vec) const
 {
 	int vec_nums = (int)intesity_vec.size();
 	int pick_loc = (vec_nums%2)? (vec_nums/2+ 1): (vec_nums/2);

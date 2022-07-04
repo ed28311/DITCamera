@@ -14,11 +14,11 @@ DITCameraTool::Config DITCameraTool::ConfigLoader::GetSPEConfig(std::string file
 {
     m_global_config_member = global_config_member;
     std::string algorithm, config_mode;
-    std::tuple<std::string, std::string>  mode_pair = _ParseModeArgument(config_argument);
+    std::tuple<std::string, std::string>  mode_pair = ParseModeArgument(config_argument);
     std::tie(algorithm, config_mode) = mode_pair;
 
     json global_config, algorithm_config;
-    std::tuple<json, json> config_pair = _ParseSPEConfig(file_path, algorithm, config_mode);
+    std::tuple<json, json> config_pair = ParseSPEConfig(file_path, algorithm, config_mode);
     std::tie(global_config, algorithm_config) = config_pair;
     algorithm_config["Algorithm"] = algorithm;
     algorithm_config["ConfigMode"] = config_mode;
@@ -27,7 +27,7 @@ DITCameraTool::Config DITCameraTool::ConfigLoader::GetSPEConfig(std::string file
 };
 
 
-std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string file_path, std::string algorithm, std::string config_mode)
+std::tuple<json, json> DITCameraTool::ConfigLoader::ParseSPEConfig(std::string file_path, std::string algorithm, std::string config_mode)
 /*
 :Description:
     Generate two json object, global config and algorithm config, which parameter load from config file.
@@ -63,7 +63,7 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string 
                 {
                     std::string key;
                     std::string value;
-                    std::tuple<std::string, std::string> key_value_pair = _ParseSPEConfigLine(read_line);
+                    std::tuple<std::string, std::string> key_value_pair = ParseSPEConfigLine(read_line);
                     std::tie(key, value) = key_value_pair;
                     global_config[key] = value;
                 }
@@ -74,7 +74,7 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string 
                         detect_algorithm = true;
                         std::string key;
                         std::string value;
-                        std::tuple<std::string, std::string> key_value_pair = _ParseSPEConfigLine(read_line);
+                        std::tuple<std::string, std::string> key_value_pair = ParseSPEConfigLine(read_line);
                         std::tie(key, value) = key_value_pair;
                         algorithm_config[key] = value;
                     }
@@ -89,7 +89,7 @@ std::tuple<json, json> DITCameraTool::ConfigLoader::_ParseSPEConfig(std::string 
     return std::make_tuple(global_config, algorithm_config);
 };
 
-std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_ParseSPEConfigLine(std::string read_line)
+std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::ParseSPEConfigLine(std::string read_line)
 {
     /*
     Assumption: 
@@ -122,7 +122,7 @@ bool DITCameraTool::ConfigLoader::IsGlobalParam(std::string inspect)
 };
 
 
-std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::_ParseModeArgument(std::string mode) 
+std::tuple<std::string, std::string> DITCameraTool::ConfigLoader::ParseModeArgument(std::string mode) 
 /*
 :Description:
     Split config argument into two argument, algorithm_name and config_name (ex., -BL[Blemish]-> std::tuple(BL, Blemish)). 
