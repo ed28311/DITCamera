@@ -2,20 +2,9 @@
 #define _Append_Avg_Area_Corner(jsonAvgAreaCorner, variable) AppendCornerAvgIntensity((jsonAvgAreaCorner), #variable, (variable))
 
 
-DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config)
+DITCameraTool::Algorithm::Shading::Shading(DITCameraTool::Config config):AlgorithmBase(config)
 {
-	m_algorithm_config = config.GetAlgorithmConf();
-	m_global_config = config.GetGlobalConf();
-	m_is_print_debug_info = GetDebugMode();
-	m_is_generate_image = (std::stoi(const_cast<Shading*>(this)->m_global_config.LoadJsonKey("OutputAllImages")));
-	if (m_is_print_debug_info)
-	{
-		_PrintVariable(m_is_generate_image);
-		_PrintVariable(config);
-	}
-	delete m_p_reporter;
-	m_p_reporter = NULL;
-	m_p_reporter = new DITCameraTool::Reporter(config, report_basic_property);
+
 }
 
 void DITCameraTool::Algorithm::Shading::LoadFigure(std::string  image_path)

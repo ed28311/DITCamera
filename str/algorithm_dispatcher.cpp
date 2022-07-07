@@ -18,7 +18,6 @@ bool DITCameraTool::AlgorithmDispatch::ExecuteAlgorithm(){
     if(m_p_algorithm != NULL)
     {
         m_p_algorithm->LoadFigure(m_image_path);
-        printf("Load Image completed.");
         result_bool = m_p_algorithm->Execute();
     }
     // delete m_p_algorithm;

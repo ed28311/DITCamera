@@ -30,11 +30,11 @@ namespace DITCameraTool
                 DITCameraTool::Reporter GetReporter();
             protected:            
                 std::vector<std::string> report_basic_property = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG" };
+                cv::Mat *m_p_image=NULL;
                 std::string m_image_path;
                 std::string m_image_name;
                 bool m_is_generate_image;
                 bool m_is_print_debug_info;
-                cv::Mat *m_p_image;
                 json m_algorithm_config;
                 json m_global_config;
                 std::string _GetImageFileName() const;
