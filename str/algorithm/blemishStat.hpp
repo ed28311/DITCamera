@@ -7,7 +7,7 @@ namespace DITCameraTool{
                 BlemishStat();
                 BlemishStat(DITCameraTool::Config);
                 virtual bool Execute() const override;
-                virtual void LoadImage(std::string) override;
+                virtual void LoadFigure(std::string) override;
             private:
                 void _statisticPixel(cv::Mat, std::vector<int>&) const;
                 float _evalPixelStandardDeviation(cv::Mat, std::vector<int>) const;

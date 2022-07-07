@@ -10,10 +10,6 @@ DITCameraTool::Reporter::Reporter()
 DITCameraTool::Reporter::Reporter(DITCameraTool::Config config, std::vector<std::string> basic_column) 
 {
 	m_global_config = config.GetGlobalConf();
-	for(std::string item:basic_column)
-	{
-		std::cout << item << " ";
-	}
 	std::cout <<std::endl;
 	m_report_cols = basic_column;
 	m_max_column = m_report_cols.size();

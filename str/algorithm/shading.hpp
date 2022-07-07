@@ -5,9 +5,9 @@ namespace DITCameraTool{
         class Shading: public DITCameraTool::Algorithm::AlgorithmBase{
             public:
                 Shading();
-                Shading(DITCameraTool::Config);
+                Shading(const DITCameraTool::Config);
                 virtual bool Execute() const override;
-                virtual void LoadImage(std::string) override;
+                virtual void LoadFigure(std::string) override;
             private:
                 int FetchAvgPixel(int, int, int, int) const;
                 json CollectCornerAvgIntensity(int avgAreaLB, int avgAreaLT, int avgAreaRB, int avgAreaRT) const;

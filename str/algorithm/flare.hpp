@@ -5,9 +5,9 @@ namespace DITCameraTool{
         class Flare: public DITCameraTool::Algorithm::AlgorithmBase{
             public:
                 Flare();
-                Flare(DITCameraTool::Config);
+                Flare(const DITCameraTool::Config);
                 virtual bool Execute() const override;
-                virtual void LoadImage(std::string) override;
+                virtual void LoadFigure(std::string) override;
             private:
                 std::vector<int> StatisticIntensity(cv::Mat*, std::vector<int>) const;
                 float EvalIntensityStandardDeviation(std::vector<int>, int) const;

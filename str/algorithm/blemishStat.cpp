@@ -9,7 +9,7 @@ DITCameraTool::Algorithm::BlemishStat::BlemishStat(DITCameraTool::Config config)
 	}
 }
 
-void DITCameraTool::Algorithm::BlemishStat::LoadImage(std::string  image_path)
+void DITCameraTool::Algorithm::BlemishStat::LoadFigure(std::string  image_path)
 {
 	m_image_path = image_path;
 	m_image_name = _GetImageFileName();

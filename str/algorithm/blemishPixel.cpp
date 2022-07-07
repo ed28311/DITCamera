@@ -1,7 +1,8 @@
 #include "blemishPixel.hpp"
 
 
-DITCameraTool::Algorithm::BlemishPixel::BlemishPixel(DITCameraTool::Config config) {
+DITCameraTool::Algorithm::BlemishPixel::BlemishPixel(DITCameraTool::Config config) 
+{
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
 	m_is_print_debug_info = GetDebugMode();
@@ -13,7 +14,7 @@ DITCameraTool::Algorithm::BlemishPixel::BlemishPixel(DITCameraTool::Config confi
 	}
 }
 
-void DITCameraTool::Algorithm::BlemishPixel::LoadImage(std::string image_path) {
+void DITCameraTool::Algorithm::BlemishPixel::LoadFigure(std::string image_path) {
 	const_cast<BlemishPixel*>(this)->m_image_path = image_path;
 	const_cast<BlemishPixel*>(this)->m_image_name = const_cast<BlemishPixel*>(this)->_GetImageFileName();
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);

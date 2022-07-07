@@ -5,7 +5,7 @@ DITCameraTool::Algorithm::Blemish::Blemish()
 
 }
 
-DITCameraTool::Algorithm::Blemish::Blemish(DITCameraTool::Config config)
+DITCameraTool::Algorithm::Blemish::Blemish(const DITCameraTool::Config config)
 {
 	m_algorithm_config = config.GetAlgorithmConf();
 	m_global_config = config.GetGlobalConf();
@@ -16,19 +16,23 @@ DITCameraTool::Algorithm::Blemish::Blemish(DITCameraTool::Config config)
 		_PrintVariable(m_is_generate_image);
 		_PrintVariable(config);
 	}
-
+	delete m_p_reporter;
+	m_p_reporter = NULL;
+	m_p_reporter = new DITCameraTool::Reporter(config, report_basic_property);
 }
 
-void DITCameraTool::Algorithm::Blemish::LoadImage(std::string  image_path)
+void DITCameraTool::Algorithm::Blemish::LoadFigure(std::string  image_path)
 {
 	FreeImage();
 	m_image_path = image_path;
+	_PrintVariable(m_image_path);
 	m_image_name = _GetImageFileName();
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{
 		throw std::invalid_argument("Invalid image path. ("+ m_image_path+ ")");
 	}
+	printf("READ COMPLETED");
 	const int STRIDE = std::stoi(m_algorithm_config.LoadJsonKey("Stride"));
 
 	cv::Mat stride_figure(figure.rows/STRIDE, figure.cols/STRIDE, CV_8U);

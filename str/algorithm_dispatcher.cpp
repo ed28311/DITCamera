@@ -15,9 +15,12 @@ DITCameraTool::AlgorithmDispatch::~AlgorithmDispatch(){
 
 bool DITCameraTool::AlgorithmDispatch::ExecuteAlgorithm(){
     bool result_bool=false;
-    m_p_algorithm->LoadImage(m_image_path);
-	printf("Load Image completed.");
-    result_bool = m_p_algorithm->Execute();
+    if(m_p_algorithm != NULL)
+    {
+        m_p_algorithm->LoadFigure(m_image_path);
+        printf("Load Image completed.");
+        result_bool = m_p_algorithm->Execute();
+    }
     // delete m_p_algorithm;
     // m_p_algorithm = NULL;
     return result_bool;

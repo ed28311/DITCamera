@@ -19,7 +19,6 @@ namespace DITCameraTool
             bool GenerateCSV();
             int m_max_column;
             bool m_is_create_report;
-            json m_global_config;
             std::string m_serial_num;
             std::string m_file_dir;
             std::string m_file_name;
@@ -30,6 +29,7 @@ namespace DITCameraTool
             void MergeReporter(DITCameraTool::Reporter);
 
         private:
+            json m_global_config;
             int AddReportHeader();
             std::string CreateCSVLine(std::vector<std::string>);
             std::vector<std::string> UpdateReportCols(std::vector<std::string>);

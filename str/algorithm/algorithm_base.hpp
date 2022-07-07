@@ -16,10 +16,10 @@ namespace DITCameraTool
         {
             public:
                 AlgorithmBase();
-                AlgorithmBase(DITCameraTool::Config);
+                AlgorithmBase(const DITCameraTool::Config);
                 virtual ~AlgorithmBase(); // why virtual.
                 virtual void FreeImage() const;
-                virtual void LoadImage(std::string);
+                virtual void LoadFigure(std::string) = 0;
                 virtual bool Execute() const=0;
                 std::string GenerateImage(cv::Mat* image, std::string item_name) const;
 
@@ -40,7 +40,7 @@ namespace DITCameraTool
                 std::string _GetImageFileName() const;
                 bool GetDebugMode() const;
 
-                DITCameraTool::Reporter* m_p_reporter;
+                DITCameraTool::Reporter* m_p_reporter=NULL;
                 json m_report_row;
                 void AttachReportRowBasicInfo() const;
         };

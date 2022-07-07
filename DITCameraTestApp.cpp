@@ -46,7 +46,6 @@ int main(int argc, char * argv[]) {
 			_PrintVariable(config_path);
 			_PrintVariable(image_path);
 			printf("---------------------------\n");
-
 			DITCameraTool::AlgorithmDispatch* dispatcher = new DITCameraTool::AlgorithmDispatch(config, image_path);
 			dispatcher->DispatchAlgorithm();
 			dispatcher->ExecuteAlgorithm();

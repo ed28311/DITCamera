@@ -6,9 +6,9 @@ namespace DITCameraTool{
         class Blemish: public DITCameraTool::Algorithm::AlgorithmBase{
             public:
                 Blemish();
-                Blemish(DITCameraTool::Config);
+                Blemish(const DITCameraTool::Config);
                 virtual bool Execute() const override;
-                virtual void LoadImage(std::string) override;
+                virtual void LoadFigure(std::string) override;
                 cv::Mat ExecuteFastDifferenceFilter(cv::Mat *) const;
             private:
                 bool DetectBlemish(cv::Mat*) const;
