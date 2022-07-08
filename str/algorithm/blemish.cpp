@@ -4,9 +4,9 @@ DITCameraTool::Algorithm::Blemish::Blemish()
 {
 
 }
-
 DITCameraTool::Algorithm::Blemish::Blemish(const DITCameraTool::Config config):AlgorithmBase(config)
 {
+
 }
 
 void DITCameraTool::Algorithm::Blemish::LoadFigure(std::string  image_path)
@@ -73,7 +73,7 @@ bool DITCameraTool::Algorithm::Blemish::Execute() const
 bool DITCameraTool::Algorithm::Blemish::DetectBlemish(cv::Mat* image) const
 {
 	cv::Mat image_copy = cv::Mat(*image);
-	bool resultBool = true;
+	bool result_bool = true;
 	int maxPixel = 0;
 	const int INTENSITY_TOLERANCE = std::stoi(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("IntensityTolerance"));
 	const int FILTER_SIZE = std::stoi(const_cast<Blemish*>(this)->m_algorithm_config.LoadJsonKey("FilterSize"));
@@ -98,7 +98,7 @@ bool DITCameraTool::Algorithm::Blemish::DetectBlemish(cv::Mat* image) const
 					maxPixel = image_copy.at<uchar>(i, j);
 				}
 				image_copy.at<uchar>(i, j) = 255;
-				resultBool = false;
+				result_bool = false;
 			}
 		}
 	}
@@ -114,9 +114,9 @@ bool DITCameraTool::Algorithm::Blemish::DetectBlemish(cv::Mat* image) const
 	WriteReportRow("ITEM", "detectBlemish");
 	WriteReportRow("UCL", std::to_string(INTENSITY_TOLERANCE));
 	WriteReportRow("VALUE", std::to_string(maxPixel));
-	WriteReportRow("RESULT", ((resultBool))? "PASS": "FAIL");
+	WriteReportRow("RESULT", ((result_bool))? "PASS": "FAIL");
 	SubmitReport(m_report_row);
-	return resultBool;
+	return result_bool;
 }
 
 cv::Mat DITCameraTool::Algorithm::Blemish::ExecuteFastDifferenceFilter(cv::Mat* image) const
@@ -172,10 +172,6 @@ cv::Mat DITCameraTool::Algorithm::Blemish::Pass2DFilter(cv::Mat* image, int FILT
 
 			float intesity_value = image_crop.dot(kernel);
 			filtered_image.at<uchar>(i, j) = (intesity_value>255)? 255: intesity_value;
-			// if(m_is_print_debug_info){
-			//     _PrintVariable(image.at<uchar>(i,j));
-			//     _PrintVariable((int)intesity_value);
-			// }
 		}
 	}
 	return filtered_image;

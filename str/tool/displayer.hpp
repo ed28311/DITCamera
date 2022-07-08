@@ -29,22 +29,22 @@ namespace DITCameraTool
 			Display();
 			Display(std::string);
 			#ifdef isWindowsToken
-			HANDLE debugHandle;
+			HANDLE debug_handle;
 			#endif
-			std::string debugMode = "INFO";
-			void cprintf(std::string);
-			void printVariable(std::string, std::string);
-			void printVariable(std::string, int);
-			void printVariable(std::string, float);
-			void printVairable(std::string, std::vector<std::string>);
-			void printVariable(std::string, DITCameraTool::Config);
+			std::string debug_mode = "INFO";
+			void CPrintf(std::string);
+			void PrintVariable(std::string, std::string);
+			void PrintVariable(std::string, int);
+			void PrintVariable(std::string, float);
+			void PrintVairable(std::string, std::vector<std::string>);
+			void PrintVariable(std::string, DITCameraTool::Config);
 		private:
-			std::string _debugPrintFormat(std::string);
-			std::string _debugEndFormat();
+			std::string DebugPrintFormat(std::string);
+			std::string DebugEndFormat();
 
 		};
 	}
 }
 
-#define _PrintVariable(variable) DITCameraTool::Tool::Display().printVariable((std::string)#variable, (variable))
+#define _PrintVariable(variable) DITCameraTool::Tool::Display().PrintVariable((std::string)#variable, (variable))
 #endif

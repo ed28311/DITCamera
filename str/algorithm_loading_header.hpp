@@ -2,5 +2,3 @@
 #include "algorithm/shading.hpp"
 #include "algorithm/flare.hpp"
 #include "algorithm/blemish.hpp"
-#include "algorithm/blemishPixel.hpp"
-#include "algorithm/blemishStat.hpp"

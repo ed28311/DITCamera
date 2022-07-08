@@ -3,22 +3,22 @@
 DITCameraTool::Tool::Display::Display()
 {
 	#ifdef isWindowsToken
-	debugHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	debug_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	#endif
 }
 
-DITCameraTool::Tool::Display::Display(std::string debugString)
+DITCameraTool::Tool::Display::Display(std::string debug_string)
 {
-	debugMode = debugString;
+	debug_mode = debug_string;
 	#ifdef isWindowsToken
-	debugHandle = GetStdHandle(STD_OUTPUT_HANDLE);;
+	debug_handle = GetStdHandle(STD_OUTPUT_HANDLE);;
 	#endif
 }
 
 
-std::string DITCameraTool::Tool::Display::_debugPrintFormat(std::string debugString)
+std::string DITCameraTool::Tool::Display::DebugPrintFormat(std::string debug_string)
 {
-	if (debugString == (std::string)("INFO"))
+	if (debug_string == (std::string)("INFO"))
 	{
 		if (!isWindows)
 		{
@@ -27,12 +27,12 @@ std::string DITCameraTool::Tool::Display::_debugPrintFormat(std::string debugStr
 		else
 		{
 			#ifdef isWindowsToken
-			SetConsoleTextAttribute(debugHandle, 14);
+			SetConsoleTextAttribute(debug_handle, 14);
 			#endif
 			return "";
 		}
 	}
-	else if (debugString == (std::string)("WARNING"))
+	else if (debug_string == (std::string)("WARNING"))
 	{
 		if (!isWindows)
 		{
@@ -41,23 +41,23 @@ std::string DITCameraTool::Tool::Display::_debugPrintFormat(std::string debugStr
 		else
 		{
 			#ifdef isWindowsToken
-			SetConsoleTextAttribute(debugHandle, 12);
+			SetConsoleTextAttribute(debug_handle, 12);
 			#endif
 			return "";
 		}
 	}
 	else
 	{
-		throw std::invalid_argument("Wrong _debugPrintFormat(debugMode) format.");
+		throw std::invalid_argument("Wrong DebugPrintFormat(debug_mode) format.");
 	}
 }
 
-std::string DITCameraTool::Tool::Display::_debugEndFormat()
+std::string DITCameraTool::Tool::Display::DebugEndFormat()
 {
 	if (isWindows)
 	{
 		#ifdef isWindowsToken
-		SetConsoleTextAttribute(debugHandle, 15);
+		SetConsoleTextAttribute(debug_handle, 15);
 		#endif
 		return "";
 	}
@@ -66,36 +66,36 @@ std::string DITCameraTool::Tool::Display::_debugEndFormat()
 		return "\033[0m";
 	}
 }
-void DITCameraTool::Tool::Display::printVariable(std::string variableName, std::string variable)
+void DITCameraTool::Tool::Display::PrintVariable(std::string variable_name, std::string variable)
 {
-	std::string debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << variableName;
-	std::string endString = _debugEndFormat();
-	std::cout << endString << " = " << variable << std::endl;
+	std::string debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << variable_name;
+	std::string end_string = DebugEndFormat();
+	std::cout << end_string << " = " << variable << std::endl;
 }
 
-void DITCameraTool::Tool::Display::printVariable(std::string variableName, int variable)
+void DITCameraTool::Tool::Display::PrintVariable(std::string variable_name, int variable)
 {
-	std::string debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << variableName;
-	std::string endString = _debugEndFormat();
-	std::cout << endString << " = " << variable << std::endl;
+	std::string debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << variable_name;
+	std::string end_string = DebugEndFormat();
+	std::cout << end_string << " = " << variable << std::endl;
 }
 
-void DITCameraTool::Tool::Display::printVariable(std::string variableName, float variable)
+void DITCameraTool::Tool::Display::PrintVariable(std::string variable_name, float variable)
 {
-	std::string debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << variableName;
-	std::string endString = _debugEndFormat();
-	std::cout << endString << " = " << variable << std::endl;
+	std::string debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << variable_name;
+	std::string end_string = DebugEndFormat();
+	std::cout << end_string << " = " << variable << std::endl;
 }
 
-void DITCameraTool::Tool::Display::printVairable(std::string variableName, std::vector<std::string> variable)
+void DITCameraTool::Tool::Display::PrintVairable(std::string variable_name, std::vector<std::string> variable)
 {
-	std::string debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << variableName;
-	std::string endString = _debugEndFormat();
-	std::cout << endString << " = [" << std::endl;
+	std::string debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << variable_name;
+	std::string end_string = DebugEndFormat();
+	std::cout << end_string << " = [" << std::endl;
 	for (std::string element : variable)
 	{
 		std::cout << element << ", ";
@@ -103,25 +103,25 @@ void DITCameraTool::Tool::Display::printVairable(std::string variableName, std::
 	std::cout << "\b\b]" << std::endl;
 }
 
-void DITCameraTool::Tool::Display::printVariable(std::string variableName, DITCameraTool::Config config)
+void DITCameraTool::Tool::Display::PrintVariable(std::string variable_name, DITCameraTool::Config config)
 {
-	json algorithmConf = config.GetAlgorithmConf();
-	json globalConf = config.GetGlobalConf();
-	std::string debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << variableName;
-	std::string endString = _debugEndFormat();
-	std::cout << endString << ":" << std::endl;
-	debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << "algorithmConfig";
-	endString = _debugEndFormat();
-	std::cout << endString << " = " << algorithmConf.dump(4) << std::endl;
-	debugString = _debugPrintFormat(debugMode);
-	std::cout << debugString << "globalConfig";
-	endString = _debugEndFormat();
-	std::cout << endString << " = " << globalConf.dump(4) << std::endl;
-	debugString = _debugPrintFormat(debugMode);
+	json algorithm_config = config.GetAlgorithmConf();
+	json global_config = config.GetGlobalConf();
+	std::string debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << variable_name;
+	std::string end_string = DebugEndFormat();
+	std::cout << end_string << ":" << std::endl;
+	debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << "algorithmConfig";
+	end_string = DebugEndFormat();
+	std::cout << end_string << " = " << algorithm_config.dump(4) << std::endl;
+	debug_string = DebugPrintFormat(debug_mode);
+	std::cout << debug_string << "globalConfig";
+	end_string = DebugEndFormat();
+	std::cout << end_string << " = " << global_config.dump(4) << std::endl;
+	debug_string = DebugPrintFormat(debug_mode);
 };
-void DITCameraTool::Tool::Display::cprintf(std::string printString)
+void DITCameraTool::Tool::Display::CPrintf(std::string printString)
 {
 
 };
