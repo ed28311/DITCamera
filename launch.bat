@@ -6,7 +6,7 @@ For %%A in ("%FILEPATH%") DO (
     SET FILEFOLDER=%%~dpA
     SET FILENAME=%%~nxA
 )
-start /D "%FILEFOLDER%" %FILENAME% ^
+start /D "%BASEDIR%" %FILEPATH% ^
 -BL[Blemish] %BASEDIR%\CameraSpec.spe %BASEDIR%\test_pic\blemishNG.jpg ^
 -BL[Blemish] %BASEDIR%\CameraSpec.spe %BASEDIR%\test_pic\blemishOK.jpg ^
 -BL[Blemish] %BASEDIR%\CameraSpec.spe %BASEDIR%\test_pic\blemish.jpg ^

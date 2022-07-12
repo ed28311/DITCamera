@@ -9,8 +9,11 @@ DITCameraTool::AlgorithmDispatch::AlgorithmDispatch(DITCameraTool::Config config
 };
 
 DITCameraTool::AlgorithmDispatch::~AlgorithmDispatch(){
-    delete m_p_algorithm;
-    m_p_algorithm = NULL;
+    if (m_p_algorithm!=NULL)
+    {
+        delete m_p_algorithm;
+        m_p_algorithm = NULL;
+    }
 }
 
 bool DITCameraTool::AlgorithmDispatch::ExecuteAlgorithm(){
@@ -20,8 +23,6 @@ bool DITCameraTool::AlgorithmDispatch::ExecuteAlgorithm(){
         m_p_algorithm->LoadFigure(m_image_path);
         result_bool = m_p_algorithm->Execute();
     }
-    // delete m_p_algorithm;
-    // m_p_algorithm = NULL;
     return result_bool;
 }
 DITCameraTool::Reporter DITCameraTool::AlgorithmDispatch::GetReporter()
@@ -37,6 +38,7 @@ void DITCameraTool::AlgorithmDispatch::DispatchAlgorithm()
         delete m_p_algorithm;
         m_p_algorithm = NULL;
     }
+
     json algorithm_conf = m_config.GetAlgorithmConf();
     if (m_p_algorithm==NULL)
     {
@@ -50,10 +52,11 @@ void DITCameraTool::AlgorithmDispatch::DispatchAlgorithm()
             m_p_algorithm = new DITCameraTool::Algorithm::Flare(m_config);
         }
     }
-    // else
-    // {
-    //     throw DITCameraTool::Exception::AllocateToNotNullPointer(m_name);
-    // };
+
+    if(m_p_algorithm == NULL)
+    {
+        throw std::exception("Fail to load algorithm thread.");
+    }
 }
 
 

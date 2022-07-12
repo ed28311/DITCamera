@@ -13,7 +13,7 @@ void DITCameraTool::Algorithm::Blemish::LoadFigure(std::string  image_path)
 {
 	FreeImage();
 	m_image_path = image_path;
-	m_image_name = _GetImageFileName();
+	m_image_name = GetImageFileName();
 	cv::Mat figure = cv::imread(m_image_path, cv::IMREAD_GRAYSCALE);
 	if (figure.empty())
 	{

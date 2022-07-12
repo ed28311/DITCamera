@@ -29,7 +29,7 @@ namespace DITCameraTool
                 void FinishReport(json) const;
                 DITCameraTool::Reporter GetReporter();
             protected:            
-                std::vector<std::string> report_basic_property = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG" };
+                std::vector<std::string> REPORT_BASIC_PROPERTY = {"ITEM", "STATUS", "VALUE", "UCL", "LCL", "RESULT", "SPEC_NAME", "DATE_TIME", "OBJ_NAME", "COMMENT", "OTHERS", "IMG" };
                 cv::Mat *m_p_image=NULL;
                 std::string m_image_path;
                 std::string m_image_name;
@@ -37,7 +37,7 @@ namespace DITCameraTool
                 bool m_is_print_debug_info;
                 json m_algorithm_config;
                 json m_global_config;
-                std::string _GetImageFileName() const;
+                std::string GetImageFileName() const;
                 bool GetDebugMode() const;
 
                 DITCameraTool::Reporter* m_p_reporter=NULL;

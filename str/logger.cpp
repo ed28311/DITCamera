@@ -16,8 +16,8 @@ void DITCameraTool::Logger::GetLogInfo(){
 
 void DITCameraTool::Logger::LoadLevelTransformer()
 {
-    m_level_transformer['1'] = " INFO";
-    m_level_transformer['2'] = "DEBUG";
+    m_level_transformer['1'] = "DEBUG";
+    m_level_transformer['2'] = " INFO";
     m_level_transformer['3'] = " WARN";
     m_level_transformer['4'] = "ERROR";
     m_level_transformer["5"] = "FATEL";

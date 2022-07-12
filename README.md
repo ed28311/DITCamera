@@ -59,11 +59,11 @@ make
 ```
 
 ### Execute
-- Execute singal mission and output report.
+##### Execute singal mission and output report.
 ```
 ./bin/main -{mode}{configMode} {config path} {image path}
 ```
-- Execute multiple mission and integrate to one report
+##### Execute multiple mission and integrate to one report
 ```
 ./bin/main \ 
 	 -{mode}{configMode} {config path} {image path} \
@@ -71,7 +71,9 @@ make
 	 ... \
 	 -{mode}{configMode} {config path} {image path}
 ```
-## Structure
+##### Sample Batch file usage. (Windows)
+```
+launch.bat ${Base directory} ${File_path}
 ```
 .
 ├── CameraSpec.spe               -> Basic config file.

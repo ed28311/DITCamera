@@ -5,8 +5,8 @@ namespace DITCameraTool
 {
     enum LOG_LEVELS
     {
-        INFO = '1',
-        DEBUG = '2',
+        DEBUG = '1',
+        INFO = '2',
         WARN = '3',
         ERROR = '4',
         FATAL = '5'

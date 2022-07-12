@@ -20,21 +20,28 @@ DITCameraTool::Algorithm::AlgorithmBase::AlgorithmBase(const DITCameraTool::Conf
 	}
 	delete m_p_reporter;
 	m_p_reporter = NULL;
-	m_p_reporter = new DITCameraTool::Reporter(config, report_basic_property);
+	m_p_reporter = new DITCameraTool::Reporter(config, REPORT_BASIC_PROPERTY);
 }
 DITCameraTool::Algorithm::AlgorithmBase::~AlgorithmBase(){
 	FreeImage();
-	delete m_p_reporter;
-	m_p_reporter = NULL;
+	if(m_p_reporter != NULL)
+	{
+		delete m_p_reporter;
+		m_p_reporter = NULL;
+	}
 }
 DITCameraTool::Reporter DITCameraTool::Algorithm::AlgorithmBase::GetReporter()
 {
+	
 	return *m_p_reporter;
 }
 void DITCameraTool::Algorithm::AlgorithmBase::FreeImage() const{
-	delete m_p_image;
-	const_cast<AlgorithmBase*>(this)->m_p_image = NULL;
-}
+	if (m_p_image!=NULL)
+	{
+		delete m_p_image;
+		const_cast<AlgorithmBase*>(this)->m_p_image = NULL;
+	}
+	}
 std::string DITCameraTool::Algorithm::AlgorithmBase::GenerateImage(cv::Mat* image, std::string item_name) const{
 	std::string file_generate_path;
 	if (m_is_generate_image)
@@ -80,7 +87,7 @@ void DITCameraTool::Algorithm::AlgorithmBase::FinishReport(json m_report_row) co
 }
 
 
-std::string DITCameraTool::Algorithm::AlgorithmBase::_GetImageFileName() const
+std::string DITCameraTool::Algorithm::AlgorithmBase::GetImageFileName() const
 {
 	std::smatch sm;
 	std::regex_search(m_image_path, sm, std::regex("(?=([^\\/^\\\\]+$))[\\w]+"));

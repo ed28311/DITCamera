@@ -40,12 +40,14 @@ int main(int argc, char * argv[]) {
 			std::string mode = std::string(argv[3 * i + 1]);
 			std::string config_path = std::string(argv[3 * i + 2]);
 			std::string image_path = std::string(argv[3 * i + 3]);
-			DITCameraTool::Config config = config_loader.GetSPEConfig(config_path, mode, global_config_members);
 			printf("---------------------------\n");
 			_PrintVariable(mode);
 			_PrintVariable(config_path);
 			_PrintVariable(image_path);
 			printf("---------------------------\n");
+
+			
+			DITCameraTool::Config config = config_loader.GetSPEConfig(config_path, mode, global_config_members);
 			DITCameraTool::AlgorithmDispatch* dispatcher = new DITCameraTool::AlgorithmDispatch(config, image_path);
 			dispatcher->DispatchAlgorithm();
 			dispatcher->ExecuteAlgorithm();
