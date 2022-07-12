@@ -75,6 +75,10 @@ make
 ```
 launch.bat ${Base directory} ${File_path}
 ```
+
+## Structure
+#### Tree
+```
 .
 ├── CameraSpec.spe               -> Basic config file.
 ├── CMakeLists.txt
@@ -105,7 +109,6 @@ launch.bat ${Base directory} ${File_path}
     ├── shading.jpg
     ├── shadingNG.jpg
     └── shadingOK.jpg
-
 ```
 
 #### Class diagram
